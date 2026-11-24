@@ -21,16 +21,14 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build GDS
-        uses: TinyTapeout/tt-gds-action@ttsky26d
-        timeout-minutes: 300
-        with:
-          pdk: sky130A
-
-      # Trial branches only: save the key numbers of the run where they can be read with git.
-      - name: Publish metrics
-        if: always()
+      # Trial branches only: publish the key numbers every few minutes while the build runs,
+      # and once more at the end, to a results/<name> branch that can be read with git.
+      - name: Start metrics publisher
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          cat > /tmp/pub.sh <<'PUBEOF'
+          cd "$GITHUB_WORKSPACE"
           OUT=/tmp/metrics.txt
           {
             echo "branch $GITHUB_REF_NAME  commit $GITHUB_SHA  $(date -u +%FT%TZ)"
@@ -56,7 +54,24 @@ jobs:
           rm -rf /tmp/res && mkdir /tmp/res && cd /tmp/res && git init -q && cp $OUT metrics.txt
           git -c user.name=trial -c user.email=trial@users.noreply.github.com add metrics.txt
           git -c user.name=trial -c user.email=trial@users.noreply.github.com commit -q -m "metrics for $GITHUB_REF_NAME $GITHUB_SHA"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" "HEAD:refs/heads/results/${GITHUB_REF_NAME#trial/}"
+          git push -f "https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git" "HEAD:refs/heads/results/${GITHUB_REF_NAME#trial/}"
+          PUBEOF
+          sed -i "1i export GH_TOKEN='$GH_TOKEN' GITHUB_WORKSPACE='$GITHUB_WORKSPACE' GITHUB_REF_NAME='$GITHUB_REF_NAME' GITHUB_SHA='$GITHUB_SHA' GITHUB_REPOSITORY='$GITHUB_REPOSITORY'" /tmp/pub.sh
+          nohup bash -c 'while sleep 300; do bash /tmp/pub.sh; done' > /tmp/pub.log 2>&1 &
+          echo $! > /tmp/pub.pid
+
+      - name: Build GDS
+        uses: TinyTapeout/tt-gds-action@ttsky26d
+        timeout-minutes: 300
+        with:
+          pdk: sky130A
+
+      - name: Publish metrics
+        if: always()
+        run: |
+          kill $(cat /tmp/pub.pid) 2>/dev/null || true
+          sleep 2
+          bash /tmp/pub.sh
 
   precheck:
     needs: gds
