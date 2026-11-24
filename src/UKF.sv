@@ -54,6 +54,7 @@ module UKF #(
     ukf_defs::PRED_PACKET pred_packet, backend_result;
     ukf_defs::UKF_OUT_PACKET result_packet, latest_state, prediction_prior;
     ukf_defs::pred_s_factor_t pred_s, latest_s, correction_s, prediction_prior_s, backend_result_s;
+    ukf_defs::meas_s_factor_t active_measurement_s;
     ukf_defs::ukf_mac_request_t wheel_mac_request, sensor_mac_request, backend_mac_request;
     ukf_defs::ukf_mac_response_t sensor_mac_response, prediction_mac_response;
     ukf_defs::ukf_divsqrt_request_t backend_div_request;
@@ -119,7 +120,7 @@ module UKF #(
         .wheel_valid(prediction_wheel_valid), .prior(prediction_prior),
         .load_correction_noise(load_shared_noise),
         .staged_correction_noise(noise_snapshot),
-        .correction_noise(),
+        .correction_noise(active_measurement_s),
         .load_correction_measurement(load_shared_measurement),
         .correction_measurement(measurement_snapshot),
         .correction_spad_request(correction_spad_request),
@@ -157,7 +158,7 @@ module UKF #(
         .INITIAL_STATE(INITIAL_STATE), .INITIAL_S(INITIAL_S)
     ) correction (
         .clock(clk), .reset(reset), .corr_packet(correction_packet),
-        .pred_packet(pred_packet), .pred_s(pred_s), .measurement_s(noise_snapshot),
+        .pred_packet(pred_packet), .pred_s(pred_s), .measurement_s(active_measurement_s),
         .load_shared_noise(load_shared_noise), .load_shared_measurement(load_shared_measurement),
         .update_failed(correction_update_failed),
         .spad_request(correction_spad_request), .spad_response(correction_spad_response),

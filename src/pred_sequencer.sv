@@ -136,10 +136,15 @@ module UKF_pred_sequencer #(
 
     assign done = state == FINISH;
     assign prediction = {spad[7], spad[8], spad[9], spad[10], spad[11], done && success};
-    for (genvar i = 0; i < 15; i++)
-        assign prediction_s[i] = working_sq[i];
-    for (genvar i = 0; i < 10; i++)
-        assign correction_noise[i] = working_sq[i];
+    assign prediction_s = {
+        working_sq[14], working_sq[13], working_sq[12], working_sq[11], working_sq[10],
+        working_sq[9],  working_sq[8],  working_sq[7],  working_sq[6],  working_sq[5],
+        working_sq[4],  working_sq[3],  working_sq[2],  working_sq[1],  working_sq[0]
+    };
+    assign correction_noise = {
+        working_sq[9], working_sq[8], working_sq[7], working_sq[6], working_sq[5],
+        working_sq[4], working_sq[3], working_sq[2], working_sq[1], working_sq[0]
+    };
 
     always_ff @(posedge clock or posedge reset) begin
         if (reset) begin
