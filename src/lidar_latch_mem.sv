@@ -52,9 +52,9 @@ module lidar_latch_mem (
 `else
             reg        sel_l;
             reg [15:0] d;
-            always @(*) if (!clk) sel_l = sel;
+            always_latch if (!clk) sel_l = sel;
             assign gclk = clk & sel_l;
-            always @(*) if (gclk) d = wd_q2;
+            always_latch if (gclk) d = wd_q2;
             assign q[i] = d;
 `endif
         end
