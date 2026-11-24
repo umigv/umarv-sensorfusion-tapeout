@@ -42,6 +42,18 @@ jobs:
             for f in $(grep -rlsE "Final congestion report" runs/wokwi --include='*.log' | sort); do echo "--- $f"; grep -A14 "Final congestion report" "$f" | tail -15 | cut -c1-140; done
             echo "=== violation tables"
             for f in $(grep -rlsE "Viol/Layer" runs/wokwi --include='*.log' | sort); do echo "--- $f"; grep -A8 "Viol/Layer" "$f" | head -30 | cut -c1-140; done
+            echo "=== drc map (100 um bins, top row is top of die)"
+            D=$(find runs/wokwi -name '*.drc*' -path '*detailedrouting*' -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2)
+            echo "file $D"
+            if [ -n "$D" ]; then
+              awk '/bbox/ {gsub(/[(),]/," "); x=int($3/100); y=int($4/100); c[y" "x]++; if(x>mx)mx=x; if(y>my)my=y; n++} END {print n" violations"; for(y=my;y>=0;y--){l=""; for(x=0;x<=mx;x++) l=l sprintf("%5d",c[y" "x]); print l}}' "$D"
+              grep -h "violation type" "$D" | sort | uniq -c
+            fi
+            echo "=== hold buffer sources"
+            N=$(find runs/wokwi -name '*.nl.v' -path '*resizertimingpostcts*' 2>/dev/null | head -1)
+            if [ -n "$N" ]; then
+              grep -A1 -E " hold[0-9]+ \(" "$N" | grep -oE "\.A\([^ )]+" | sed -E 's/^\.A\(.?//; s/\[.*//' | cut -d. -f1-2 | sort | uniq -c | sort -rn | head -40
+            fi
             echo "=== yosys stat"
             for f in $(grep -rlsE "Chip area for" runs/wokwi --include='*.log' --include='*.rpt' | sort | tail -2); do echo "--- $f"; grep -B60 "Chip area for" "$f" | tail -75 | cut -c1-120; done
             echo "=== flow log tail"
@@ -62,7 +74,7 @@ jobs:
 
       - name: Build GDS
         uses: TinyTapeout/tt-gds-action@ttsky26d
-        timeout-minutes: 300
+        timeout-minutes: 350
         with:
           pdk: sky130A
 
