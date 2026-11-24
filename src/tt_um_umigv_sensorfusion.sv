@@ -146,22 +146,15 @@ module tt_um_umigv_sensorfusion (
     logic        state_valid;
     logic [31:0] state_ts, state_x, state_y, state_theta, state_omega, state_v;
 
-    // AREA PROBE: a filter-shaped block with 28 words in the filter's place (not a filter)
-    logic        kf_valid;
-    logic [31:0] kf_ts, kf_x, kf_y, kf_theta, kf_omega, kf_v;
-    filter_probe #(.WORDS(28)) u_probe (
-        .clk(clk), .rst_n(rst_n_s), .meas_pulse(ukf_pulse), .beat_ts(beat_ts),
-        .vn_yaw_f32(vn_yaw_f32), .vn_rate_f32(vn_rate_f32), .vn_lat_f64(vn_lat_f64), .vn_lon_f64(vn_lon_f64),
-        .dw_delta(dw_delta), .cfg_we(bus_we), .cfg_addr(bus_addr), .cfg_wdata(bus_wdata),
-        .state_valid(kf_valid), .state_ts(kf_ts), .state_x(kf_x), .state_y(kf_y),
-        .state_theta(kf_theta), .state_omega(kf_omega), .state_v(kf_v));
-    assign state_valid = state_from_filter ? kf_valid : host_state_valid;
-    assign state_ts    = state_from_filter ? kf_ts    : host_state_ts;
-    assign state_x     = state_from_filter ? kf_x     : host_state_x;
-    assign state_y     = state_from_filter ? kf_y     : host_state_y;
-    assign state_theta = state_from_filter ? kf_theta : host_state_theta;
-    assign state_omega = state_from_filter ? kf_omega : host_state_omega;
-    assign state_v     = state_from_filter ? kf_v     : host_state_v;
+    // No filter in this build: the state comes from the host-written registers.
+    assign state_valid = host_state_valid;
+    assign state_ts    = host_state_ts;
+    assign state_x     = host_state_x;
+    assign state_y     = host_state_y;
+    assign state_theta = host_state_theta;
+    assign state_omega = host_state_omega;
+    assign state_v     = host_state_v;
+    wire _unused_kf = &{state_from_filter, bus_we, bus_addr, bus_wdata, 1'b0};
 
     // ---- lidar block ------------------------------------------------------------------------
     logic       mii_tx_en;
