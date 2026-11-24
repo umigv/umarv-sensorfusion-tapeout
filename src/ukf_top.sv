@@ -268,12 +268,13 @@ module ukf_store (
     end
 
     localparam WORDS = 62;
-    logic [WORDS-1:0] gate;
-    integer n;
-    always_ff @(negedge clk) begin
-        for (n = 0; n < WORDS; n = n + 1)
-            gate[n] <= we_q && (wa_q == n[5:0]);
-    end
+    // TRIAL: one enable pulse for the whole store, from a single flip-flop on the falling edge,
+    // ANDed with each word's select. The select is decoded from the held address, which is steady
+    // from half a clock before the pulse rises until after it falls (writes are at least three
+    // clocks apart), so each AND output is a clean pulse.
+    logic pulse;
+    always_ff @(negedge clk) pulse <= we_q;
+    wire [WORDS-1:0] sel, gate;
 
     wire [31:0] q [0:63];
     assign rdata = q[raddr];
@@ -282,6 +283,12 @@ module ukf_store (
     generate
         for (i = 0; i < 64; i = i + 1) begin : word
             if (i < WORDS) begin : real_
+                assign sel[i] = (wa_q == i);
+`ifdef SYNTHESIS
+                sky130_fd_sc_hd__and2_1 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
+`else
+                assign gate[i] = sel[i] & pulse;
+`endif
 `ifdef SYNTHESIS
                 genvar b;
                 for (b = 0; b < 32; b = b + 1) begin : bit_
