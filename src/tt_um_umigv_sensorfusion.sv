@@ -87,17 +87,19 @@ module tt_um_umigv_sensorfusion (
         .time_us        ()
     );
 
+    assign overflow = 1'b0;
+
     UKF u_srukf (
-        .clk(clk), .rst_n(rst_n_s), .ukf_beat(1'b0),
+        .clk(clk), .rst_n(rst_n_s),
         .ukf_pulse(ukf_pulse && !rejected_snapshot), .ukf_beat_ts(beat_ts),
-        .ukf_vn_valid(vn_valid), .ukf_vn_yaw_f32(vn_yaw_f32), .ukf_vn_rate_f32(vn_rate_f32),
-        .ukf_vn_lat_f64(vn_lat_f64), .ukf_vn_lon_f64(vn_lon_f64),
+        .ukf_vn_valid(vn_valid),
+        .ukf_vn_x(vn_lon_f64[31:0]), .ukf_vn_y(vn_lat_f64[31:0]),
+        .ukf_vn_theta(vn_yaw_f32), .ukf_vn_omega(vn_rate_f32),
         .ukf_dw_valid(dw_valid), .ukf_dw_delta(dw_delta), .measurement_s(measurement_s),
-        .prediction_done(1'b0), .prediction_result(161'b0), .prediction_result_s(480'b0),
-        .prediction_mac_request(67'b0), .prediction_div_request(66'b0),
-        .ukf_busy(busy), .ukf_valid(corrected), .ukf_failed(failed),
-        .ukf_reinit_required(reinit_required), .ukf_vn_overflow(overflow),
-        .ukf_x(x), .ukf_y(y), .ukf_theta(heading), .ukf_omega(rate), .ukf_wheelB(wheel_bias)
+        .ukf_busy(busy), .ukf_pred_done(), .ukf_valid(corrected), .ukf_failed(failed),
+        .ukf_reinit_required(reinit_required),
+        .ukf_x(x), .ukf_y(y), .ukf_theta(heading), .ukf_omega(rate), .ukf_wheelB(wheel_bias),
+        .corrected_s()
     );
 
     // Each hardware snapshot represents a whole beat. A VN-only beat may
