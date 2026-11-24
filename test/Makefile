@@ -7,7 +7,7 @@ FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 COMPILE_ARGS += -DCOCOTB_TEST
 SRC_DIR = $(CURDIR)/../src
-PROJECT_SOURCES = srukf_core.v timestamper.sv tt_um_umigv_sensorfusion.sv
+PROJECT_SOURCES = tt_um_umigv_sensorfusion_flat.v
 
 ifneq ($(GATES),yes)
 
