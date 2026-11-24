@@ -49,6 +49,11 @@
 // one, 2.5 ms later. Read them after the pulse and they cannot change under you.
 //
 // Written in the plain SystemVerilog subset the Tiny Tapeout tools accept.
+// TRIAL: build with the Kalman filter in place (also defined in the top-level file)
+`ifndef WITH_UKF
+`define WITH_UKF
+`endif
+
 module spi_regs (
     input  logic        clk,
     input  logic        rst_n,              // active low, released in step with clk
@@ -80,6 +85,13 @@ module spi_regs (
     // State supplied by the host (stand-in for the Kalman filter)
     output logic        host_state_valid,   // one clock
     output logic [31:0] host_state_ts, host_state_x, host_state_y, host_state_theta, host_state_omega, host_state_v,
+
+    // With the Kalman filter built in (WITH_UKF), this block keeps no copy of the host-written
+    // state (24-3B) or of the measurements: writes to 24-3B reach the filter over the bus below and
+    // land in its storage, and reads of 24-3B and 48-6B fetch a word from the filter for one clock.
+    output logic        spi_rd,             // one clock: the word at spi_raddr is wanted now
+    output logic [6:0]  spi_raddr,          // the filter's address for it
+    input  logic [31:0] spi_rword,
 
     // Every host write, for registers kept in other blocks
     output logic        bus_we,             // one clock
@@ -153,12 +165,17 @@ module spi_regs (
     assign dst_ip         = {w[28], w[29], w[30], w[31]};
     assign src_port       = {w[33], w[32]};
     assign dst_port       = {w[35], w[34]};
+`ifdef WITH_UKF
+    assign host_state_ts = 32'd0; assign host_state_x = 32'd0; assign host_state_y = 32'd0;
+    assign host_state_theta = 32'd0; assign host_state_omega = 32'd0; assign host_state_v = 32'd0;
+`else
     assign host_state_ts    = {w[39], w[38], w[37], w[36]};
     assign host_state_x     = {w[43], w[42], w[41], w[40]};
     assign host_state_y     = {w[47], w[46], w[45], w[44]};
     assign host_state_theta = {w[51], w[50], w[49], w[48]};
     assign host_state_omega = {w[55], w[54], w[53], w[52]};
     assign host_state_v     = {w[59], w[58], w[57], w[56]};
+`endif
 
     // ---- event counters ------------------------------------------------------------------------
     logic [7:0] cnt [0:6];
@@ -175,22 +192,54 @@ module spi_regs (
         end
     endfunction
 
+`ifdef WITH_UKF
+    localparam [6:0] W_END = 7'h24;         // 24-3B are kept in the filter
+`else
+    localparam [6:0] W_END = 7'h3C;
+`endif
     logic [6:0] rd_addr;
     logic [7:0] rd_data;
+    // where a register lives in the filter: 0-5 are its state words, 112 and up its sensor words
+    wire from_filter = (rd_addr >= 7'h24 && rd_addr < 7'h3C) || (rd_addr >= 7'h48 && rd_addr <= 7'h4B)
+                    || (rd_addr >= 7'h50 && rd_addr <= 7'h6B);
     always_comb begin
         rd_data = 8'h00;
         if (rd_addr == 7'h00)                           rd_data = 8'hA7;
         else if (rd_addr == 7'h01)                      rd_data = 8'h01;
-        else if (rd_addr < 7'h3C)                       rd_data = w[rd_addr[5:0]];
+        else if (rd_addr < W_END)                       rd_data = w[rd_addr[5:0]];
         else if (rd_addr >= 7'h40 && rd_addr <= 7'h46)  rd_data = cnt[rd_addr[2:0]];
-        else if (rd_addr >= 7'h48 && rd_addr <= 7'h4B)  rd_data = pick({32'd0, beat_ts}, {1'b0, rd_addr[1:0]});
         else if (rd_addr == 7'h4C)                      rd_data = {6'd0, dw_valid, vn_valid};
+`ifdef WITH_UKF
+        else if (from_filter)                           rd_data = spi_rword[8*rd_addr[1:0] +: 8];
+`else
+        else if (rd_addr >= 7'h48 && rd_addr <= 7'h4B)  rd_data = pick({32'd0, beat_ts}, {1'b0, rd_addr[1:0]});
         else if (rd_addr >= 7'h50 && rd_addr <= 7'h53)  rd_data = pick({32'd0, vn_yaw_f32}, {1'b0, rd_addr[1:0]});
         else if (rd_addr >= 7'h54 && rd_addr <= 7'h57)  rd_data = pick({32'd0, vn_rate_f32}, {1'b0, rd_addr[1:0]});
         else if (rd_addr >= 7'h58 && rd_addr <= 7'h5F)  rd_data = pick(vn_lat_f64, rd_addr[2:0]);
         else if (rd_addr >= 7'h60 && rd_addr <= 7'h67)  rd_data = pick(vn_lon_f64, rd_addr[2:0]);
         else if (rd_addr >= 7'h68 && rd_addr <= 7'h6B)  rd_data = pick({32'd0, dw_ext}, {1'b0, rd_addr[1:0]});
+`endif
     end
+
+`ifdef WITH_UKF
+    always_comb begin
+        case (rd_addr[6:2])
+            5'h12:   spi_raddr = 7'd125;                    // 48: beat time
+            5'h14:   spi_raddr = 7'd120;                    // 50: yaw
+            5'h15:   spi_raddr = 7'd121;                    // 54: turn rate
+            5'h16:   spi_raddr = 7'd112;                    // 58: latitude, low half
+            5'h17:   spi_raddr = 7'd113;                    // 5C: latitude, high half
+            5'h18:   spi_raddr = 7'd114;                    // 60: longitude, low half
+            5'h19:   spi_raddr = 7'd115;                    // 64: longitude, high half
+            5'h1A:   spi_raddr = 7'd124;                    // 68: wheel travel
+            default: spi_raddr = {2'b00, rd_addr[6:2] - 5'd9};   // 24-3B: state words 0-5
+        endcase
+    end
+    wire _unused_meas = &{beat_ts, vn_yaw_f32, vn_rate_f32, vn_lat_f64, vn_lon_f64, dw_ext, 1'b0};
+`else
+    assign spi_raddr = 7'd0;
+    wire _unused_filter = &{spi_rword, from_filter, 1'b0};
+`endif
 
     // ---- the transfer ---------------------------------------------------------------------------
     logic [2:0] bit_cnt;
@@ -204,6 +253,11 @@ module spi_regs (
     wire       byte_done = sck_rise && (bit_cnt == 3'd7);
     wire [6:0] next_addr = got_addr ? (addr + 7'd1) : byte_in[6:0];
     assign rd_addr = next_addr;
+`ifdef WITH_UKF
+    assign spi_rd = byte_done && from_filter;
+`else
+    assign spi_rd = 1'b0;
+`endif
 
     integer k;
     always_ff @(posedge clk or negedge rst_n) begin
@@ -234,7 +288,7 @@ module spi_regs (
                     end else begin
                         if (is_write) begin
                             bus_we <= 1'b1; bus_addr <= addr; bus_wdata <= byte_in;
-                            if (addr >= 7'h02 && addr < 7'h3C) w[addr[5:0]] <= byte_in;
+                            if (addr >= 7'h02 && addr < W_END) w[addr[5:0]] <= byte_in;
                             if (addr == 7'h3C) host_state_valid <= 1'b1;
                             if (addr == 7'h3D) cnt_clear <= 1'b1;
                         end

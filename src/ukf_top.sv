@@ -7,7 +7,7 @@
 //
 //   ukf_steps     the table of steps (about 540). A step is  d = a op b,  or a jump/call/return.
 //   ukf_consts    the constants the steps use
-//   ukf_store     64 words of 32 bits, held in latches. Words 0-5 are wired straight out as the
+//   ukf_store     62 words of 32 bits, held in latches. Words 0-5 are wired straight out as the
 //                 state the lidar block reads.
 //   fp_serial     one single-precision unit: add, subtract, multiply, divide, square root, and
 //                 integer difference to float. One bit per clock.
@@ -26,8 +26,15 @@
 //     One count of the latitude slice is 2^-27 degree (0.8 mm); of the longitude slice, 2^-26.
 //   - the wheel encoder has 16,384 counts per turn and moves fewer than 2^25 counts a beat
 //   - the beat is 2.5 ms (400 Hz); dt is a constant in the table
-// Tuning values are constants in the table. The tuning writes from the SPI block (cfg_*) are
-// not used yet.
+// Tuning values are constants in the table; SPI writes to 6C-7F are not used yet.
+//
+// The SPI block keeps no copy of the state or of the sensor words. It uses this block's storage
+// and selector instead, which saves about 200 flip-flops and two wide buses across the chip:
+//   - while enable is low, SPI writes to registers 24-3B (cfg_*) go byte by byte into words 0-5,
+//     so the host-supplied state sits in the same six words the filter would fill. They are
+//     taken only while the filter is idle.
+//   - an SPI read (spi_rd, for one clock, with the address of a word on spi_raddr) borrows the
+//     read path for that clock; the sequencer waits a clock if it wanted it.
 //
 // The output words change one after another over about 30 clocks at the end of a beat, just
 // before state_valid. A reader that must have all six from the same beat should take them on
@@ -52,6 +59,9 @@ module ukf_top (
     input  logic        cfg_we,
     input  logic [6:0]  cfg_addr,
     input  logic [7:0]  cfg_wdata,
+    input  logic        spi_rd,             // one clock: the SPI block wants the word at spi_raddr now
+    input  logic [6:0]  spi_raddr,          // 0-5 state words, 112-125 sensor words
+    output logic [31:0] spi_rword,
 
     output logic        state_valid,        // one clock: the six words below are a new state
     output logic [31:0] state_ts,
@@ -73,6 +83,7 @@ module ukf_top (
     wire [9:0] target = word[9:0];
 
     localparam [2:0] FN_RAW = 3'd6, FN_CTL = 3'd7;
+    localparam [6:0] HOST_STATE_FIRST = 7'h24, HOST_STATE_END = 7'h3C;
     localparam [2:0] C_JMP = 3'd0, C_CALL = 3'd1, C_RET = 3'd2, C_HALT = 3'd3, C_DONE = 3'd4, C_SETI = 3'd5;
 
     // ---- storage, constants, sensor words -----------------------------------------------------
@@ -88,20 +99,25 @@ module ukf_top (
 
     logic [31:0] ext;
     always_comb begin
-        case (rd_addr[2:0])
-            3'd0:    ext = vn_yaw_f32;
-            3'd1:    ext = vn_rate_f32;
-            3'd2:    ext = {6'd0, vn_lat_f64[45:20]};
-            3'd3:    ext = {6'd0, vn_lon_f64[45:20]};
-            3'd4:    ext = {{4{dw_delta[27]}}, dw_delta};
-            3'd5:    ext = beat_ts;
+        case (rd_addr[3:0])
+            4'd0:    ext = vn_lat_f64[31:0];        // 0-3: the raw doubles, for the host to read
+            4'd1:    ext = vn_lat_f64[63:32];
+            4'd2:    ext = vn_lon_f64[31:0];
+            4'd3:    ext = vn_lon_f64[63:32];
+            4'd8:    ext = vn_yaw_f32;
+            4'd9:    ext = vn_rate_f32;
+            4'd10:   ext = {6'd0, vn_lat_f64[45:20]};
+            4'd11:   ext = {6'd0, vn_lon_f64[45:20]};
+            4'd12:   ext = {{4{dw_delta[27]}}, dw_delta};
+            4'd13:   ext = beat_ts;
             // latitude as single precision: same sign, exponent re-biased, top of the fraction
-            3'd6:    ext = {vn_lat_f64[63], ~vn_lat_f64[59], vn_lat_f64[58:52], vn_lat_f64[51:29]};
+            4'd14:   ext = {vn_lat_f64[63], ~vn_lat_f64[59], vn_lat_f64[58:52], vn_lat_f64[51:29]};
             default: ext = 32'd0;
         endcase
     end
     wire [31:0] din = !rd_addr[6]             ? m_rdata :
-                      (rd_addr[6:3] == 4'd15) ? ext     : k_value;
+                      (rd_addr[6:4] == 3'd7)  ? ext     : k_value;
+    assign spi_rword = din;
 
     // ---- arithmetic ---------------------------------------------------------------------------
     logic        f_load_a, f_load_b, f_start;
@@ -122,12 +138,24 @@ module ukf_top (
 
     wire is_ctl = (fn == FN_CTL);
     wire running = (q != Q_CLEAR) && (q != Q_IDLE);
-    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW);
-    assign f_load_b = (q == Q_B);
-    assign f_start  = (q == Q_GO);
-    assign rd_addr  = (q == Q_B) ? b_addr : a_addr;
+    // a host write of one byte of the state: read the word, replace the byte, write it back
+    wire host_wr = cfg_we && !enable && (q == Q_IDLE) && (cfg_addr >= HOST_STATE_FIRST) && (cfg_addr < HOST_STATE_END);
+    wire [4:0] host_word = cfg_addr[6:2] - 5'd9;
+    logic [31:0] host_merged;
+    always_comb begin
+        host_merged = din;
+        host_merged[8*cfg_addr[1:0] +: 8] = cfg_wdata;
+    end
 
-    wire write_ok = (wcond == 2'd0) || (wcond == 2'd2 && flag) || (wcond == 2'd3 && !flag);
+    wire stall = spi_rd;                // the read path is lent to the SPI block for this clock
+    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && !stall;
+    assign f_load_b = (q == Q_B) && !stall;
+    assign f_start  = (q == Q_GO);
+    assign rd_addr  = spi_rd      ? spi_raddr :
+                      host_wr     ? {2'b00, host_word} :
+                      (q == Q_B)  ? b_addr : a_addr;
+
+    wire write_ok = (wcond == 2'd0) || (wcond == 2'd2 && flag) || (wcond == 2'd3 && !flag);    // 1: never
 
     logic take;
     always_comb begin
@@ -159,11 +187,12 @@ module ukf_top (
                     if (clr == 5'd23) q <= Q_IDLE;
                 end
                 Q_IDLE: begin
+                    if (host_wr) begin m_we <= 1'b1; m_waddr <= {1'b0, host_word}; m_wdata <= host_merged; end
                     if (meas_pulse && enable) begin
                         vn_ok <= vn_valid; dw_ok <= dw_valid; pc <= 10'd0; depth <= 2'd0; q <= Q_A;
                     end
                 end
-                Q_A: begin
+                Q_A: if (!stall) begin
                     if (is_ctl) begin
                         pc <= pc + 10'd1;
                         case (cop)
@@ -188,7 +217,7 @@ module ukf_top (
                         q <= Q_B;
                     end
                 end
-                Q_B:  q <= Q_GO;
+                Q_B:  if (!stall) q <= Q_GO;
                 Q_GO: q <= Q_WAIT;
                 Q_WAIT: if (f_done) begin
                     if (write_ok) begin m_we <= 1'b1; m_waddr <= d_addr; m_wdata <= f_result; end
@@ -211,11 +240,10 @@ module ukf_top (
     assign state_omega = m_first[159:128];
     assign state_v     = m_first[191:160];
 
-    wire _unused = &{f_busy, cfg_we, cfg_addr, cfg_wdata, vn_lat_f64[62:60], vn_lat_f64[19:0], vn_lon_f64[63:46],
-                     vn_lon_f64[19:0], overruns, 1'b0};
+    wire _unused = &{f_busy, overruns, 1'b0};
 endmodule
 
-// 64 x 32 latch memory. Same write scheme as lidar_latch_mem: the data is registered and held,
+// 62 x 32 latch memory (addresses 62 and 63 read as zero). Same write scheme as lidar_latch_mem: the data is registered and held,
 // one falling-edge flip-flop per word is that word's latch enable, and writes must be at least
 // 3 clocks apart (the sequencer above leaves 3 or more). A word must not be read until 2 clocks
 // after its write.
@@ -239,10 +267,11 @@ module ukf_store (
         end
     end
 
-    logic [63:0] gate;
+    localparam WORDS = 62;
+    logic [WORDS-1:0] gate;
     integer n;
     always_ff @(negedge clk) begin
-        for (n = 0; n < 64; n = n + 1)
+        for (n = 0; n < WORDS; n = n + 1)
             gate[n] <= we_q && (wa_q == n[5:0]);
     end
 
@@ -252,16 +281,20 @@ module ukf_store (
     genvar i;
     generate
         for (i = 0; i < 64; i = i + 1) begin : word
+            if (i < WORDS) begin : real_
 `ifdef SYNTHESIS
-            genvar b;
-            for (b = 0; b < 32; b = b + 1) begin : bit_
-                sky130_fd_sc_hd__dlxtp_1 u_latch (.D(wd_q[b]), .GATE(gate[i]), .Q(q[i][b]));
-            end
+                genvar b;
+                for (b = 0; b < 32; b = b + 1) begin : bit_
+                    sky130_fd_sc_hd__dlxtp_1 u_latch (.D(wd_q[b]), .GATE(gate[i]), .Q(q[i][b]));
+                end
 `else
-            reg [31:0] d;
-            always_latch if (gate[i]) d = wd_q;
-            assign q[i] = d;
+                reg [31:0] d;
+                always_latch if (gate[i]) d = wd_q;
+                assign q[i] = d;
 `endif
+            end else begin : none_
+                assign q[i] = 32'd0;
+            end
         end
         for (i = 0; i < 6; i = i + 1) begin : outw
             assign first6[32*i +: 32] = q[i];
