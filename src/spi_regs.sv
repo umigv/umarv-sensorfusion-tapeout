@@ -125,7 +125,12 @@ module spi_regs (
     wire sck_fall = selected &&  sck_s[2] && !sck_s[1];
 
     // ---- writable registers 00-3B ----------------------------------------------------------------
-    logic [7:0] w [0:59];
+`ifdef WITH_UKF
+    localparam W_COUNT = 36;                // 24-3B are kept in the filter, so there are no registers for them here
+`else
+    localparam W_COUNT = 60;
+`endif
+    logic [7:0] w [0:W_COUNT-1];
 
     function automatic [7:0] reset_value;
         input [5:0] a;
@@ -262,7 +267,7 @@ module spi_regs (
     integer k;
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            for (k = 0; k < 60; k = k + 1) w[k] <= reset_value(k[5:0]);
+            for (k = 0; k < W_COUNT; k = k + 1) w[k] <= reset_value(k[5:0]);
             for (k = 0; k < 7; k = k + 1)  cnt[k] <= 8'd0;
             bit_cnt <= 3'd0; sh_in <= 7'd0; got_addr <= 1'b0; is_write <= 1'b0; addr <= 7'd0;
             sh_out <= 8'd0; spi_miso <= 1'b0;
