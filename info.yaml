@@ -27,6 +27,7 @@ project:
     - "reset_release.sv"
     - "lidar_laser_table.sv"
     - "lidar_motion.sv"
+    - "lidar_latch_mem.sv"
     - "lidar_point_buffer.sv"
     - "lidar_xyz.sv"
     - "lidar_frame_tx.sv"

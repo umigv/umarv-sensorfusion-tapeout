@@ -16,7 +16,9 @@
 //   oldest unread distance; rd_pop steps to the next. blk_pop discards blk0 once its 32
 //   distances have been read.
 //
-// Storage is flip-flops: 256 distances and 8 block records.
+// Storage: 256 distances in latches (lidar_latch_mem) and 8 block records in flip-flops.
+// A distance is readable two clocks after it is written; a block is only made visible after
+// its last distance, and the transform takes far longer than that to ask for it.
 module lidar_point_buffer (
     input  logic        clk,
     input  logic        rst,                // synchronous, active high
@@ -43,13 +45,10 @@ module lidar_point_buffer (
 );
 
     // ---- distances ------------------------------------------------------------------------------
-    logic [15:0] mem [0:255];
     logic [8:0]  wr_ptr;            // next write, including returns not yet committed
     logic [8:0]  wr_commit;         // everything before this is visible to the read side
     logic [8:0]  rd_ptr;
     wire  [8:0]  used = wr_ptr - rd_ptr;
-
-    assign rd_data = mem[rd_ptr[7:0]];
 
     // ---- block records: {first of a sweep, azimuth} ---------------------------------------------
     logic [16:0] bmem [0:7];
@@ -76,6 +75,15 @@ module lidar_point_buffer (
     wire no_room        = (used > 9'd224) || (bcount == 4'd8);     // need 32 free distances and one block record
     wire drop_now       = first_of_block ? no_room : dropping;
 
+    lidar_latch_mem u_mem (
+        .clk   (clk),
+        .we    (pt_valid && !drop_now && !rst),
+        .waddr (wr_ptr[7:0]),
+        .wdata (pt_distance),
+        .raddr (rd_ptr[7:0]),
+        .rdata (rd_data)
+    );
+
     always_ff @(posedge clk) begin
         if (rst) begin
             wr_ptr <= 9'd0; wr_commit <= 9'd0; rd_ptr <= 9'd0;
@@ -99,7 +107,6 @@ module lidar_point_buffer (
                     if (wrapped) begin sweep_pending <= 1'b1; wr_sweep_start <= 1'b1; end
                 end
                 if (!drop_now) begin
-                    mem[wr_ptr[7:0]] <= pt_distance;
                     wr_ptr <= wr_ptr + 9'd1;
                 end
                 pt_cnt <= pt_cnt + 5'd1;                            // wraps from 31 to 0
