@@ -78,6 +78,8 @@ module spi_regs (
     output logic [15:0] src_port, dst_port,
 
     // State supplied by the host (stand-in for the Kalman filter)
+    output logic [2:0]  meas_sel,           // TRIAL: sensor words are read through the filter's selector
+    input  logic [31:0] meas_word,
     input  logic [191:0] state_words,       // TRIAL: the state lives in the filter's storage; read back from there
     output logic        host_state_valid,   // one clock
     output logic [31:0] host_state_ts, host_state_x, host_state_y, host_state_theta, host_state_omega, host_state_v,
@@ -177,6 +179,19 @@ module spi_regs (
     endfunction
 
     logic [6:0] rd_addr;
+    always_comb begin
+        case (rd_addr[6:2])
+            5'h12:   meas_sel = 3'd7;     // 48: beat time
+            5'h14:   meas_sel = 3'd0;     // 50: yaw
+            5'h15:   meas_sel = 3'd1;     // 54: rate
+            5'h16:   meas_sel = 3'd3;     // 58: latitude, low half
+            5'h17:   meas_sel = 3'd2;     // 5C: latitude, high half
+            5'h18:   meas_sel = 3'd5;     // 60: longitude, low half
+            5'h19:   meas_sel = 3'd4;     // 64: longitude, high half
+            default: meas_sel = 3'd6;     // 68: wheel travel
+        endcase
+    end
+    wire _probe_unused = &{beat_ts, vn_yaw_f32, vn_rate_f32, vn_lat_f64, vn_lon_f64, dw_ext, 1'b0};
     logic [7:0] rd_data;
     always_comb begin
         rd_data = 8'h00;
@@ -185,13 +200,9 @@ module spi_regs (
         else if (rd_addr < 7'h24)                       rd_data = w[rd_addr[5:0]];
         else if (rd_addr < 7'h3C)                       rd_data = state_words[8*(rd_addr - 7'h24) +: 8];
         else if (rd_addr >= 7'h40 && rd_addr <= 7'h46)  rd_data = cnt[rd_addr[2:0]];
-        else if (rd_addr >= 7'h48 && rd_addr <= 7'h4B)  rd_data = pick({32'd0, beat_ts}, {1'b0, rd_addr[1:0]});
+        else if ((rd_addr >= 7'h48 && rd_addr <= 7'h4B) || (rd_addr >= 7'h50 && rd_addr <= 7'h6B))
+                                                        rd_data = meas_word[8*rd_addr[1:0] +: 8];
         else if (rd_addr == 7'h4C)                      rd_data = {6'd0, dw_valid, vn_valid};
-        else if (rd_addr >= 7'h50 && rd_addr <= 7'h53)  rd_data = pick({32'd0, vn_yaw_f32}, {1'b0, rd_addr[1:0]});
-        else if (rd_addr >= 7'h54 && rd_addr <= 7'h57)  rd_data = pick({32'd0, vn_rate_f32}, {1'b0, rd_addr[1:0]});
-        else if (rd_addr >= 7'h58 && rd_addr <= 7'h5F)  rd_data = pick(vn_lat_f64, rd_addr[2:0]);
-        else if (rd_addr >= 7'h60 && rd_addr <= 7'h67)  rd_data = pick(vn_lon_f64, rd_addr[2:0]);
-        else if (rd_addr >= 7'h68 && rd_addr <= 7'h6B)  rd_data = pick({32'd0, dw_ext}, {1'b0, rd_addr[1:0]});
     end
 
     // ---- the transfer ---------------------------------------------------------------------------

@@ -17,6 +17,8 @@ module filter_probe_serial (
     input  logic [31:0] vn_yaw_f32, vn_rate_f32,
     input  logic [63:0] vn_lat_f64, vn_lon_f64,
     input  logic signed [27:0] dw_delta,
+    input  logic [2:0]  spi_sel,            // the SPI block reads sensor words through the same selector
+    output logic [31:0] meas_word,
     input  logic        cfg_we,
     input  logic [6:0]  cfg_addr,
     input  logic [7:0]  cfg_wdata,
@@ -218,12 +220,15 @@ module filter_probe_serial (
                                              .raddr(m_raddr), .rdata(m_rdata), .first6(m_first));
 
     // ---- arithmetic ----
-    logic        f_load_a, f_load_b, f_start;
+    logic        f_load_b, f_start;
     wire         f_busy, f_done;
     wire  [31:0] f_result;
     logic [31:0] ext;
+    logic        f_load_a;
+    wire  [2:0]  ext_sel = f_load_a ? r_a[2:0] : spi_sel;
+    assign meas_word = ext;
     always_comb begin
-        case (r_a[2:0])
+        case (ext_sel)
             3'd0: ext = vn_yaw_f32;
             3'd1: ext = vn_rate_f32;
             3'd2: ext = vn_lat_f64[63:32];

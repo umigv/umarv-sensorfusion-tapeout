@@ -57,6 +57,8 @@ module tt_um_umigv_sensorfusion (
     logic        state_valid;
     logic [31:0] state_ts, state_x, state_y, state_theta, state_omega, state_v;
     logic        host_state_valid;
+    logic [2:0]  meas_sel;
+    logic [31:0] meas_word;
     logic [31:0] host_state_ts, host_state_x, host_state_y, host_state_theta, host_state_omega, host_state_v;
     logic [6:0]  lidar_stat;
     logic        host_miso;
@@ -99,6 +101,8 @@ module tt_um_umigv_sensorfusion (
         .dst_ip           (dst_ip),
         .src_port         (src_port),
         .dst_port         (dst_port),
+        .meas_sel       (meas_sel),
+        .meas_word      (meas_word),
         .state_words    ({state_v, state_omega, state_theta, state_y, state_x, state_ts}),
         .host_state_valid (host_state_valid),
         .host_state_ts    (host_state_ts),
@@ -153,7 +157,7 @@ module tt_um_umigv_sensorfusion (
     filter_probe_serial u_probe (
         .clk(clk), .rst_n(rst_n_s), .enable(state_from_filter), .meas_pulse(ukf_pulse), .beat_ts(beat_ts),
         .vn_yaw_f32(vn_yaw_f32), .vn_rate_f32(vn_rate_f32), .vn_lat_f64(vn_lat_f64), .vn_lon_f64(vn_lon_f64),
-        .dw_delta(dw_delta), .cfg_we(bus_we), .cfg_addr(bus_addr), .cfg_wdata(bus_wdata),
+        .dw_delta(dw_delta), .spi_sel(meas_sel), .meas_word(meas_word), .cfg_we(bus_we), .cfg_addr(bus_addr), .cfg_wdata(bus_wdata),
         .state_valid(kf_valid), .state_ts(state_ts), .state_x(state_x), .state_y(state_y),
         .state_theta(state_theta), .state_omega(state_omega), .state_v(state_v));
     assign state_valid = kf_valid | host_state_valid;
