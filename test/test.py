@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
-# Smoke test of the chip top level with no sensors attached: the VN-300 line idles high
+# Smoke test of the chip top level with no sensors, lidar or host attached (the chip runs on
+# its reset settings): the VN-300 line idles high
 # and the encoder returns all zeros. Checks that the beat runs at 400 Hz, that each beat
 # produces a sync pulse and one 32-clock encoder read, and that the "measurements ready"
 # pulse still comes, at the deadline, when nothing answers.
@@ -20,13 +21,13 @@ async def test_beats_without_sensors(dut):
 
     dut.ena.value = 1
     dut.uio_in.value = 0
-    dut.ui_in.value = 0b0000_1101   # vn_rx idle high, miso low, enable, turn-count check on
+    dut.ui_in.value = 0b0000_1001   # vn_rx idle high, encoder miso low, host SPI idle (cs_n high), MII idle
     dut.rst_n.value = 0
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
     await ClockCycles(dut.clk, 5)
 
-    sync_rises, cs_falls, sck_rises, pulses, frame_bits = [], [], 0, [], 0
+    sync_rises, cs_falls, sck_rises, pulses = [], [], 0, []
     prev = int(dut.uo_out.value)
     assert prev & 0b0000_0010, "encoder chip select should idle high"
     assert not prev & 0b0000_0101, "sync and sck should idle low"
@@ -45,8 +46,6 @@ async def test_beats_without_sensors(dut):
             assert not now & 0x02, "sck toggled while chip select was high"
         if rose & 0x10:
             pulses.append(cycle)
-        if now & 0x40:
-            frame_bits += 1
         prev = now
 
     dut._log.info(f"sync pulses at {sync_rises}, reads at {cs_falls}, ready pulses at {pulses}")
@@ -57,4 +56,4 @@ async def test_beats_without_sensors(dut):
     assert len(pulses) == 2, "expected one ready pulse per beat"
     for s, p in zip(sync_rises, pulses):
         assert abs((p - s) - DEADLINE_CLKS) < 200, "with no sensors the ready pulse comes at the deadline"
-    assert frame_bits > 0, "debug stream never started"
+    assert not prev & 0x80, "MII transmit should stay idle with no lidar"

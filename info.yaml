@@ -32,6 +32,10 @@ project:
     - "lidar_xyz.sv"
     - "lidar_frame_tx.sv"
     - "lidar_top.sv"
+    - "spi_regs.sv"
+    - "fp32_mac.sv"
+    - "fp32_divsqrt.sv"
+    - "filter_probe.sv"
     - "tt_um_umigv_sensorfusion.sv"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
