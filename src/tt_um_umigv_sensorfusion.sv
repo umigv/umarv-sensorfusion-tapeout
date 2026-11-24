@@ -3,9 +3,10 @@
  *
  * Tiny Tapeout top level for the sensor fusion chip.
  *
- * For now this holds only the timestamper. The settings are tied to constants and the
- * measurements leave on a simple debug serial stream, because the host SPI register block
- * is not written yet. Both of those are stand-ins and will be replaced.
+ * TRIAL BUILD: timestamper plus the lidar block, to see whether the lidar block places and
+ * routes. The lidar block's settings and the filter state it expects come from a 424-bit
+ * shift register loaded on two pins; that is a stand-in for the register block and the
+ * Kalman filter, neither of which is written yet.
  */
 
 module tt_um_umigv_sensorfusion (
@@ -33,7 +34,25 @@ module tt_um_umigv_sensorfusion (
     assign vn_rx          = ui_in[0];
     assign dw_miso        = ui_in[1];
     assign enable         = ui_in[2];
-    assign dw_check_turns = ui_in[3];
+
+    // Stand-in settings: while cfg_shift is high, one bit is shifted in per clock.
+    // When cfg_shift falls, the lidar block is told a new filter state has arrived.
+    localparam CFG_BITS = 424;
+    logic [CFG_BITS-1:0] cfg;
+    logic [2:0] cfg_shift_s;
+    logic [1:0] cfg_data_s;
+    always_ff @(posedge clk or negedge rst_n_s) begin
+        if(!rst_n_s) begin
+            cfg <= '0; cfg_shift_s <= 3'b000; cfg_data_s <= 2'b00;
+        end else begin
+            cfg_shift_s <= {cfg_shift_s[1:0], ui_in[5]};
+            cfg_data_s  <= {cfg_data_s[0], ui_in[4]};
+            if(cfg_shift_s[1]) cfg <= {cfg[CFG_BITS-2:0], cfg_data_s[1]};
+        end
+    end
+    logic state_valid;
+    assign state_valid    = cfg_shift_s[2] & ~cfg_shift_s[1];
+    assign dw_check_turns = cfg[423];
 
     logic vn_sync, dw_cs_n, dw_sck, dw_mosi, ukf_pulse;
     logic        [31:0] beat_ts;
@@ -106,6 +125,50 @@ module tt_um_umigv_sensorfusion (
     logic dbg_data;
     assign dbg_data = dbg_frame & dbg_word[dbg_idx];
 
+    logic       mii_tx_en;
+    logic [3:0] mii_txd;
+    logic [6:0] lidar_stat;
+
+    lidar_top u_lidar (
+        .clk           (clk),
+        .rst_n         (rst_n_s),
+        .enable        (cfg[0]),
+        .bypass        (cfg[1]),
+        .lidar_port    (cfg[17:2]),
+        .scale_4mm     (cfg[18]),
+        .lidar_model   (cfg[20:19]),
+        .yaw_offset    (cfg[36:21]),
+        .corr_rot_en   (cfg[37]),
+        .corr_shift_en (cfg[38]),
+        .src_mac       (cfg[86:39]),
+        .dst_mac       (cfg[134:87]),
+        .src_ip        (cfg[166:135]),
+        .dst_ip        (cfg[198:167]),
+        .src_port      (cfg[214:199]),
+        .dst_port      (cfg[230:215]),
+        .mii_rx_clk    (ui_in[7]),
+        .mii_rx_dv     (ui_in[3]),
+        .mii_rxd       (uio_in[3:0]),
+        .mii_tx_clk    (ui_in[6]),
+        .mii_tx_en     (mii_tx_en),
+        .mii_txd       (mii_txd),
+        .state_valid   (state_valid),
+        .state_ts      (cfg[262:231]),
+        .state_x       (cfg[294:263]),
+        .state_y       (cfg[326:295]),
+        .state_theta   (cfg[358:327]),
+        .state_omega   (cfg[390:359]),
+        .state_v       (cfg[422:391]),
+        .time_us       (time_us[31:0]),
+        .stat_lidar_pkt      (lidar_stat[0]),
+        .stat_other_pkt      (lidar_stat[1]),
+        .stat_rx_crc_bad     (lidar_stat[2]),
+        .stat_frame_sent     (lidar_stat[3]),
+        .stat_buf_overflow   (lidar_stat[4]),
+        .stat_motion_overrun (lidar_stat[5]),
+        .stat_tx_underrun    (lidar_stat[6])
+    );
+
     // Pins out
     assign uo_out[0] = vn_sync;
     assign uo_out[1] = dw_cs_n;
@@ -114,12 +177,12 @@ module tt_um_umigv_sensorfusion (
     assign uo_out[4] = ukf_pulse;
     assign uo_out[5] = dbg_data;
     assign uo_out[6] = dbg_frame;
-    assign uo_out[7] = 1'b0;
+    assign uo_out[7] = mii_tx_en;
 
-    assign uio_out = 8'h00;
-    assign uio_oe  = 8'h00;
+    assign uio_out = {mii_txd, 4'h0};
+    assign uio_oe  = 8'hF0;
 
     // List all unused inputs to prevent warnings
-    wire _unused = &{ena, ui_in[7:4], uio_in, 1'b0};
+    wire _unused = &{ena, uio_in[7:4], lidar_stat, 1'b0};
 
 endmodule

@@ -6,7 +6,7 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = timestamper.sv tt_um_umigv_sensorfusion.sv
+PROJECT_SOURCES = timestamper.sv v16PacketParser.v lidar_vlp16_rx.sv lidar_cordic.sv mii_recv.sv mii_send.sv async_fifo.sv reset_release.sv lidar_laser_table.sv lidar_motion.sv lidar_point_buffer.sv lidar_xyz.sv lidar_frame_tx.sv lidar_top.sv tt_um_umigv_sensorfusion.sv
 
 ifneq ($(GATES),yes)
 
