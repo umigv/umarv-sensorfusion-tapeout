@@ -78,6 +78,7 @@ module spi_regs (
     output logic [15:0] src_port, dst_port,
 
     // State supplied by the host (stand-in for the Kalman filter)
+    input  logic [191:0] state_words,       // TRIAL: the state lives in the filter's storage; read back from there
     output logic        host_state_valid,   // one clock
     output logic [31:0] host_state_ts, host_state_x, host_state_y, host_state_theta, host_state_omega, host_state_v,
 
@@ -181,7 +182,8 @@ module spi_regs (
         rd_data = 8'h00;
         if (rd_addr == 7'h00)                           rd_data = 8'hA7;
         else if (rd_addr == 7'h01)                      rd_data = 8'h01;
-        else if (rd_addr < 7'h3C)                       rd_data = w[rd_addr[5:0]];
+        else if (rd_addr < 7'h24)                       rd_data = w[rd_addr[5:0]];
+        else if (rd_addr < 7'h3C)                       rd_data = state_words[8*(rd_addr - 7'h24) +: 8];
         else if (rd_addr >= 7'h40 && rd_addr <= 7'h46)  rd_data = cnt[rd_addr[2:0]];
         else if (rd_addr >= 7'h48 && rd_addr <= 7'h4B)  rd_data = pick({32'd0, beat_ts}, {1'b0, rd_addr[1:0]});
         else if (rd_addr == 7'h4C)                      rd_data = {6'd0, dw_valid, vn_valid};
@@ -234,7 +236,7 @@ module spi_regs (
                     end else begin
                         if (is_write) begin
                             bus_we <= 1'b1; bus_addr <= addr; bus_wdata <= byte_in;
-                            if (addr >= 7'h02 && addr < 7'h3C) w[addr[5:0]] <= byte_in;
+                            if (addr >= 7'h02 && addr < 7'h24) w[addr[5:0]] <= byte_in;
                             if (addr == 7'h3C) host_state_valid <= 1'b1;
                             if (addr == 7'h3D) cnt_clear <= 1'b1;
                         end

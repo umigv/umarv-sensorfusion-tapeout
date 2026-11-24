@@ -54,6 +54,8 @@ module tt_um_umigv_sensorfusion (
     logic signed [15:0] yaw_offset;
     logic [47:0] src_mac, dst_mac;
     logic [31:0] src_ip, dst_ip;
+    logic        state_valid;
+    logic [31:0] state_ts, state_x, state_y, state_theta, state_omega, state_v;
     logic        host_state_valid;
     logic [31:0] host_state_ts, host_state_x, host_state_y, host_state_theta, host_state_omega, host_state_v;
     logic [6:0]  lidar_stat;
@@ -97,6 +99,7 @@ module tt_um_umigv_sensorfusion (
         .dst_ip           (dst_ip),
         .src_port         (src_port),
         .dst_port         (dst_port),
+        .state_words    ({state_v, state_omega, state_theta, state_y, state_x, state_ts}),
         .host_state_valid (host_state_valid),
         .host_state_ts    (host_state_ts),
         .host_state_x     (host_state_x),
@@ -143,25 +146,18 @@ module tt_um_umigv_sensorfusion (
     );
 
     // ---- Kalman filter, and the choice of where the lidar block's state comes from --------
-    logic        state_valid;
-    logic [31:0] state_ts, state_x, state_y, state_theta, state_omega, state_v;
 
-    // AREA PROBE: a compact filter-shaped block in the filter's place (not a filter)
+    // AREA PROBE: a compact filter-shaped block in the filter's place (not a filter). Its storage
+    // also holds the host-written state, so there is no second copy and no selector.
     logic        kf_valid;
-    logic [31:0] kf_ts, kf_x, kf_y, kf_theta, kf_omega, kf_v;
     filter_probe_serial u_probe (
-        .clk(clk), .rst_n(rst_n_s), .meas_pulse(ukf_pulse), .beat_ts(beat_ts),
+        .clk(clk), .rst_n(rst_n_s), .enable(state_from_filter), .meas_pulse(ukf_pulse), .beat_ts(beat_ts),
         .vn_yaw_f32(vn_yaw_f32), .vn_rate_f32(vn_rate_f32), .vn_lat_f64(vn_lat_f64), .vn_lon_f64(vn_lon_f64),
         .dw_delta(dw_delta), .cfg_we(bus_we), .cfg_addr(bus_addr), .cfg_wdata(bus_wdata),
-        .state_valid(kf_valid), .state_ts(kf_ts), .state_x(kf_x), .state_y(kf_y),
-        .state_theta(kf_theta), .state_omega(kf_omega), .state_v(kf_v));
-    assign state_valid = state_from_filter ? kf_valid : host_state_valid;
-    assign state_ts    = state_from_filter ? kf_ts    : host_state_ts;
-    assign state_x     = state_from_filter ? kf_x     : host_state_x;
-    assign state_y     = state_from_filter ? kf_y     : host_state_y;
-    assign state_theta = state_from_filter ? kf_theta : host_state_theta;
-    assign state_omega = state_from_filter ? kf_omega : host_state_omega;
-    assign state_v     = state_from_filter ? kf_v     : host_state_v;
+        .state_valid(kf_valid), .state_ts(state_ts), .state_x(state_x), .state_y(state_y),
+        .state_theta(state_theta), .state_omega(state_omega), .state_v(state_v));
+    assign state_valid = kf_valid | host_state_valid;
+    wire _unused_hs = &{host_state_ts, host_state_x, host_state_y, host_state_theta, host_state_omega, host_state_v, 1'b0};
 
     // ---- lidar block ------------------------------------------------------------------------
     logic       mii_tx_en;
