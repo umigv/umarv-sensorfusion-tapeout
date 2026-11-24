@@ -23,7 +23,7 @@ jobs:
 
       - name: Build GDS
         uses: TinyTapeout/tt-gds-action@ttsky26d
-        timeout-minutes: 75
+        timeout-minutes: 300
         with:
           pdk: sky130A
 
