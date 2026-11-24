@@ -21,6 +21,7 @@
 
   "//": "Trial: area-oriented synthesis",
   "SYNTH_STRATEGY": "AREA 3",
+  "PL_ROUTABILITY_DRIVEN": 0,
 
   "//": "Hold slack margin - Increase them in case you are getting hold violations.",
   "PL_RESIZER_HOLD_SLACK_MARGIN": 0.1,
