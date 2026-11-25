@@ -89,12 +89,16 @@ module tt_um_umigv_sensorfusion (
 
     assign overflow = 1'b0;
 
-    UKF u_srukf (
+    UKF #(
+        .WHEEL_VELOCITY_SCALE(32'h3e000000),
+        .INITIAL_STATE(161'h7b99999b7c99999a7e6666677e99999a7d147ae3),
+        .INITIAL_S(480'h3e6147aebcb439583e3851ec3c449ba63ccccccd3df5c28fbc23d70a3c03126fbc75c28f3e8000003cf5c28fbba3d70a3c23d70a3ca3d70a3e99999a),
+        .PROCESS_S(480'h3be560423a83126f3c1374bc00000000000000003c03126f00000000000000003a83126f3c3439580000000000000000000000003b03126f3c449ba6)
+    ) u_srukf (
         .clk(clk), .rst_n(rst_n_s),
         .ukf_pulse(ukf_pulse && !rejected_snapshot), .ukf_beat_ts(beat_ts),
-        .ukf_vn_valid(vn_valid),
-        .ukf_vn_x(vn_lon_f64[31:0]), .ukf_vn_y(vn_lat_f64[31:0]),
-        .ukf_vn_theta(vn_yaw_f32), .ukf_vn_omega(vn_rate_f32),
+        .ukf_vn_valid(vn_valid), .ukf_vn_yaw_f32(vn_yaw_f32), .ukf_vn_rate_f32(vn_rate_f32),
+        .ukf_vn_lat_f64(vn_lat_f64), .ukf_vn_lon_f64(vn_lon_f64),
         .ukf_dw_valid(dw_valid), .ukf_dw_delta(dw_delta), .measurement_s(measurement_s),
         .ukf_busy(busy), .ukf_pred_done(), .ukf_valid(corrected), .ukf_failed(failed),
         .ukf_reinit_required(reinit_required),
