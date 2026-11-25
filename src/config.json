@@ -20,7 +20,7 @@
   "CLOCK_PERIOD": 20,
 
   "//": "Trial: area-oriented synthesis",
-  "SYNTH_STRATEGY": "AREA 3",
+  "SYNTH_STRATEGY": "DELAY 1",
   "MAX_FANOUT_CONSTRAINT": 20,
   "DESIGN_REPAIR_MAX_SLEW_PCT": 10,
   "DESIGN_REPAIR_MAX_CAP_PCT": 10,
