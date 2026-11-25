@@ -63,6 +63,44 @@ jobs:
             echo "$P" | head -20
             for f in $P; do case "$f" in *max.rpt) echo "--- $f"; grep -E "^Startpoint|^Endpoint|slack" "$f" | head -90 | cut -c1-170; echo "--- worst path in full"; awk '/^Startpoint/{n++} n==1' "$f" | head -90 | cut -c1-150;; esac; done
             for f in $P; do case "$f" in *violator*|*checks*) echo "--- $f"; grep -oE "(u_[a-z_]+\.)?u_[a-z_0-9]+\.[a-zA-Z_0-9]+" "$f" | cut -d. -f1-2 | sort | uniq -c | sort -rn | head -30;; esac; done
+            echo "=== timing detail v2"
+            echo "--- corners and constraints the flow resolved"
+            jq -c '{DEFAULT_CORNER, PNR_CORNERS, RSZ_CORNERS, STA_CORNERS, MAX_TRANSITION_CONSTRAINT, MAX_FANOUT_CONSTRAINT, MAX_CAPACITANCE_CONSTRAINT, SYNTH_STRATEGY, SYNTH_ADDER_TYPE, DESIGN_REPAIR_MAX_SLEW_PCT, GRT_DESIGN_REPAIR_MAX_SLEW_PCT, CLOCK_UNCERTAINTY_CONSTRAINT, TIME_DERATING_CONSTRAINT, IO_DELAY_CONSTRAINT, PL_RESIZER_SETUP_SLACK_MARGIN, PL_RESIZER_SETUP_MAX_BUFFER_PCT, RUN_POST_GRT_DESIGN_REPAIR, RUN_POST_GRT_RESIZER_TIMING, DRT_ANTENNA_REPAIR_ITERS}' runs/wokwi/resolved.json 2>&1 | cut -c1-900
+            echo "--- resizer messages"
+            grep -rhsE "RSZ-[0-9]+|worst slack|Found [0-9]+ (slew|cap|fanout|long wire)" runs/wokwi --include='*.log' | sed -E 's/[0-9]+(\.[0-9]+)?/N/g' | sort | uniq -c | sort -rn | head -30 | cut -c1-160
+            for f in $(ls runs/wokwi/*resizertiming*/*.log runs/wokwi/*repairdesign*/*.log 2>/dev/null); do echo "--- $f"; grep -E "RSZ-|WNS|TNS|worst slack|Iter|violat" "$f" | tail -8 | cut -c1-160; done
+            for C in nom_tt_025C_1v80 max_ss_100C_1v60; do
+              D=$(find runs/wokwi -type d -path '*stapostpnr*' -name "$C" 2>/dev/null | head -1)
+              [ -z "$D" ] && continue
+              echo "##### corner $C"
+              if [ -f "$D/checks.rpt" ]; then
+                echo "--- slew violations by size (ns over the limit), then the 25 worst, then by net/instance prefix"
+                awk '/^max slew/{s=1;next} /^max (cap|fanout)/{s=0} /^min /{s=0} s && /VIOLATED/ {n++; v=-$(NF-1); if(v<0.1)a++; else if(v<0.3)b++; else if(v<0.75)c++; else d++} END {printf "total %d: under 0.1 ns %d, 0.1-0.3 %d, 0.3-0.75 %d, over 0.75 %d\n", n,a,b,c,d}' "$D/checks.rpt"
+                awk '/^max slew/{s=1;next} /^max (cap|fanout)/{s=0} /^min /{s=0} s && /VIOLATED/' "$D/checks.rpt" | head -25 | cut -c1-150
+                awk '/^max slew/{s=1;next} /^max (cap|fanout)/{s=0} /^min /{s=0} s && /VIOLATED/ {print $1}' "$D/checks.rpt" | sed -E 's/\[[0-9]+\\?\]//g; s/\/[A-Za-z0-9_]+$//; s/_[0-9]+_$/GATE/; s/^(fanout|hold|wire|input|output|clkbuf|clkload|rebuffer|split|max_cap|max_length|place|ANTENNA)[_0-9a-z]*$/\1/' | cut -d. -f1-3 | sort | uniq -c | sort -rn | head -25
+                echo "--- capacitance violations: count and the 10 worst"
+                awk '/^max cap/{s=1;next} /^max (slew|fanout)/{s=0} /^min /{s=0} s && /VIOLATED/' "$D/checks.rpt" | wc -l
+                awk '/^max cap/{s=1;next} /^max (slew|fanout)/{s=0} /^min /{s=0} s && /VIOLATED/' "$D/checks.rpt" | head -10 | cut -c1-150
+              fi
+              if [ -f "$D/max.rpt" ]; then
+                echo "--- setup paths: slack, from net, to net (all reported), then by from/to block"
+                awk '/^Startpoint:/{sp=$2; st=""; last=""; armed=0} sp!="" && index($0, sp "/") && /\/Q|\/Q_N|\(in\)/ {armed=1} /\(net\)/ {if(armed && st==""){st=$1} last=$1} /^Startpoint:.*input port/{armed=1} /slack \((VIOLATED|MET)\)/ {print $1, st, last}' "$D/max.rpt" > /tmp/paths_$C.txt
+                wc -l < /tmp/paths_$C.txt
+                head -40 /tmp/paths_$C.txt | cut -c1-160
+                awk '$1<0 {a=$2; b=$3; gsub(/\[[0-9]+\\?\]/,"",a); gsub(/\[[0-9]+\\?\]/,"",b); n=split(a,x,"."); m=split(b,y,"."); A=x[1]; if(n>1)A=A"."x[2]; B=y[1]; if(m>1)B=B"."y[2]; c[A" -> "B]++; if(!(A" -> "B in w) || $1<w[A" -> "B]) w[A" -> "B]=$1} END {for(k in c) printf "%6d paths, worst %8.3f  %s\n", c[k], w[k], k}' /tmp/paths_$C.txt | sort -k4 -n | head -40
+              fi
+            done
+            echo "=== detail files v3"
+            mkdir -p /tmp/extra
+            for C in nom_tt_025C_1v80 max_ss_100C_1v60; do
+              D=$(find runs/wokwi -type d -path '*stapostpnr*' -name "$C" 2>/dev/null | head -1)
+              [ -n "$D" ] && [ -f "$D/checks.rpt" ] && head -c 4000000 "$D/checks.rpt" | gzip > /tmp/extra/checks_$C.rpt.gz
+              [ -n "$D" ] && [ -f "$D/max.rpt" ] && head -c 6000000 "$D/max.rpt" | gzip > /tmp/extra/max_$C.rpt.gz
+            done
+            NL=$(find runs/wokwi -path '*stapostpnr*' -prune -o -name '*.nl.v' -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2)
+            echo "netlist $NL"
+            [ -n "$NL" ] && [ -n "$(ls /tmp/extra/checks_* 2>/dev/null)" ] && gzip -c "$NL" > /tmp/extra/final.nl.v.gz
+            ls -la /tmp/extra 2>/dev/null
             echo "=== yosys stat"
             for f in $(grep -rlsE "Chip area for" runs/wokwi --include='*.log' --include='*.rpt' | sort | tail -2); do echo "--- $f"; grep -B60 "Chip area for" "$f" | tail -75 | cut -c1-120; done
             echo "=== flow log tail"
@@ -72,8 +110,8 @@ jobs:
             tail -40 runs/wokwi/error.log 2>/dev/null | cut -c1-220
           } > $OUT 2>&1 || true
           wc -c $OUT
-          rm -rf /tmp/res && mkdir /tmp/res && cd /tmp/res && git init -q && cp $OUT metrics.txt
-          git -c user.name=trial -c user.email=trial@users.noreply.github.com add metrics.txt
+          rm -rf /tmp/res && mkdir /tmp/res && cd /tmp/res && git init -q && cp $OUT metrics.txt; cp /tmp/extra/* . 2>/dev/null || true
+          git -c user.name=trial -c user.email=trial@users.noreply.github.com add -A
           git -c user.name=trial -c user.email=trial@users.noreply.github.com commit -q -m "metrics for $GITHUB_REF_NAME $GITHUB_SHA"
           git push -f "https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git" "HEAD:refs/heads/results/${GITHUB_REF_NAME#trial/}"
           PUBEOF
