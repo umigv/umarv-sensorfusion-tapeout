@@ -42,8 +42,14 @@
 //   50-53    VN-300 yaw, single precision           54-57  VN-300 turn rate, single precision
 //   58-5F    VN-300 latitude, double precision      60-67  VN-300 longitude, double precision
 //   68-6B    encoder travel since the last beat, counts, signed
-//   6C-7F    not held here. Every write, to any address, also appears on bus_we / bus_addr /
-//            bus_wdata, so another block (the Kalman filter) can keep its own registers there.
+//   6C       Kalman filter word address [96]. Held in the filter, write only.
+//   70-73    the filter word at that address. Reads work for any address (0-61 the filter's
+//            storage, 64-111 its constants, 112-126 the sensor words). Writes are taken only for
+//            the tunable constants (addresses 96-111, listed in test/ukf/ukf_prog.py) and only
+//            while the filter is switched off (control bit 7 = 0); a tunable constant keeps its
+//            built-in value until it is written, and goes back to it at reset.
+//   Every write, to any address, also appears on bus_we / bus_addr / bus_wdata; that is how the
+//   filter sees writes to 24-3B, 6C and 70-73.
 //
 // The measurement registers change only at a beat (meas_pulse) and then stay put until the next
 // one, 2.5 ms later. Read them after the pulse and they cannot change under you.
@@ -206,7 +212,7 @@ module spi_regs (
     logic [7:0] rd_data;
     // where a register lives in the filter: 0-5 are its state words, 112 and up its sensor words
     wire from_filter = (rd_addr >= 7'h24 && rd_addr < 7'h3C) || (rd_addr >= 7'h48 && rd_addr <= 7'h4B)
-                    || (rd_addr >= 7'h50 && rd_addr <= 7'h6B);
+                    || (rd_addr >= 7'h50 && rd_addr <= 7'h6B) || (rd_addr >= 7'h70 && rd_addr <= 7'h73);
     always_comb begin
         rd_data = 8'h00;
         if (rd_addr == 7'h00)                           rd_data = 8'hA7;
@@ -237,6 +243,7 @@ module spi_regs (
             5'h18:   spi_raddr = 7'd114;                    // 60: longitude, low half
             5'h19:   spi_raddr = 7'd115;                    // 64: longitude, high half
             5'h1A:   spi_raddr = 7'd124;                    // 68: wheel travel
+            5'h1C:   spi_raddr = 7'd127;                    // 70: the filter word picked by register 6C
             default: spi_raddr = {2'b00, rd_addr[6:2] - 5'd9};   // 24-3B: state words 0-5
         endcase
     end
