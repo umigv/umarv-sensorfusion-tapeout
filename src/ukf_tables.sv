@@ -5,6 +5,7 @@
 // always / if the flag is set (2) / if it is clear (3), [19:13] first operand, [12:6] second operand,
 // [5:0] destination. For 7: [22:20] jump, call, return, stop, stop with a new state, mark as started;
 // [19:17] condition; [9:0] target.
+(* keep_hierarchy *)
 module ukf_steps (
     input  logic [9:0]  pc,
     output logic [25:0] word
