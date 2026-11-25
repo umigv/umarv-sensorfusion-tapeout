@@ -55,7 +55,34 @@ module lidar_latch_mem (
 
     wire [255:0] sel, gate;
     wire [15:0] q [0:255];
-    assign rdata = q[raddr];
+
+    // Reading, in two levels. Each group of 16 words has its own selector, followed by a buffer
+    // placed by name; a second selector picks the group, followed by an output buffer. Without
+    // the named buffers the tools build one flat 256-word selector, and wherever its words end
+    // up far apart a small gate in the middle of it is left driving millimetres of wire.
+    wire [15:0] grp_pre [0:15];
+    wire [15:0] grp     [0:15];
+    wire [15:0] rdata_pre = grp[raddr[7:4]];
+    genvar g, gb;
+    generate
+        for (g = 0; g < 16; g = g + 1) begin : rgrp
+            assign grp_pre[g] = q[{g[3:0], raddr[3:0]}];
+            for (gb = 0; gb < 16; gb = gb + 1) begin : rb
+`ifdef SYNTHESIS
+                sky130_fd_sc_hd__buf_4 u_rbuf (.A(grp_pre[g][gb]), .X(grp[g][gb]));
+`else
+                assign grp[g][gb] = grp_pre[g][gb];
+`endif
+            end
+        end
+        for (gb = 0; gb < 16; gb = gb + 1) begin : ob
+`ifdef SYNTHESIS
+            sky130_fd_sc_hd__buf_4 u_obuf (.A(rdata_pre[gb]), .X(rdata[gb]));
+`else
+            assign rdata[gb] = rdata_pre[gb];
+`endif
+        end
+    endgenerate
 
     genvar i;
     generate
