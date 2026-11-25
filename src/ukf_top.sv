@@ -322,7 +322,33 @@ module ukf_store #(
     wire [127:0] sel, gate;
 
     wire [31:0] q [0:127];
-    assign rdata = q[raddr];
+
+    // Reading, in two levels: a selector and a named buffer for each group of 8 words, then a
+    // selector across the groups. Without the named buffers the tools build one flat selector,
+    // and wherever its words end up far apart a small gate in the middle of it is left driving
+    // millimetres of wire, which was the slowest path on the chip.
+    localparam GROUPS = (64 + NCFG + 7) / 8;
+    wire [31:0] grp_pre [0:15];
+    wire [31:0] grp     [0:15];
+    assign rdata = grp[raddr[6:3]];
+    genvar g, gb;
+    generate
+        for (g = 0; g < 16; g = g + 1) begin : rgrp
+            if (g < GROUPS) begin : real_
+                assign grp_pre[g] = q[{g[3:0], raddr[2:0]}];
+                for (gb = 0; gb < 32; gb = gb + 1) begin : rb
+`ifdef SYNTHESIS
+                    sky130_fd_sc_hd__buf_4 u_rbuf (.A(grp_pre[g][gb]), .X(grp[g][gb]));
+`else
+                    assign grp[g][gb] = grp_pre[g][gb];
+`endif
+                end
+            end else begin : none_
+                assign grp_pre[g] = 32'd0;
+                assign grp[g]     = 32'd0;
+            end
+        end
+    endgenerate
 
     genvar i;
     generate
