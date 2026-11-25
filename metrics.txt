@@ -1,0 +1,1345 @@
+branch trial/n-defrep  commit 6a814ae18e9c5edf648da14ed7f5ddc11c3bd329  2026-11-25T09:10:45Z
+=== steps reached
+11-openroad-checkmacroinstances
+12-openroad-staprepnr
+13-openroad-floorplan
+14-openroad-dumprcvalues
+15-odb-checkmacroantennaproperties
+16-odb-setpowerconnections
+17-odb-manualmacroplacement
+18-openroad-cutrows
+19-openroad-tapendcapinsertion
+20-odb-addpdnobstructions
+21-openroad-generatepdn
+22-odb-removepdnobstructions
+23-odb-addroutingobstructions
+24-openroad-globalplacementskipio
+25-openroad-ioplacement
+26-odb-customioplacement
+27-odb-applydeftemplate
+28-openroad-globalplacement
+29-odb-writeverilogheader
+30-checker-powergridviolations
+31-openroad-stamidpnr
+32-openroad-repairdesignpostgpl
+33-odb-manualglobalplacement
+34-openroad-detailedplacement
+35-openroad-cts
+36-openroad-stamidpnr-1
+37-openroad-resizertimingpostcts
+38-openroad-stamidpnr-2
+39-openroad-globalrouting
+40-openroad-checkantennas
+41-odb-diodesonports
+42-openroad-repairantennas
+43-openroad-resizertimingpostgrt
+44-openroad-stamidpnr-3
+45-openroad-detailedrouting
+46-odb-removeroutingobstructions
+47-openroad-checkantennas-1
+48-checker-trdrc
+49-odb-reportdisconnectedpins
+50-checker-disconnectedpins
+51-odb-reportwirelength
+52-checker-wirelength
+53-openroad-fillinsertion
+54-odb-cellfrequencytables
+55-openroad-rcx
+56-openroad-stapostpnr
+57-openroad-irdropreport
+58-magic-streamout
+59-klayout-streamout
+60-klayout-render
+61-magic-writelef
+62-odb-checkdesignantennaproperties
+63-magic-drc
+64-checker-magicdrc
+65-magic-spiceextraction
+66-checker-illegaloverlap
+67-netgen-lvs
+68-checker-lvs
+69-checker-setupviolations
+70-checker-holdviolations
+71-checker-maxslewviolations
+72-checker-maxcapviolations
+73-misc-reportmanufacturability
+error.log
+final
+flow.log
+pdk.json
+resolved.json
+tmp
+warning.log
+=== key lines
+[INFO RSZ-0039] Resized 1179 instances.
+[INFO RSZ-0038] Inserted 3974 buffers in 1926 nets.
+   Chip area for module '\tt_um_umigv_sensorfusion': 95131.238400
+   Chip area for module '\tt_um_umigv_sensorfusion': 181908.214400
+   Chip area for module '\tt_um_umigv_sensorfusion': 473711.827200
+[INFO GRT-0018] Total wirelength: 3060757 um
+[INFO GRT-0014] Routed nets: 54840
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO RSZ-0051] Resized 13 instances: 13 up, 0 up match, 0 down, 0 VT
+[INFO RSZ-0032] Inserted 207 hold buffers.
+[INFO GRT-0018] Total wirelength: 3110982 um
+[INFO GRT-0014] Routed nets: 56152
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO RSZ-0032] Inserted 702 hold buffers.
+[GPL-0302] Target density 0.6000 is too low for the available free area.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO GRT-0018] Total wirelength: 2974093 um
+[INFO GRT-0014] Routed nets: 54840
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GPL-0302] Target density 0.6000 is too low for the available free area.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO GPL-0036] Movable instances area:     475751.283 um^2
+[INFO GPL-0006] Number of instances:             60079
+[INFO GPL-0010] Number of nets:                  49762
+[INFO GPL-0011] Number of pins:                 166908
+[INFO GPL-0016] Core area:                  694446.029 um^2
+[INFO GPL-0018] Movable instances area:     536179.047 um^2
+[INFO GPL-0019] Utilization:                    78.782 %
+[WARNING GPL-0302] Target density 0.6000 is too low for the available free area.
+[INFO IFP-0102] Core area:                       694446.029 um^2
+[INFO IFP-0105] Number of instances:                  49743
+Number of nets:           56157
+    Completing 100% with 32397 violations.
+[INFO DRT-0199]   Number of violations = 37146.
+    Completing 100% with 20525 violations.
+[INFO DRT-0199]   Number of violations = 20525.
+    Completing 100% with 19706 violations.
+[INFO DRT-0199]   Number of violations = 19706.
+    Completing 100% with 4755 violations.
+[INFO DRT-0199]   Number of violations = 4755.
+    Completing 100% with 1259 violations.
+[INFO DRT-0199]   Number of violations = 1259.
+    Completing 100% with 693 violations.
+[INFO DRT-0199]   Number of violations = 693.
+    Completing 100% with 473 violations.
+[INFO DRT-0199]   Number of violations = 473.
+    Completing 100% with 359 violations.
+[INFO DRT-0199]   Number of violations = 359.
+    Completing 100% with 234 violations.
+[INFO DRT-0199]   Number of violations = 234.
+    Completing 100% with 179 violations.
+[INFO DRT-0199]   Number of violations = 179.
+    Completing 100% with 21 violations.
+[INFO DRT-0199]   Number of violations = 21.
+    Completing 100% with 20 violations.
+[INFO DRT-0199]   Number of violations = 20.
+    Completing 100% with 15 violations.
+[INFO DRT-0199]   Number of violations = 15.
+    Completing 100% with 10 violations.
+[INFO DRT-0199]   Number of violations = 10.
+    Completing 100% with 7 violations.
+[INFO DRT-0199]   Number of violations = 7.
+    Completing 100% with 7 violations.
+[INFO DRT-0199]   Number of violations = 7.
+    Completing 100% with 2 violations.
+[INFO DRT-0199]   Number of violations = 2.
+    Completing 100% with 2 violations.
+[INFO DRT-0199]   Number of violations = 2.
+    Completing 100% with 2 violations.
+[INFO DRT-0199]   Number of violations = 2.
+    Completing 100% with 2 violations.
+[INFO DRT-0199]   Number of violations = 2.
+    Completing 100% with 1 violations.
+[INFO DRT-0199]   Number of violations = 1.
+    Completing 100% with 1 violations.
+[INFO DRT-0199]   Number of violations = 1.
+    Completing 100% with 0 violations.
+[INFO DRT-0199]   Number of violations = 0.
+=== cell type reports (last of each step)
+--- runs/wokwi/13-openroad-floorplan/openroad-floorplan.log
+Cell type report:                       Count       Area
+  Buffer                                 3013   12229.23
+  Inverter                               4132   15527.39
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266296.65
+  Total                                 49743  475751.28
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-openroad-floor
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-openroad-floorp
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-ope
+--- runs/wokwi/18-openroad-cutrows/openroad-cutrows.log
+Cell type report:                       Count       Area
+  Buffer                                 3013   12229.23
+  Inverter                               4132   15527.39
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266296.65
+  Total                                 49743  475751.28
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/18-open
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/18-openroad-cutrow
+--- runs/wokwi/19-openroad-tapendcapinsertion/openroad-tapendcapinsertion.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 3013   12229.23
+  Inverter                               4132   15527.39
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266296.65
+  Total                                 60079  489614.58
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-openroad-tapen
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-openroad-tapend
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-ope
+--- runs/wokwi/21-openroad-generatepdn/openroad-generatepdn.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 3013   12229.23
+  Inverter                               4132   15527.39
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266296.65
+  Total                                 60079  489614.58
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-openroad-gener
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-openroad-genera
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-ope
+[INFO PSM-0040] All shapes on net VPWR are connected.
+[INFO PSM-0040] All shapes on net VGND are connected.
+--- runs/wokwi/28-openroad-globalplacement/openroad-globalplacement.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 3013   12229.23
+  Inverter                               4132   15527.39
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266296.65
+  Total                                 60079  489614.58
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-openroad-globa
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-openroad-global
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-ope
+--- runs/wokwi/32-openroad-repairdesignpostgpl/openroad-repairdesignpostgpl.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 3013   12749.73
+  Timing Repair Buffer                   3987   34852.18
+  Inverter                               4132   15527.39
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266450.55
+  Total                                 64066  525141.15
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-openroad-repai
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-openroad-repair
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-ope
+--- runs/wokwi/34-openroad-detailedplacement/openroad-detailedplacement.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 3013   12749.73
+  Timing Repair Buffer                   3987   34852.18
+  Inverter                               4132   15527.39
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266450.55
+  Total                                 64066  525141.15
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-openroad-detai
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-openroad-detail
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-ope
+--- runs/wokwi/35-openroad-cts/openroad-cts.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 3013   12749.73
+  Clock buffer                            555    7757.44
+  Timing Repair Buffer                   3987   34852.18
+  Inverter                               4130   15519.88
+  Clock inverter                           41     389.12
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266450.55
+  Total                                 64660  533280.21
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/35-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/35-openroad-cts/t
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/35-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/35-openroad-cts/tt
+--- runs/wokwi/37-openroad-resizertimingpostcts/openroad-resizertimingpostcts.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 3013   12749.73
+  Clock buffer                            555    7757.44
+  Timing Repair Buffer                   4689   41878.92
+  Inverter                               4130   15519.88
+  Clock inverter                           41     389.12
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266450.55
+  Total                                 65362  540306.95
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/37-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/37-openroad-resiz
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/37-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/37-openroad-resize
+--- runs/wokwi/39-openroad-globalrouting/openroad-globalrouting.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 3013   12749.73
+  Clock buffer                            555    7757.44
+  Timing Repair Buffer                   4689   41878.92
+  Inverter                               4130   15519.88
+  Clock inverter                           41     389.12
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266450.55
+  Total                                 65362  540306.95
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/39-open
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/39-openroad-global
+--- runs/wokwi/42-openroad-repairantennas/1-openroad-diodeinsertion/openroad-diodeinsertion.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Antenna cell                            641    1604.04
+  Buffer                                 3013   12749.73
+  Clock buffer                            555    7757.44
+  Timing Repair Buffer                   4689   41878.92
+  Inverter                               4130   15519.88
+  Clock inverter                           41     389.12
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266450.55
+  Total                                 66003  541910.99
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/42-open
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/42-openroad-repair
+--- runs/wokwi/43-openroad-resizertimingpostgrt/openroad-resizertimingpostgrt.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Antenna cell                            641    1604.04
+  Buffer                                 3013   12749.73
+  Clock buffer                            555    7757.44
+  Timing Repair Buffer                   6001   55017.77
+  Inverter                               4130   15519.88
+  Clock inverter                           41     389.12
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266476.82
+  Total                                 67315  555076.11
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/43-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/43-openroad-resiz
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/43-openro
+--- runs/wokwi/45-openroad-detailedrouting/openroad-detailedrouting.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Antenna cell                            641    1604.04
+  Buffer                                 3013   12749.73
+  Clock buffer                            555    7757.44
+  Timing Repair Buffer                   6001   55017.77
+  Inverter                               4130   15519.88
+  Clock inverter                           41     389.12
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266476.82
+  Total                                 67315  555076.11
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/45-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/45-openroad-detai
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/45-openro
+--- runs/wokwi/53-openroad-fillinsertion/openroad-fillinsertion.log
+Cell type report:                       Count       Area
+  Fill cell                             48915  140766.26
+  Tap cell                               9964   12466.96
+  Antenna cell                            641    1604.04
+  Buffer                                 3013   12749.73
+  Clock buffer                            555    7757.44
+  Timing Repair Buffer                   6001   55017.77
+  Inverter                               4130   15519.88
+  Clock inverter                           41     389.12
+  Sequential cell                       10071  181698.01
+  Multi-Input combinational cell        32527  266476.82
+  Total                                115858  694446.03
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/53-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/53-openroad-filli
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/53-openro
+--- runs/wokwi/55-openroad-rcx/max/rcx.log
+Cell type report:                       Count       Area
+  Fill cell                             48915  140766.26
+  Tap cell                               9964   12466.96
+  Antenna cell                            641    1604.04
+  Standard cell                         56338  539608.78
+  Total                                115858  694446.03
+Writing extracted parasitics to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/55-o
+[INFO RCX-0443] 56157 nets finished
+--- runs/wokwi/55-openroad-rcx/min/rcx.log
+Cell type report:                       Count       Area
+  Fill cell                             48915  140766.26
+  Tap cell                               9964   12466.96
+  Antenna cell                            641    1604.04
+  Standard cell                         56338  539608.78
+  Total                                115858  694446.03
+Writing extracted parasitics to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/55-o
+[INFO RCX-0443] 56157 nets finished
+--- runs/wokwi/55-openroad-rcx/nom/rcx.log
+Cell type report:                       Count       Area
+  Fill cell                             48915  140766.26
+  Tap cell                               9964   12466.96
+  Antenna cell                            641    1604.04
+  Standard cell                         56338  539608.78
+  Total                                115858  694446.03
+Writing extracted parasitics to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/55-o
+[INFO RCX-0443] 56157 nets finished
+=== congestion reports
+--- runs/wokwi/39-openroad-globalrouting/openroad-globalrouting.log
+[INFO GRT-0096] Final congestion report:
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow
+---------------------------------------------------------------------------------------
+li1                  0             0            0.00%             0 /  0 /  0
+met1            123439        100957           81.79%             2 /  1 / 109
+met2            130670        103305           79.06%             1 /  2 / 198
+met3             96328         58198           60.42%             3 /  1 / 208
+met4             59203         26083           44.06%             0 /  2 / 152
+---------------------------------------------------------------------------------------
+Total           409640        288543           70.44%             6 /  6 / 667
+
+[INFO GRT-0018] Total wirelength: 2974093 um
+[INFO GRT-0014] Routed nets: 54840
+[WARNING GRT-0704] Try reduce the layer adjustment from 30.000002% to 14%
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+--- runs/wokwi/43-openroad-resizertimingpostgrt/openroad-resizertimingpostgrt.log
+[INFO GRT-0096] Final congestion report:
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow
+---------------------------------------------------------------------------------------
+li1                  0             0            0.00%             0 /  0 /  0
+met1            123426        103783           84.09%             2 /  1 / 140
+met2            130670        107364           82.16%             1 /  3 / 279
+met3             96328         61046           63.37%             2 /  1 / 331
+met4             59203         27673           46.74%             1 /  2 / 218
+---------------------------------------------------------------------------------------
+Total           409627        299866           73.20%             6 /  7 / 968
+
+[INFO GRT-0018] Total wirelength: 3110982 um
+[INFO GRT-0014] Routed nets: 56152
+[WARNING GRT-0704] Try reduce the layer adjustment from 30.000002% to 5%
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+=== violation tables
+--- runs/wokwi/45-openroad-detailedrouting/openroad-detailedrouting.log
+Viol/Layer         li1   mcon   met1    via   met2   via2   met3   via3   met4
+Cut Spacing          0     32      0      1      0      2      0      0      0
+Metal Spacing        0      0   5094      0   1481      0    485      0      0
+Min Hole             0      0     11      0      0      0      0      0      0
+Recheck             34      0   2799      0   1367      0    380      0    169
+Short                0      3  20823     16   3589      0    715      1    144
+[INFO DRT-0267] cpu time = 00:38:05, elapsed time = 00:09:53, memory = 2468.10 (MB), peak = 2598.56 (MB)
+Total wire length = 2128103 um.
+Total wire length on LAYER li1 = 0 um.
+--
+Viol/Layer        mcon   met1    via   met2   met3   met4
+Cut Spacing         13      0      0      0      0      0
+Metal Spacing        0   2620      0    791    278      0
+Min Hole             0      1      0      1      0      0
+Short                0  15015      4   1684    109      9
+[INFO DRT-0267] cpu time = 00:34:40, elapsed time = 00:08:58, memory = 2511.50 (MB), peak = 2694.60 (MB)
+Total wire length = 2102575 um.
+Total wire length on LAYER li1 = 0 um.
+Total wire length on LAYER met1 = 745363 um.
+--
+Viol/Layer        mcon   met1    via   met2   met3   met4
+Cut Spacing         16      0      1      0      0      0
+Metal Spacing        0   2542      0    782    247      2
+Min Hole             0      1      0      1      0      0
+Short                0  14162      3   1795    140     14
+[INFO DRT-0267] cpu time = 00:35:06, elapsed time = 00:09:10, memory = 2629.89 (MB), peak = 2747.36 (MB)
+Total wire length = 2094391 um.
+Total wire length on LAYER li1 = 0 um.
+Total wire length on LAYER met1 = 742944 um.
+--
+=== drc map (100 um bins, top row is top of die)
+file runs/wokwi/45-openroad-detailedrouting/drt-run-0/tt_um_umigv_sensorfusion.drc-8.rpt.xml
+ violations
+    0
+=== hold buffer sources
+    149 u_lidar.u_frame_tx
+    108 u_lidar.u_xyz
+     92 u_lidar.u_motion
+     27 u_lidar.u_rx
+     22 u_lidar.sweep_time_us
+     21 u_lidar.u_tx_fifo
+     21 u_lidar.u_buffer
+     21 u_lidar.firing_azimuth
+     20 u_lidar.u_cordic
+     16 u_lidar.shift_y
+     16 u_lidar.shift_x
+     14 u_lidar.cordic_sin
+     14 u_lidar.cordic_cos
+     12 u_lidar.fire_cos0
+      8 u_ukf.cfg_set
+      7 u_timestamper.dw_now
+      7 u_lidar.fire_cos3
+      6 u_lidar.pt_distance
+      5 u_lidar.fire_cos2
+      4 u_ukf.m_wdata
+      4 u_timestamper.tx_shift
+      4 u_regs.sh_out
+      4 u_lidar.u_rx_fifo
+      4 u_lidar.fire_cos1
+      2 u_ukf.q
+      2 u_timestamper.us_ctr
+      2 u_timestamper.spi_pause_ctr
+      2 u_timestamper.miso_sync
+      2 u_timestamper.dw_have_prev
+      2 u_regs.sck_s
+      2 u_lidar.fire_sin1
+      2 u_lidar.fire_sin0
+      1 u_ukf.u_fp
+      1 u_ukf.started
+      1 u_ukf.ret1
+      1 u_ukf.ret0
+      1 u_ukf.m_waddr
+      1 u_timestamper.vn_rx_sync
+      1 u_timestamper.sck_ctr
+      1 u_timestamper.dw_prev
+=== sta summary (after routing)
+┏━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━�
+┃                      ┃ Hold     ┃ Reg to   ┃          ┃          ┃ of which ┃ Setup     ┃ Reg to   ┃           ┃ Setup    ┃ of which  ┃          ┃           ┃
+┃                      ┃ Worst    ┃ Reg      ┃          ┃ Hold Vio ┃ reg to   ┃ Worst     ┃ Reg      ┃           ┃ Vio      ┃ reg to    ┃ Max Cap  ┃ Max Slew  ┃
+┃ Corner/Group         ┃ Slack    ┃ Paths    ┃ Hold TNS ┃ Count    ┃ reg      ┃ Slack     ┃ Paths    ┃ Setup TNS ┃ Count    ┃ reg       ┃ Violati… ┃ Violatio… ┃
+┡━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━�
+│ Overall              │ 0.0766   │ 0.0766   │ 0.0000   │ 0        │ 0        │ -9.0846   │ -9.0846  │ -1100.61… │ 486      │ 486       │ 272      │ 17531     │
+│ nom_tt_025C_1v80     │ 0.2713   │ 0.2713   │ 0.0000   │ 0        │ 0        │ 5.4694    │ 5.4694   │ 0.0000    │ 0        │ 0         │ 128      │ 3050      │
+│ nom_ss_100C_1v60     │ 0.7673   │ 0.7673   │ 0.0000   │ 0        │ 0        │ -7.5159   │ -7.5159  │ -862.3754 │ 168      │ 168       │ 216      │ 14403     │
+│ nom_ff_n40C_1v95     │ 0.0821   │ 0.0821   │ 0.0000   │ 0        │ 0        │ 9.3126    │ 9.3126   │ 0.0000    │ 0        │ 0         │ 115      │ 1187      │
+│ min_tt_025C_1v80     │ 0.2712   │ 0.2712   │ 0.0000   │ 0        │ 0        │ 6.4099    │ 6.4099   │ 0.0000    │ 0        │ 0         │ 102      │ 2192      │
+│ min_ss_100C_1v60     │ 0.7648   │ 0.7648   │ 0.0000   │ 0        │ 0        │ -5.7665   │ -5.7665  │ -608.6153 │ 138      │ 138       │ 158      │ 10894     │
+│ min_ff_n40C_1v95     │ 0.0845   │ 0.0845   │ 0.0000   │ 0        │ 0        │ 9.3269    │ 9.3269   │ 0.0000    │ 0        │ 0         │ 93       │ 888       │
+│ max_tt_025C_1v80     │ 0.2680   │ 0.2680   │ 0.0000   │ 0        │ 0        │ 4.2387    │ 4.2387   │ 0.0000    │ 0        │ 0         │ 160      │ 3713      │
+│ max_ss_100C_1v60     │ 0.6092   │ 0.7714   │ 0.0000   │ 0        │ 0        │ -9.0846   │ -9.0846  │ -1100.61… │ 180      │ 180       │ 272      │ 17531     │
+│ max_ff_n40C_1v95     │ 0.0766   │ 0.0766   │ 0.0000   │ 0        │ 0        │ 9.2675    │ 9.2675   │ 0.0000    │ 0        │ 0         │ 141      │ 1590      │
+└──────────────────────┴──────────┴──────────┴──────────┴─────────�
+--- runs/wokwi/47-openroad-checkantennas-1/openroad-checkantennas-1.log
+245
+--- runs/wokwi/47-openroad-checkantennas-1/reports/antenna.rpt
+Net: _00166_
+  Pin:   _81952_/D (sky130_fd_sc_hd__dfxtp_2)
+    Layer: mcon
+      Partial area ratio:    0.23
+      Required ratio:    3.00 (Gate area) 
+      Cumulative area ratio:    0.23
+      Required ratio:    0.00 (Cumulative area) 
+
+    Layer: met1
+      Partial area ratio:    0.72
+      Required ratio:    0.00 (Gate area) 
+      Cumulative area ratio:    0.72
+      Required ratio:    0.00 (Cumulative area) 
+      Partial area ratio:    3.39
+      Required ratio:  400.00 (Side area) 
+      Cumulative area ratio:    3.39
+      Required ratio:    0.00 (Cumulative side area) 
+
+    Layer: via
+      Partial area ratio:    0.18
+      Required ratio:    6.00 (Gate area) 
+      Cumulative area ratio:    0.41
+      Required ratio:    0.00 (Cumulative area) 
+
+    Layer: met2
+      Partial area ratio:    2.42
+      Required ratio:    0.00 (Gate area) 
+      Cumulative area ratio:    3.14
+      Required ratio:    0.00 (Cumulative area) 
+      Partial area ratio:   10.75
+      Required ratio:  400.00 (Side area) 
+      Cumulative area ratio:   14.14
+      Required ratio:    0.00 (Cumulative side area) 
+
+    Layer: via2
+      Partial area ratio:    0.32
+      Required ratio:    6.00 (Gate area) 
+      Cumulative area ratio:    0.73
+      Required ratio:    0.00 (Cumulative area) 
+
+--- runs/wokwi/47-openroad-checkantennas-1/reports/antenna_summary.rpt
+┏━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━�
+┃ P / R ┃ Partial ┃ Required ┃ Net                              ┃ Pin                                                      ┃ Layer ┃
+┡━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━�
+│ 11.88 │ 4752.06 │ 400.00   │ _25670_                          │ _65063_/A                                                │ met3  │
+│ 9.53  │ 3811.56 │ 400.00   │ _24715_                          │ _63890_/A                                                │ met3  │
+│ 8.14  │ 3255.87 │ 400.00   │ net1412                          │ _64221_/A                                                │ met3  │
+│ 7.64  │ 3056.26 │ 400.00   │ u_lidar.rst                      │ fanout2048/A                                             │ met3  │
+│ 6.37  │ 2546.67 │ 400.00   │ net1380                          │ _64358_/A                                                │ met3  │
+│ 5.99  │ 2397.14 │ 400.00   │ net7                             │ _82007_/D                                                │ met3  │
+│ 5.62  │ 2249.08 │ 400.00   │ _25304_                          │ _63271_/D                                                │ met3  │
+│ 5.57  │ 2228.72 │ 400.00   │ _13329_                          │ _49403_/A2                                               │ met3  │
+│ 4.89  │ 1956.76 │ 400.00   │ _27170_                          │ _65169_/A_N                                              │ met3  │
+│ 4.65  │ 1860.11 │ 400.00   │ _13196_                          │ _49276_/A2                                               │ met3  │
+│ 4.47  │ 1788.83 │ 400.00   │ _24564_                          │ _65021_/A                                                │ met3  │
+│ 4.47  │ 1788.83 │ 400.00   │ _24564_                          │ _66302_/A                                                │ met3  │
+│ 4.47  │ 1787.24 │ 400.00   │ net3025                          │ fanout3024/A                                             │ met3  │
+│ 4.44  │ 1776.13 │ 400.00   │ _24542_                          │ _62557_/A                                                │ met3  │
+│ 4.40  │ 1761.21 │ 400.00   │ net1854                          │ _55839_/A                                                │ met3  │
+│ 4.40  │ 1758.16 │ 400.00   │ _28080_                          │ _66069_/C                                                │ met3  │
+│ 4.38  │ 1752.44 │ 400.00   │ _26789_                          │ _64763_/D                                                │ met3  │
+│ 4.21  │ 1685.14 │ 400.00   │ _25028_                          │ _62994_/D                                                │ met3  │
+│ 3.89  │ 1556.38 │ 400.00   │ u_lidar.sent_tgl                 │ _50366_/B                                                │ met3  │
+│ 3.88  │ 1553.97 │ 400.00   │ _25405_                          │ _63373_/D                                                │ met3  │
+│ 3.81  │ 1523.81 │ 400.00   │ net1480                          │ _60427_/C1                                               │ met3  │
+│ 3.77  │ 1507.11 │ 400.00   │ net13                            │ _82006_/D                                                │ met3  │
+│ 3.67  │ 1469.14 │ 400.00   │ _25500_                          │ _63563_/A                                                │ met3  │
+│ 3.64  │ 1454.16 │ 400.00   │ _26594_                          │ _64596_/A                                                │ met3  │
+│ 3.55  │ 1418.92 │ 400.00   │ _24645_                          │ _65039_/A                                                │ met3  │
+│ 3.40  │ 1361.46 │ 400.00   │ u_ukf.u_store.wd_q[7\]           │ fanout2844/A                                             │ met3  │
+│ 3.39  │ 1355.24 │ 400.00   │ _26854_                          │ _64835_/B                                                │ met3  │
+│ 3.37  │ 1346.48 │ 400.00   │ _28117_                          │ _66123_/B                                                │ met3  │
+│ 3.36  │ 1345.75 │ 400.00   │ u_lidar.u_tx_fifo.f.mem[2\][2\]  │ hold5558/A                                               │ met2  │
+│ 3.36  │ 1343.81 │ 400.00   │ _11055_                          │ _67846_/A                                                │ met3  │
+│ 3.36  │ 1342.79 │ 400.00   │ net631                           │ u_lidar.u_buffer.u_mem.word[8\].bit_[9\].u_latch/GATE    │ met3  │
+│ 3.36  │ 1342.55 │ 400.00   │ dw_check_turns                   │ _74151_/B2                                               │ met3  │
+│ 3.35  │ 1341.53 │ 400.00   │ _24564_                          │ _66302_/A                                                │ met2  │
+│ 3.21  │ 1282.93 │ 400.00   │ _04918_                          │ _77934_/A                                                │ met3  │
+│ 3.15  │ 1261.59 │ 400.00   │ net11                            │ _82004_/D                                                │ met3  │
+│ 3.15  │ 1258.79 │ 400.00   │ net3999                          │ _81800_/D                                                │ met3  │
+│ 3.15  │ 1258.60 │ 400.00   │ _02640_                          │ _80487_/D                                                │ met3  │
+=== slow-corner paths (after routing)
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/sta.process_stats.json
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/power.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/ws.min.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/clock.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/tt_um_umigv_sensorfusion__max_ss_100C_1v60.sdf
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/skew.min.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/filter_unannotated.log
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/filter_unannotated.process_stats.json
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/violator_list.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/tt_um_umigv_sensorfusion__max_ss_100C_1v60.lib
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/wns.min.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/tns.min.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/tns.max.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/min.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/checks.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/max.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/filter_unannotated_metrics.json
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/wns.max.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/unpropagated.rpt
+runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/skew.max.rpt
+--- runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/tns.max.rpt
+--- worst path in full
+--- runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/max.rpt
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _80631_ (rising edge-triggered flip-flop clocked by clk)
+                                             -9.084566   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81533_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.864051   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81544_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.852201   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81559_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.830201   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81570_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.788544   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81530_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.788521   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _80633_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.770615   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81526_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.744710   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81552_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.715789   slack (VIOLATED)
+Startpoint: _81433_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _80627_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.715154   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81567_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.684012   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _80630_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.664341   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81541_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.660468   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81523_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.645397   slack (VIOLATED)
+Startpoint: _81433_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81458_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.625799   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81464_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.611383   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81535_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.604202   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81532_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.583055   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81549_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.579884   slack (VIOLATED)
+Startpoint: _81433_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81564_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.561635   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81578_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.556617   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81585_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.555655   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81446_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.540754   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81561_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.526723   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81538_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.481129   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81556_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.480737   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81558_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.467323   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81540_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.467297   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81596_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.415053   slack (VIOLATED)
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _81551_ (rising edge-triggered flip-flop clocked by clk)
+                                             -8.395091   slack (VIOLATED)
+grep: write error: Broken pipe
+--- worst path in full
+Startpoint: _81432_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _80631_ (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout         Cap        Slew       Delay        Time   Description
+---------------------------------------------------------------------------------------------
+                                  0.000000    0.000000   clock clk (rise edge)
+                                  0.000000    0.000000   clock source latency
+     1    0.131439    0.947986    0.722280    0.722280 ^ clk (in)
+                                                         clk (net)
+                      0.953234    0.000000    0.722280 ^ clkbuf_0_clk/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.128846    0.229033    0.695095    1.417374 ^ clkbuf_0_clk/X (sky130_fd_sc_hd__clkbuf_16)
+                                                         clknet_0_clk (net)
+                      0.234116    0.027737    1.445111 ^ clkbuf_2_0_0_clk/A (sky130_fd_sc_hd__clkbuf_8)
+     8    0.160581    0.429451    0.586668    2.031780 ^ clkbuf_2_0_0_clk/X (sky130_fd_sc_hd__clkbuf_8)
+                                                         clknet_2_0_0_clk (net)
+                      0.430723    0.020320    2.052099 ^ clkbuf_5_5_0_clk/A (sky130_fd_sc_hd__clkbuf_8)
+     2    0.030786    0.112565    0.437064    2.489163 ^ clkbuf_5_5_0_clk/X (sky130_fd_sc_hd__clkbuf_8)
+                                                         clknet_5_5_0_clk (net)
+                      0.112721    0.003874    2.493037 ^ clkbuf_6_10__f_clk/A (sky130_fd_sc_hd__clkbuf_16)
+     5    0.062283    0.123928    0.307601    2.800638 ^ clkbuf_6_10__f_clk/X (sky130_fd_sc_hd__clkbuf_16)
+                                                         clknet_6_10__leaf_clk (net)
+                      0.124390    0.005519    2.806157 ^ clkbuf_leaf_291_clk/A (sky130_fd_sc_hd__clkbuf_8)
+    14    0.046925    0.146232    0.330051    3.136209 ^ clkbuf_leaf_291_clk/X (sky130_fd_sc_hd__clkbuf_8)
+                                                         clknet_leaf_291_clk (net)
+                      0.146264    0.002229    3.138437 ^ _81432_/CLK (sky130_fd_sc_hd__dfrtp_2)
+     1    0.002767    0.069366    0.743293    3.881731 ^ _81432_/Q (sky130_fd_sc_hd__dfrtp_2)
+                                                         u_ukf.pc[0] (net)
+                      0.069366    0.000209    3.881939 ^ fanout3028/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+     2    0.008022    0.150014    0.546476    4.428415 ^ fanout3028/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+                                                         net3028 (net)
+                      0.150014    0.000246    4.428661 ^ load_slew3030/A (sky130_fd_sc_hd__clkbuf_4)
+     6    0.105977    0.492054    0.620430    5.049091 ^ load_slew3030/X (sky130_fd_sc_hd__clkbuf_4)
+                                                         net3030 (net)
+                      0.492463    0.012339    5.061430 ^ fanout3027/A (sky130_fd_sc_hd__clkdlybuf4s25_1)
+     8    0.146584    2.298469    2.318236    7.379667 ^ fanout3027/X (sky130_fd_sc_hd__clkdlybuf4s25_1)
+                                                         net3027 (net)
+                      2.298895    0.027689    7.407355 ^ fanout3026/A (sky130_fd_sc_hd__dlymetal6s2s_1)
+    10    0.081289    1.206384    1.535658    8.943014 ^ fanout3026/X (sky130_fd_sc_hd__dlymetal6s2s_1)
+                                                         net3026 (net)
+                      1.207002    0.015413    8.958426 ^ _46161_/A (sky130_fd_sc_hd__nand2_2)
+     9    0.267617    2.203537    2.147213   11.105639 v _46161_/Y (sky130_fd_sc_hd__nand2_2)
+                                                         _10849_ (net)
+                      2.203537    0.001172   11.106811 v _46518_/A (sky130_fd_sc_hd__nor2_2)
+     4    0.193042    3.308947    3.433026   14.539837 ^ _46518_/Y (sky130_fd_sc_hd__nor2_2)
+                                                         _11206_ (net)
+                      3.308947    0.000247   14.540083 ^ _46519_/B (sky130_fd_sc_hd__nor2_2)
+     3    0.037444    0.657378    1.027892   15.567976 v _46519_/Y (sky130_fd_sc_hd__nor2_2)
+                                                         _11207_ (net)
+                      0.657382    0.003155   15.571131 v _67485_/B (sky130_fd_sc_hd__nand3_2)
+     1    0.004757    0.176558    0.353854   15.924984 ^ _67485_/Y (sky130_fd_sc_hd__nand3_2)
+                                                         _29362_ (net)
+                      0.176558    0.000234   15.925219 ^ _67488_/A (sky130_fd_sc_hd__nand3_2)
+     1    0.005121    0.268083    0.174291   16.099510 v _67488_/Y (sky130_fd_sc_hd__nand3_2)
+                                                         _29365_ (net)
+                      0.268083    0.000394   16.099905 v _67491_/A (sky130_fd_sc_hd__nand2_2)
+     1    0.002837    0.081076    0.159954   16.259857 ^ _67491_/Y (sky130_fd_sc_hd__nand2_2)
+                                                         _29368_ (net)
+                      0.081076    0.000231   16.260088 ^ _67500_/A_N (sky130_fd_sc_hd__nand3b_2)
+     1    0.005723    0.123757    0.223624   16.483713 ^ _67500_/Y (sky130_fd_sc_hd__nand3b_2)
+                                                         _29377_ (net)
+                      0.123757    0.000435   16.484148 ^ _67501_/B (sky130_fd_sc_hd__nand3_2)
+     1    0.007937    0.301802    0.210314   16.694462 v _67501_/Y (sky130_fd_sc_hd__nand3_2)
+                                                         _29378_ (net)
+                      0.301802    0.000666   16.695127 v _67536_/A (sky130_fd_sc_hd__nand2_2)
+     1    0.172788    1.375246    1.158703   17.853830 ^ _67536_/Y (sky130_fd_sc_hd__nand2_2)
+                                                         _29413_ (net)
+                      1.378674    0.059535   17.913366 ^ _67541_/A (sky130_fd_sc_hd__nand2_2)
+     1    0.047142    0.586249    0.863324   18.776690 v _67541_/Y (sky130_fd_sc_hd__nand2_2)
+                                                         _29418_ (net)
+                      0.586491    0.011447   18.788136 v _67542_/A (sky130_fd_sc_hd__nand2_2)
+     1    0.007106    0.167977    0.306617   19.094753 ^ _67542_/Y (sky130_fd_sc_hd__nand2_2)
+                                                         _29419_ (net)
+                      0.167977    0.000581   19.095333 ^ _67612_/A (sky130_fd_sc_hd__nand3_2)
+     2    0.125318    1.589457    1.306656   20.401991 v _67612_/Y (sky130_fd_sc_hd__nand3_2)
+                                                         _29489_ (net)
+                      1.590173    0.029878   20.431868 v _67626_/A1 (sky130_fd_sc_hd__a21oi_2)
+     3    0.015460    0.458726    0.940233   21.372101 ^ _67626_/Y (sky130_fd_sc_hd__a21oi_2)
+                                                         _29503_ (net)
+                      0.458726    0.000838   21.372940 ^ max_cap105/A (sky130_fd_sc_hd__buf_2)
+     4    0.030308    0.244663    0.508697   21.881638 ^ max_cap105/X (sky130_fd_sc_hd__buf_2)
+                                                         net105 (net)
+                      0.244687    0.002656   21.884293 ^ _68349_/A (sky130_fd_sc_hd__nand2_2)
+     4    0.037189    0.326952    0.371333   22.255625 v _68349_/Y (sky130_fd_sc_hd__nand2_2)
+                                                         _30226_ (net)
+                      0.326961    0.002151   22.257776 v _68402_/A (sky130_fd_sc_hd__nor2_4)
+     7    0.069418    0.696102    0.747750   23.005527 ^ _68402_/Y (sky130_fd_sc_hd__nor2_4)
+                                                         _30279_ (net)
+                      0.696114    0.002499   23.008026 ^ _68828_/A (sky130_fd_sc_hd__buf_2)
+--- runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/wns.max.rpt
+--- worst path in full
+--- runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/skew.max.rpt
+--- worst path in full
+--- runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/ws.max.rpt
+--- worst path in full
+--- runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/violator_list.rpt
+--- runs/wokwi/56-openroad-stapostpnr/max_ss_100C_1v60/checks.rpt
+  11308 u_lidar.u_buffer
+   5698 u_ukf.u_store
+      2 u_ukf.pc
+      1 u_lidar.rst
+=== timing detail v2
+--- corners and constraints the flow resolved
+{"DEFAULT_CORNER":"nom_tt_025C_1v80","PNR_CORNERS":null,"RSZ_CORNERS":null,"STA_CORNERS":["nom_tt_025C_1v80","nom_ss_100C_1v60","nom_ff_n40C_1v95","min_tt_025C_1v80","min_ss_100C_1v60","min_ff_n40C_1v95","max_tt_025C_1v80","max_ss_100C_1v60","max_ff_n40C_1v95"],"MAX_TRANSITION_CONSTRAINT":0.75,"MAX_FANOUT_CONSTRAINT":10,"MAX_CAPACITANCE_CONSTRAINT":0.2,"SYNTH_STRATEGY":"AREA 3","SYNTH_ADDER_TYPE":"YOSYS","DESIGN_REPAIR_MAX_SLEW_PCT":20,"GRT_DESIGN_REPAIR_MAX_SLEW_PCT":10,"CLOCK_UNCERTAINTY_CONSTRAINT":0.25,"TIME_DERATING_CONSTRAINT":5,"IO_DELAY_CONSTRAINT":20,"PL_RESIZER_SETUP_SLACK_MARGIN":0.05,"PL_RESIZER_SETUP_MAX_BUFFER_PCT":50,"RUN_POST_GRT_DESIGN_REPAIR":false,"RUN_POST_GRT_RESIZER_TIMING":true,"DRT_ANTENNA_REPAIR_ITERS":0}
+--- resizer messages
+      2 [RSZ-N] found N floating nets.
+      2 [INFO RSZ-N] Repair move sequence: UnbufferMove SizeUpMove SwapPinsMove BufferMove CloneMove SplitLoadMove 
+      2 [INFO RSZ-N] Inserted N tie skyN_fd_sc_hd__conb_N instances.
+      2 [INFO RSZ-N] Inserted N hold buffers.
+      2 [INFO RSZ-N] Found N endpoints with hold violations.
+      1 [WARNING RSZ-N] found N floating nets.
+      1 [INFO RSZ-N] Using max wire length Num.
+      1 [INFO RSZ-N] Swapped pins on N instances.
+      1 [INFO RSZ-N] Resized N instances: N up, N up match, N down, N VT
+      1 [INFO RSZ-N] Resized N instances.
+      1 [INFO RSZ-N] Repairing N out of N (N%) violating endpoints...
+      1 [INFO RSZ-N] Removed N buffers.
+      1 [INFO RSZ-N] No setup violations found
+      1 [INFO RSZ-N] Inserted N skyN_fd_sc_hd__clkdlybufNsN_N input buffers.
+      1 [INFO RSZ-N] Inserted N buffers in N nets.
+      1 [INFO RSZ-N] Found N slew violations.
+      1 [INFO RSZ-N] Found N fanout violations.
+      1 [INFO RSZ-N] Found N endpoints with setup violations.
+      1 [INFO RSZ-N] Found N capacitance violations.
+--- runs/wokwi/32-openroad-repairdesignpostgpl/openroad-repairdesignpostgpl.log
+[INFO RSZ-0034] Found 1764 slew violations.
+[INFO RSZ-0035] Found 558 fanout violations.
+[INFO RSZ-0036] Found 1 capacitance violations.
+[INFO RSZ-0039] Resized 1179 instances.
+[INFO RSZ-0038] Inserted 3974 buffers in 1926 nets.
+[INFO RSZ-0042] Inserted 12 tie sky130_fd_sc_hd__conb_1 instances.
+[INFO RSZ-0042] Inserted 5 tie sky130_fd_sc_hd__conb_1 instances.
+[WARNING RSZ-0020] found 2 floating nets.
+--- runs/wokwi/37-openroad-resizertimingpostcts/openroad-resizertimingpostcts.log
+[INFO RSZ-0100] Repair move sequence: UnbufferMove SizeUpMove SwapPinsMove BufferMove CloneMove SplitLoadMove 
+[INFO RSZ-0098] No setup violations found
+[INFO RSZ-0046] Found 657 endpoints with hold violations.
+Iteration | Resized | Buffers | Cloned Gates |   Area   |   WNS   |   TNS   | Endpoint
+[INFO RSZ-0032] Inserted 702 hold buffers.
+--- runs/wokwi/43-openroad-resizertimingpostgrt/openroad-resizertimingpostgrt.log
+[INFO RSZ-0099] Repairing 136 out of 136 (100.00%) violating endpoints...
+   Iter   | Removed | Resized | Inserted | Cloned |  Pin  |   Area   |    WNS   |   TNS      |  Viol  | Worst
+[INFO RSZ-0059] Removed 2 buffers.
+[INFO RSZ-0051] Resized 13 instances: 13 up, 0 up match, 0 down, 0 VT
+[INFO RSZ-0043] Swapped pins on 1 instances.
+[INFO RSZ-0046] Found 1315 endpoints with hold violations.
+Iteration | Resized | Buffers | Cloned Gates |   Area   |   WNS   |   TNS   | Endpoint
+[INFO RSZ-0032] Inserted 207 hold buffers.
+##### corner nom_tt_025C_1v80
+--- slew violations by size (ns over the limit), then the 25 worst, then by net/instance prefix
+total 3050: under 0.1 ns 1110, 0.1-0.3 929, 0.3-0.75 645, over 0.75 366
+u_lidar.u_buffer.u_mem.word[96].bit_[6].u_latch/GATE    0.750000    3.406152   -2.656152 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[11].u_latch/GATE    0.750000    3.406100   -2.656100 (VIOLATED)
+fanout1317/A                            0.750000    3.405610   -2.655610 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[12].u_latch/GATE    0.750000    3.401490   -2.651491 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[10].u_latch/GATE    0.750000    3.401430   -2.651430 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[9].u_latch/GATE    0.750000    3.400454   -2.650454 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[14].u_latch/GATE    0.750000    3.400438   -2.650438 (VIOLATED)
+fanout1318/X                            0.750000    3.400430   -2.650430 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[218].bit_[12].u_latch/GATE    0.750000    3.142890   -2.392890 (VIOLATED)
+ANTENNA_627/DIODE                       0.750000    3.142884   -2.392884 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[218].bit_[9].u_latch/GATE    0.750000    3.142852   -2.392852 (VIOLATED)
+ANTENNA_628/DIODE                       0.750000    3.142846   -2.392846 (VIOLATED)
+fanout835/A                             0.750000    3.129926   -2.379926 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[218].u_gate/X    0.750000    3.129922   -2.379922 (VIOLATED)
+_67684_/B                               0.750000    2.928361   -2.178361 (VIOLATED)
+_68113_/A2                              0.750000    2.928210   -2.178210 (VIOLATED)
+_67877_/A2                              0.750000    2.916995   -2.166996 (VIOLATED)
+_67683_/Y                               0.750000    2.916972   -2.166972 (VIOLATED)
+_62541_/B                               0.750000    2.670910   -1.920910 (VIOLATED)
+ANTENNA_119/DIODE                       0.750000    2.670897   -1.920897 (VIOLATED)
+wire1682/A                              0.750000    2.670898   -1.920898 (VIOLATED)
+_62524_/Y                               0.750000    2.663166   -1.913166 (VIOLATED)
+_65329_/B1                              0.750000    2.646762   -1.896762 (VIOLATED)
+_64873_/B1                              0.750000    2.646392   -1.896392 (VIOLATED)
+_65466_/A2                              0.750000    2.646018   -1.896018 (VIOLATED)
+   2020 GATE
+    460 fanout
+    257 ANTENNA
+    221 u_lidar.u_buffer.u_mem
+     58 u_ukf.u_store.word
+     20 max_cap
+      5 wire
+      5 input
+      1 load_slew2895
+      1 load_slew2881
+      1 load_slew2856
+      1 hold
+--- capacitance violations: count and the 10 worst
+128
+_62457_/X                               0.200000    0.520986   -0.320986 (VIOLATED)
+_50305_/Y                               0.200000    0.520816   -0.320816 (VIOLATED)
+max_cap1567/X                           0.200000    0.502865   -0.302865 (VIOLATED)
+_62970_/X                               0.200000    0.484632   -0.284632 (VIOLATED)
+max_cap413/X                            0.200000    0.481667   -0.281667 (VIOLATED)
+max_cap1559/X                           0.200000    0.474418   -0.274418 (VIOLATED)
+_62379_/X                               0.200000    0.455337   -0.255337 (VIOLATED)
+wire1397/X                              0.200000    0.444142   -0.244142 (VIOLATED)
+_50069_/Y                               0.200000    0.434556   -0.234556 (VIOLATED)
+_62371_/Y                               0.200000    0.409493   -0.209493 (VIOLATED)
+--- setup paths: slack, from net, to net (all reported), then by from/to block
+2000
+5.469444 u_ukf.pc[1] clknet_leaf_72_clk
+5.507415 u_ukf.pc[1] clknet_leaf_120_clk
+5.510035 u_ukf.pc[1] clknet_leaf_73_clk
+5.555790 u_ukf.pc[1] clknet_leaf_97_clk
+5.560413 u_ukf.pc[1] clknet_leaf_101_clk
+5.563950 u_ukf.pc[0] clknet_leaf_120_clk
+5.593400 u_ukf.pc[1] clknet_leaf_100_clk
+5.593832 u_ukf.pc[1] clknet_leaf_33_clk
+5.594341 u_ukf.pc[1] clknet_leaf_92_clk
+5.677253 u_ukf.pc[0] clknet_leaf_86_clk
+5.680552 u_ukf.pc[1] clknet_leaf_95_clk
+5.698638 u_ukf.pc[1] clknet_leaf_92_clk
+5.700194 u_ukf.pc[1] clknet_leaf_93_clk
+5.707957 u_ukf.pc[0] clknet_leaf_89_clk
+5.710959 u_ukf.pc[0] clknet_leaf_88_clk
+5.726980 u_ukf.pc[0] clknet_leaf_101_clk
+5.727987 u_ukf.pc[0] clknet_leaf_94_clk
+5.744174 u_ukf.pc[0] clknet_leaf_121_clk
+5.746234 u_ukf.pc[1] clknet_leaf_88_clk
+5.748202 u_ukf.pc[1] clknet_leaf_96_clk
+5.759569 u_ukf.pc[0] clknet_leaf_88_clk
+5.764337 u_ukf.pc[1] clknet_leaf_120_clk
+5.769754 u_ukf.pc[0] clknet_leaf_89_clk
+5.776746 u_ukf.pc[0] clknet_leaf_98_clk
+5.788220 u_ukf.pc[0] clknet_leaf_27_clk
+5.788790 u_ukf.pc[1] clknet_leaf_97_clk
+5.790620 u_ukf.pc[1] clknet_leaf_95_clk
+5.791701 u_ukf.pc[1] clknet_leaf_70_clk
+5.796959 u_ukf.pc[0] clknet_leaf_101_clk
+5.815025 u_ukf.pc[1] clknet_leaf_95_clk
+5.820944 u_ukf.pc[0] clknet_leaf_86_clk
+5.829968 u_ukf.pc[0] clknet_leaf_94_clk
+5.832579 u_ukf.pc[0] clknet_leaf_88_clk
+5.834402 u_ukf.pc[0] clknet_leaf_89_clk
+5.844594 u_ukf.pc[1] clknet_leaf_120_clk
+5.845060 u_ukf.pc[0] clknet_leaf_92_clk
+5.846650 u_ukf.pc[1] clknet_leaf_27_clk
+5.862395 u_ukf.pc[0] clknet_leaf_83_clk
+5.868614 u_ukf.pc[1] clknet_leaf_92_clk
+5.871607 u_ukf.pc[1] clknet_leaf_25_clk
+##### corner max_ss_100C_1v60
+--- slew violations by size (ns over the limit), then the 25 worst, then by net/instance prefix
+total 17531: under 0.1 ns 5853, 0.1-0.3 6155, 0.3-0.75 3737, over 0.75 1786
+u_lidar.u_buffer.u_mem.word[96].bit_[6].u_latch/GATE    0.750000    5.868531   -5.118531 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[11].u_latch/GATE    0.750000    5.868474   -5.118474 (VIOLATED)
+fanout1317/A                            0.750000    5.867564   -5.117564 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[12].u_latch/GATE    0.750000    5.858569   -5.108569 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[10].u_latch/GATE    0.750000    5.858448   -5.108448 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[9].u_latch/GATE    0.750000    5.856325   -5.106325 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[96].bit_[14].u_latch/GATE    0.750000    5.856279   -5.106278 (VIOLATED)
+fanout1318/X                            0.750000    5.856233   -5.106233 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[218].bit_[12].u_latch/GATE    0.750000    5.438033   -4.688032 (VIOLATED)
+ANTENNA_627/DIODE                       0.750000    5.438019   -4.688018 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[218].bit_[9].u_latch/GATE    0.750000    5.437988   -4.687988 (VIOLATED)
+ANTENNA_628/DIODE                       0.750000    5.437974   -4.687974 (VIOLATED)
+fanout835/A                             0.750000    5.414813   -4.664813 (VIOLATED)
+u_lidar.u_buffer.u_mem.word[218].u_gate/X    0.750000    5.414796   -4.664796 (VIOLATED)
+_67684_/B                               0.750000    5.249567   -4.499567 (VIOLATED)
+_68113_/A2                              0.750000    5.249295   -4.499295 (VIOLATED)
+_67877_/A2                              0.750000    5.229834   -4.479834 (VIOLATED)
+_67683_/Y                               0.750000    5.229746   -4.479746 (VIOLATED)
+_62541_/B                               0.750000    4.724661   -3.974661 (VIOLATED)
+ANTENNA_119/DIODE                       0.750000    4.724638   -3.974638 (VIOLATED)
+wire1682/A                              0.750000    4.724640   -3.974640 (VIOLATED)
+_62524_/Y                               0.750000    4.711669   -3.961669 (VIOLATED)
+_46425_/A2                              0.750000    4.518475   -3.768475 (VIOLATED)
+_50011_/A2_N                            0.750000    4.505429   -3.755430 (VIOLATED)
+_67750_/B                               0.750000    4.505313   -3.755313 (VIOLATED)
+  10620 GATE
+   3113 u_lidar.u_buffer.u_mem
+   1928 fanout
+   1218 u_ukf.u_store.word
+    428 ANTENNA
+    143 max_cap
+     37 wire
+      9 input
+      6 hold
+      2 uo_out
+      1 load_slew3874
+      1 load_slew3463
+      1 load_slew3429
+      1 load_slew3356
+      1 load_slew2971
+      1 load_slew2954
+      1 load_slew2908
+      1 load_slew2895
+      1 load_slew2881
+      1 load_slew2874
+      1 load_slew2872
+      1 load_slew2856
+      1 load_slew2835
+      1 load_slew2800
+      1 load_slew2742
+--- capacitance violations: count and the 10 worst
+272
+_50305_/Y                               0.200000    0.570635   -0.370635 (VIOLATED)
+_62457_/X                               0.200000    0.558745   -0.358745 (VIOLATED)
+_62970_/X                               0.181284    0.528434   -0.347150 (VIOLATED)
+max_cap1567/X                           0.200000    0.545074   -0.345074 (VIOLATED)
+max_cap413/X                            0.200000    0.518605   -0.318605 (VIOLATED)
+max_cap1559/X                           0.200000    0.515323   -0.315323 (VIOLATED)
+_62379_/X                               0.200000    0.496381   -0.296381 (VIOLATED)
+fanout1318/X                            0.094309    0.377898   -0.283589 (VIOLATED)
+wire1397/X                              0.200000    0.476237   -0.276237 (VIOLATED)
+_50069_/Y                               0.200000    0.471104   -0.271104 (VIOLATED)
+--- setup paths: slack, from net, to net (all reported), then by from/to block
+2000
+-9.084566 u_ukf.pc[0] clknet_leaf_120_clk
+-8.864051 u_ukf.pc[0] clknet_leaf_101_clk
+-8.852201 u_ukf.pc[0] clknet_leaf_72_clk
+-8.830201 u_ukf.pc[0] clknet_leaf_100_clk
+-8.788544 u_ukf.pc[0] clknet_leaf_73_clk
+-8.788521 u_ukf.pc[0] clknet_leaf_92_clk
+-8.770615 u_ukf.pc[0] clknet_leaf_120_clk
+-8.744710 u_ukf.pc[0] clknet_leaf_86_clk
+-8.715789 u_ukf.pc[0] clknet_leaf_89_clk
+-8.715154 u_ukf.pc[1] clknet_leaf_120_clk
+-8.684012 u_ukf.pc[0] clknet_leaf_97_clk
+-8.664341 u_ukf.pc[0] clknet_leaf_121_clk
+-8.660468 u_ukf.pc[0] clknet_leaf_95_clk
+-8.645397 u_ukf.pc[0] clknet_leaf_88_clk
+-8.625799 u_ukf.pc[1] clknet_leaf_25_clk
+-8.611383 u_ukf.pc[0] clknet_leaf_33_clk
+-8.604202 u_ukf.pc[0] clknet_leaf_94_clk
+-8.583055 u_ukf.pc[0] clknet_leaf_101_clk
+-8.579884 u_ukf.pc[0] clknet_leaf_88_clk
+-8.561635 u_ukf.pc[1] clknet_leaf_97_clk
+-8.556617 u_ukf.pc[0] clknet_leaf_89_clk
+-8.555655 u_ukf.pc[0] clknet_leaf_92_clk
+-8.540754 u_ukf.pc[0] clknet_leaf_27_clk
+-8.526723 u_ukf.pc[0] clknet_leaf_98_clk
+-8.481129 u_ukf.pc[0] clknet_leaf_96_clk
+-8.480737 u_ukf.pc[0] clknet_leaf_88_clk
+-8.467323 u_ukf.pc[0] clknet_leaf_101_clk
+-8.467297 u_ukf.pc[0] clknet_leaf_95_clk
+-8.415053 u_ukf.pc[0] clknet_leaf_93_clk
+-8.395091 u_ukf.pc[0] clknet_leaf_89_clk
+-8.391840 u_ukf.pc[0] clknet_leaf_120_clk
+-8.384532 u_ukf.pc[0] clknet_leaf_27_clk
+-8.383368 u_ukf.pc[0] clknet_leaf_86_clk
+-8.376917 u_ukf.pc[0] clknet_leaf_70_clk
+-8.375498 u_ukf.pc[0] clknet_leaf_94_clk
+-8.375011 u_ukf.pc[0] clknet_leaf_83_clk
+-8.370279 u_ukf.pc[0] clknet_leaf_88_clk
+-8.368522 u_ukf.pc[0] clknet_leaf_95_clk
+-8.353635 u_ukf.pc[0] clknet_leaf_94_clk
+-8.337096 u_ukf.pc[0] clknet_leaf_92_clk
+     7 paths, worst   -9.085  u_ukf.pc -> clknet_leaf_120_clk
+     4 paths, worst   -8.864  u_ukf.pc -> clknet_leaf_101_clk
+     2 paths, worst   -8.852  u_ukf.pc -> clknet_leaf_72_clk
+     1 paths, worst   -8.830  u_ukf.pc -> clknet_leaf_100_clk
+     6 paths, worst   -8.789  u_ukf.pc -> clknet_leaf_73_clk
+     8 paths, worst   -8.789  u_ukf.pc -> clknet_leaf_92_clk
+     4 paths, worst   -8.745  u_ukf.pc -> clknet_leaf_86_clk
+    10 paths, worst   -8.716  u_ukf.pc -> clknet_leaf_89_clk
+     5 paths, worst   -8.684  u_ukf.pc -> clknet_leaf_97_clk
+     1 paths, worst   -8.664  u_ukf.pc -> clknet_leaf_121_clk
+     4 paths, worst   -8.660  u_ukf.pc -> clknet_leaf_95_clk
+     7 paths, worst   -8.645  u_ukf.pc -> clknet_leaf_88_clk
+     3 paths, worst   -8.626  u_ukf.pc -> clknet_leaf_25_clk
+     4 paths, worst   -8.611  u_ukf.pc -> clknet_leaf_33_clk
+     9 paths, worst   -8.604  u_ukf.pc -> clknet_leaf_94_clk
+     7 paths, worst   -8.541  u_ukf.pc -> clknet_leaf_27_clk
+     2 paths, worst   -8.527  u_ukf.pc -> clknet_leaf_98_clk
+     1 paths, worst   -8.481  u_ukf.pc -> clknet_leaf_96_clk
+    10 paths, worst   -8.415  u_ukf.pc -> clknet_leaf_93_clk
+     1 paths, worst   -8.377  u_ukf.pc -> clknet_leaf_70_clk
+     7 paths, worst   -8.375  u_ukf.pc -> clknet_leaf_83_clk
+     6 paths, worst   -8.212  u_ukf.pc -> clknet_leaf_29_clk
+     6 paths, worst   -8.097  u_ukf.pc -> clknet_leaf_28_clk
+     4 paths, worst   -7.894  u_ukf.pc -> clknet_leaf_26_clk
+     8 paths, worst   -7.843  u_ukf.pc -> clknet_leaf_82_clk
+     6 paths, worst   -7.511  u_ukf.pc -> clknet_leaf_81_clk
+     7 paths, worst   -6.653  u_ukf.pc -> clknet_leaf_80_clk
+     2 paths, worst   -6.579  u_ukf.pc -> clknet_leaf_34_clk
+     1 paths, worst   -6.400  u_ukf.pc -> clknet_leaf_30_clk
+     2 paths, worst   -5.815  u_ukf.pc -> clknet_leaf_18_clk
+     2 paths, worst   -5.792  u_ukf.pc -> clknet_leaf_19_clk
+     1 paths, worst   -5.582  u_ukf.pc -> clknet_leaf_84_clk
+     2 paths, worst   -5.084  u_ukf.pc -> clknet_leaf_17_clk
+     8 paths, worst   -2.256  u_ukf.pc -> clknet_leaf_290_clk
+     3 paths, worst   -2.073  u_ukf.pc -> clknet_leaf_79_clk
+     5 paths, worst   -1.888  u_ukf.pc -> clknet_leaf_291_clk
+     1 paths, worst   -1.774  u_ukf.pc -> clknet_leaf_23_clk
+     2 paths, worst   -1.596  u_ukf.pc -> clknet_leaf_289_clk
+     2 paths, worst   -1.526  u_ukf.pc -> clknet_leaf_24_clk
+     1 paths, worst   -1.418  u_ukf.pc -> clknet_leaf_288_clk
+=== yosys stat
+--- runs/wokwi/06-yosys-synthesis/reports/stat.rpt
+     1223 3.21E+04   sky130_fd_sc_hd__dfrtp_2
+      200  5255.04   sky130_fd_sc_hd__dfstp_2
+     2312 4.92E+04   sky130_fd_sc_hd__dfxtp_2
+     6336 9.51E+04   sky130_fd_sc_hd__dlxtp_1
+     4125  15483.6   sky130_fd_sc_hd__inv_2
+        7   43.792   sky130_fd_sc_hd__inv_4
+     1787 2.01E+04   sky130_fd_sc_hd__mux2_2
+    11384 7.12E+04   sky130_fd_sc_hd__nand2_2
+       12   135.13   sky130_fd_sc_hd__nand2_4
+        1   20.019   sky130_fd_sc_hd__nand2_8
+       20  175.168   sky130_fd_sc_hd__nand2b_2
+     1671 1.67E+04   sky130_fd_sc_hd__nand3_2
+        6  105.101   sky130_fd_sc_hd__nand3_4
+      213  2398.55   sky130_fd_sc_hd__nand3b_2
+     3211 2.01E+04   sky130_fd_sc_hd__nor2_2
+       27  304.042   sky130_fd_sc_hd__nor2_4
+        1   20.019   sky130_fd_sc_hd__nor2_8
+        3   26.275   sky130_fd_sc_hd__nor2b_2
+      103 1.03E+03   sky130_fd_sc_hd__nor3_2
+        2   32.531   sky130_fd_sc_hd__nor3_4
+       15   187.68   sky130_fd_sc_hd__nor3b_2
+       28  350.336   sky130_fd_sc_hd__o2111a_2
+       20  300.288   sky130_fd_sc_hd__o2111ai_2
+      790 7.91E+03   sky130_fd_sc_hd__o211a_2
+        1   17.517   sky130_fd_sc_hd__o211a_4
+      112  1.4E+03   sky130_fd_sc_hd__o211ai_2
+      407 3.56E+03   sky130_fd_sc_hd__o21a_2
+     1082 9.48E+03   sky130_fd_sc_hd__o21ai_2
+        4   65.062   sky130_fd_sc_hd__o21ai_4
+       28  280.269   sky130_fd_sc_hd__o21ba_2
+       29  326.563   sky130_fd_sc_hd__o21bai_2
+        1   18.768   sky130_fd_sc_hd__o21bai_4
+      156 1.76E+03   sky130_fd_sc_hd__o221a_2
+       33  495.475   sky130_fd_sc_hd__o221ai_2
+       87  870.835   sky130_fd_sc_hd__o22a_2
+       12  150.144   sky130_fd_sc_hd__o22ai_2
+       11  123.869   sky130_fd_sc_hd__o2bb2a_2
+        4   60.058   sky130_fd_sc_hd__o2bb2ai_2
+       22  247.738   sky130_fd_sc_hd__o311a_2
+        3   48.797   sky130_fd_sc_hd__o311ai_2
+       31  310.298   sky130_fd_sc_hd__o31a_2
+       25    312.8   sky130_fd_sc_hd__o31ai_2
+       14  157.651   sky130_fd_sc_hd__o32a_2
+        1   16.266   sky130_fd_sc_hd__o32ai_2
+        6   75.072   sky130_fd_sc_hd__o41a_2
+        3   48.797   sky130_fd_sc_hd__o41ai_2
+     1373 8.59E+03   sky130_fd_sc_hd__or2_2
+       17  148.893   sky130_fd_sc_hd__or2_4
+      192 1.68E+03   sky130_fd_sc_hd__or2b_2
+      239 1.79E+03   sky130_fd_sc_hd__or3_2
+        1   11.261   sky130_fd_sc_hd__or3_4
+      140 1.23E+03   sky130_fd_sc_hd__or3b_2
+      392 3.43E+03   sky130_fd_sc_hd__or4_2
+        2   22.522   sky130_fd_sc_hd__or4_4
+       41  410.394   sky130_fd_sc_hd__or4b_2
+      116  1886.81   sky130_fd_sc_hd__xnor2_2
+      349 5.68E+03   sky130_fd_sc_hd__xor2_2
+
+   Area for cell type \sky130_fd_sc_hd__and2_1 is unknown!
+
+   Chip area for module '\tt_um_umigv_sensorfusion': 473711.827200
+--- runs/wokwi/06-yosys-synthesis/yosys-synthesis.log
+   Area for cell type $_ANDNOT_ is unknown!
+   Area for cell type $_AND_ is unknown!
+   Area for cell type $_MUX_ is unknown!
+   Area for cell type $_NAND_ is unknown!
+   Area for cell type $_NOR_ is unknown!
+   Area for cell type $_NOT_ is unknown!
+   Area for cell type $_ORNOT_ is unknown!
+   Area for cell type $_OR_ is unknown!
+   Area for cell type $_XNOR_ is unknown!
+   Area for cell type $_XOR_ is unknown!
+   Area for cell type \sky130_fd_sc_hd__and2_1 is unknown!
+
+   Chip area for module '\tt_um_umigv_sensorfusion': 181908.214400
+--
+     1223 3.21E+04   sky130_fd_sc_hd__dfrtp_2
+      200  5255.04   sky130_fd_sc_hd__dfstp_2
+     2312 4.92E+04   sky130_fd_sc_hd__dfxtp_2
+     6336 9.51E+04   sky130_fd_sc_hd__dlxtp_1
+     4125  15483.6   sky130_fd_sc_hd__inv_2
+        7   43.792   sky130_fd_sc_hd__inv_4
+     1787 2.01E+04   sky130_fd_sc_hd__mux2_2
+    11384 7.12E+04   sky130_fd_sc_hd__nand2_2
+       12   135.13   sky130_fd_sc_hd__nand2_4
+        1   20.019   sky130_fd_sc_hd__nand2_8
+       20  175.168   sky130_fd_sc_hd__nand2b_2
+     1671 1.67E+04   sky130_fd_sc_hd__nand3_2
+        6  105.101   sky130_fd_sc_hd__nand3_4
+      213  2398.55   sky130_fd_sc_hd__nand3b_2
+     3211 2.01E+04   sky130_fd_sc_hd__nor2_2
+       27  304.042   sky130_fd_sc_hd__nor2_4
+        1   20.019   sky130_fd_sc_hd__nor2_8
+        3   26.275   sky130_fd_sc_hd__nor2b_2
+      103 1.03E+03   sky130_fd_sc_hd__nor3_2
+        2   32.531   sky130_fd_sc_hd__nor3_4
+       15   187.68   sky130_fd_sc_hd__nor3b_2
+       28  350.336   sky130_fd_sc_hd__o2111a_2
+       20  300.288   sky130_fd_sc_hd__o2111ai_2
+      790 7.91E+03   sky130_fd_sc_hd__o211a_2
+        1   17.517   sky130_fd_sc_hd__o211a_4
+      112  1.4E+03   sky130_fd_sc_hd__o211ai_2
+      407 3.56E+03   sky130_fd_sc_hd__o21a_2
+     1082 9.48E+03   sky130_fd_sc_hd__o21ai_2
+        4   65.062   sky130_fd_sc_hd__o21ai_4
+       28  280.269   sky130_fd_sc_hd__o21ba_2
+       29  326.563   sky130_fd_sc_hd__o21bai_2
+        1   18.768   sky130_fd_sc_hd__o21bai_4
+      156 1.76E+03   sky130_fd_sc_hd__o221a_2
+       33  495.475   sky130_fd_sc_hd__o221ai_2
+       87  870.835   sky130_fd_sc_hd__o22a_2
+       12  150.144   sky130_fd_sc_hd__o22ai_2
+       11  123.869   sky130_fd_sc_hd__o2bb2a_2
+        4   60.058   sky130_fd_sc_hd__o2bb2ai_2
+       22  247.738   sky130_fd_sc_hd__o311a_2
+        3   48.797   sky130_fd_sc_hd__o311ai_2
+       31  310.298   sky130_fd_sc_hd__o31a_2
+       25    312.8   sky130_fd_sc_hd__o31ai_2
+       14  157.651   sky130_fd_sc_hd__o32a_2
+        1   16.266   sky130_fd_sc_hd__o32ai_2
+        6   75.072   sky130_fd_sc_hd__o41a_2
+        3   48.797   sky130_fd_sc_hd__o41ai_2
+     1373 8.59E+03   sky130_fd_sc_hd__or2_2
+       17  148.893   sky130_fd_sc_hd__or2_4
+      192 1.68E+03   sky130_fd_sc_hd__or2b_2
+      239 1.79E+03   sky130_fd_sc_hd__or3_2
+        1   11.261   sky130_fd_sc_hd__or3_4
+      140 1.23E+03   sky130_fd_sc_hd__or3b_2
+      392 3.43E+03   sky130_fd_sc_hd__or4_2
+        2   22.522   sky130_fd_sc_hd__or4_4
+       41  410.394   sky130_fd_sc_hd__or4b_2
+      116  1886.81   sky130_fd_sc_hd__xnor2_2
+      349 5.68E+03   sky130_fd_sc_hd__xor2_2
+
+   Area for cell type \sky130_fd_sc_hd__and2_1 is unknown!
+
+   Chip area for module '\tt_um_umigv_sensorfusion': 473711.827200
+=== flow log tail
+Cell 'tt_um_umigv_sensorfusion' has (5) input pin(s) without antenna gate information. They might not be connected to a gate.
+Cell 'tt_um_umigv_sensorfusion' has (13) output pin(s) without antenna diffusion information. They might not be driven.
+Gating variable for step 'KLayout.XOR' set to 'False'- the step will be skipped.
+Skipping step 'KLayout vs. Magic XOR'…
+Gating variable for step 'Checker.XOR' set to 'False'- the step will be skipped.
+Skipping step 'XOR Difference Checker'…
+Running 'Magic.DRC' at 'runs/wokwi/63-magic-drc'…
+Logging subprocess to [repr.filename]'runs/wokwi/63-magic-drc/magic-drc.log'[/repr.filename]…
+Gating variable for step 'KLayout.DRC' set to 'False'- the step will be skipped.
+Skipping step 'Design Rule Check (KLayout)'…
+Running 'Checker.MagicDRC' at 'runs/wokwi/64-checker-magicdrc'…
+Check for Magic DRC errors clear.
+Gating variable for step 'Checker.KLayoutDRC' set to 'False'- the step will be skipped.
+Skipping step 'KLayout DRC Checker'…
+Running 'Magic.SpiceExtraction' at 'runs/wokwi/65-magic-spiceextraction'…
+Logging subprocess to [repr.filename]'runs/wokwi/65-magic-spiceextraction/magic-spiceextraction.log'[/repr.filename]…
+Running 'Checker.IllegalOverlap' at 'runs/wokwi/66-checker-illegaloverlap'…
+Check for Magic Illegal Overlap errors clear.
+Running 'Netgen.LVS' at 'runs/wokwi/67-netgen-lvs'…
+Logging subprocess to [repr.filename]'runs/wokwi/67-netgen-lvs/netgen-lvs.log'[/repr.filename]…
+Running 'Checker.LVS' at 'runs/wokwi/68-checker-lvs'…
+Check for LVS errors clear.
+Gating variable for step 'Yosys.EQY' set to 'False'- the step will be skipped.
+Skipping step 'Equivalence Check'…
+Running 'Checker.SetupViolations' at 'runs/wokwi/69-checker-setupviolations'…
+Setup violations found in the following corners:
+* max_ss_100C_1v60
+* min_ss_100C_1v60
+* nom_ss_100C_1v60
+No setup violations found
+Running 'Checker.HoldViolations' at 'runs/wokwi/70-checker-holdviolations'…
+No hold violations found
+Running 'Checker.MaxSlewViolations' at 'runs/wokwi/71-checker-maxslewviolations'…
+Max Slew violations found in the following corners:
+* max_ff_n40C_1v95
+* max_ss_100C_1v60
+* max_tt_025C_1v80
+* min_ff_n40C_1v95
+* min_ss_100C_1v60
+* min_tt_025C_1v80
+* nom_ff_n40C_1v95
+* nom_ss_100C_1v60
+* nom_tt_025C_1v80
+No max slew violations found
+Running 'Checker.MaxCapViolations' at 'runs/wokwi/72-checker-maxcapviolations'…
+Max Cap violations found in the following corners:
+* max_ff_n40C_1v95
+* max_ss_100C_1v60
+* max_tt_025C_1v80
+* min_ff_n40C_1v95
+* min_ss_100C_1v60
+* min_tt_025C_1v80
+* nom_ff_n40C_1v95
+* nom_ss_100C_1v60
+* nom_tt_025C_1v80
+No max cap violations found
+Running 'Misc.ReportManufacturability' at 'runs/wokwi/73-misc-reportmanufacturability'…
+klayout__drc_error__count not reported. KLayout.DRC may have been skipped.
+Saving views to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/final'…
+Flow complete.
+=== warnings and errors summary
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer mcon
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer mcon
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via2
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via2
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via3
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via3
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via4
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via4
+Threshold for Threshold-surpassing long wires is not set. The checker will be skipped.
+'VSRC_LOC_FILES' was not given a value, which may make the results of IR drop analysis inaccurate. If you are not integrating a top-level chip for manufacture, you may ignore this warning, otherwise, see the documentatio
+Cell 'tt_um_umigv_sensorfusion' has (5) input pin(s) without antenna gate information. They might not be connected to a gate.
+Cell 'tt_um_umigv_sensorfusion' has (13) output pin(s) without antenna diffusion information. They might not be driven.
+Setup violations found in the following corners:
+* max_ss_100C_1v60
+* min_ss_100C_1v60
+* nom_ss_100C_1v60
+Max Slew violations found in the following corners:
+* max_ff_n40C_1v95
+* max_ss_100C_1v60
+* max_tt_025C_1v80
+* min_ff_n40C_1v95
+* min_ss_100C_1v60
+* min_tt_025C_1v80
+* nom_ff_n40C_1v95
+* nom_ss_100C_1v60
+* nom_tt_025C_1v80
+Max Cap violations found in the following corners:
+* max_ff_n40C_1v95
+* max_ss_100C_1v60
+* max_tt_025C_1v80
+* min_ff_n40C_1v95
+* min_ss_100C_1v60
+* min_tt_025C_1v80
+* nom_ff_n40C_1v95
+* nom_ss_100C_1v60
+* nom_tt_025C_1v80
+klayout__drc_error__count not reported. KLayout.DRC may have been skipped.
