@@ -6,7 +6,7 @@ source $::env(SCRIPTS_DIR)/base.sdc
 proc two_clock_from { what patterns } {
     set nets {}
     foreach p $patterns { set nets [concat $nets [get_nets -quiet $p]] }
-    puts "\[INFO\] two-clock path, $what: [llength $nets] nets"
+    puts "\[INFO\] UKF two-clock path, $what: [llength $nets] nets"
     if { [llength $nets] > 0 } {
         set_multicycle_path -setup 2 -through $nets
         set_multicycle_path -hold 1 -through $nets
@@ -27,7 +27,7 @@ two_clock_from "SPI read address" [list {u_regs.rd_addr_q[*]} {u_regs\.rd_addr_q
 set rp [concat [get_nets -quiet {u_lidar.u_buffer.rd_ptr[*]}] [get_nets -quiet {u_lidar\.u_buffer\.rd_ptr\[*\]}]]
 set rd [concat [get_nets -quiet {u_lidar.buf_rd_data[*]}] [get_nets -quiet {u_lidar\.buf_rd_data\[*\]}] \
                [get_nets -quiet {u_lidar.u_buffer.rd_data[*]}] [get_nets -quiet {u_lidar.u_buffer.mem_rdata[*]}]]
-puts "\[INFO\] two-clock path, lidar buffer read: [llength $rp] pointer nets, [llength $rd] data nets"
+puts "\[INFO\] UKF two-clock path, lidar buffer read: [llength $rp] pointer nets, [llength $rd] data nets"
 if { [llength $rp] > 0 && [llength $rd] > 0 } {
     set_multicycle_path -setup 2 -through $rp -through $rd
     set_multicycle_path -hold 1 -through $rp -through $rd
