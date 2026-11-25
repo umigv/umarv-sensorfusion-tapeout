@@ -264,9 +264,23 @@ module spi_regs (
     wire [7:0] byte_in   = {sh_in, mosi_s[1]};
     wire       byte_done = sck_rise && (bit_cnt == 3'd7);
     wire [6:0] next_addr = got_addr ? (addr + 7'd1) : byte_in[6:0];
-    assign rd_addr = next_addr;
+    // Two-clock read. At the end of a byte the address of the next byte to send is registered
+    // (rd_addr_q), and the byte itself is taken two clocks later (fetch[1]). The way from the
+    // address through the filter's storage to the outgoing byte is too long for one clock at the
+    // slow corner; the timing constraints (project.sdc) give every path that starts at rd_addr_q
+    // two clocks to match. For both clocks the filter's read path is borrowed (spi_rd).
+    logic [6:0] rd_addr_q;
+    logic [1:0] fetch;
+    assign rd_addr = rd_addr_q;
+`ifndef SYNTHESIS
+    // in simulation the byte is unknown in the first of the two clocks, so a use that did not
+    // wait would show up as unknowns in the tests
+    wire [7:0] rd_data_v = fetch[0] ? 8'hxx : rd_data;
+`else
+    wire [7:0] rd_data_v = rd_data;
+`endif
 `ifdef WITH_UKF
-    assign spi_rd = byte_done && from_filter;
+    assign spi_rd = (fetch != 2'b00) && from_filter;
 `else
     assign spi_rd = 1'b0;
 `endif
@@ -277,13 +291,14 @@ module spi_regs (
             for (k = 0; k < W_COUNT; k = k + 1) w[k] <= reset_value(k[5:0]);
             for (k = 0; k < 7; k = k + 1)  cnt[k] <= 8'd0;
             bit_cnt <= 3'd0; sh_in <= 7'd0; got_addr <= 1'b0; is_write <= 1'b0; addr <= 7'd0;
-            sh_out <= 8'd0; spi_miso <= 1'b0;
+            sh_out <= 8'd0; spi_miso <= 1'b0; rd_addr_q <= 7'd0; fetch <= 2'b00;
             host_state_valid <= 1'b0; cnt_clear <= 1'b0;
             bus_we <= 1'b0; bus_addr <= 7'd0; bus_wdata <= 8'd0;
         end else begin
             host_state_valid <= 1'b0;
             bus_we           <= 1'b0;
             cnt_clear        <= 1'b0;
+            fetch            <= {fetch[0], 1'b0};
 
             if (!selected) begin
                 bit_cnt <= 3'd0; got_addr <= 1'b0; spi_miso <= 1'b0;
@@ -306,8 +321,12 @@ module spi_regs (
                         end
                         addr <= addr + 7'd1;
                     end
-                    sh_out <= rd_data;              // the byte the host will clock out next
+                    // the byte the host will clock out next, fetched over the next two clocks (not
+                    // in a write transfer: the filter's read path is needed for the write itself)
+                    rd_addr_q <= next_addr;
+                    if (got_addr ? !is_write : !byte_in[7]) fetch <= 2'b01;
                 end
+                if (fetch[1]) sh_out <= rd_data_v;
                 if (sck_fall) begin
                     spi_miso <= sh_out[7] && got_addr && !is_write;
                     sh_out   <= {sh_out[6:0], 1'b0};
