@@ -1,0 +1,603 @@
+branch trial/cfg8-pipe  commit 9452848a37a43e859eb469575510b94e4c793c7f  2026-11-25T07:18:43Z
+=== steps reached
+01-verilator-lint
+02-checker-linttimingconstructs
+03-checker-linterrors
+04-checker-lintwarnings
+05-yosys-jsonheader
+06-yosys-synthesis
+07-checker-yosysunmappedcells
+08-checker-yosyssynthchecks
+09-checker-netlistassignstatements
+10-openroad-checksdcfiles
+11-openroad-checkmacroinstances
+12-openroad-staprepnr
+13-openroad-floorplan
+14-openroad-dumprcvalues
+15-odb-checkmacroantennaproperties
+16-odb-setpowerconnections
+17-odb-manualmacroplacement
+18-openroad-cutrows
+19-openroad-tapendcapinsertion
+20-odb-addpdnobstructions
+21-openroad-generatepdn
+22-odb-removepdnobstructions
+23-odb-addroutingobstructions
+24-openroad-globalplacementskipio
+25-openroad-ioplacement
+26-odb-customioplacement
+27-odb-applydeftemplate
+28-openroad-globalplacement
+29-odb-writeverilogheader
+30-checker-powergridviolations
+31-openroad-stamidpnr
+32-openroad-repairdesignpostgpl
+33-odb-manualglobalplacement
+34-openroad-detailedplacement
+35-openroad-cts
+36-openroad-stamidpnr-1
+37-openroad-resizertimingpostcts
+38-openroad-stamidpnr-2
+39-openroad-globalrouting
+40-openroad-checkantennas
+41-openroad-repairdesignpostgrt
+42-odb-diodesonports
+43-openroad-repairantennas
+44-openroad-resizertimingpostgrt
+error.log
+flow.log
+resolved.json
+tmp
+warning.log
+=== key lines
+[INFO RSZ-0039] Resized 833 instances.
+[INFO RSZ-0038] Inserted 2899 buffers in 1512 nets.
+[INFO GRT-0018] Total wirelength: 3180906 um
+[INFO GRT-0014] Routed nets: 53279
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO RSZ-0039] Resized 289 instances.
+[INFO RSZ-0038] Inserted 17 buffers in 524 nets.
+[INFO GRT-0018] Total wirelength: 3190035 um
+[INFO GRT-0014] Routed nets: 53296
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+   Chip area for module '\tt_um_umigv_sensorfusion': 95131.238400
+   Chip area for module '\tt_um_umigv_sensorfusion': 182673.948800
+   Chip area for module '\tt_um_umigv_sensorfusion': 473912.019200
+[INFO RSZ-0032] Inserted 776 hold buffers.
+[GPL-0302] Target density 0.6000 is too low for the available free area.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO GRT-0018] Total wirelength: 3288450 um
+[INFO GRT-0014] Routed nets: 53296
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO RSZ-0032] Inserted 53 hold buffers.
+[INFO GRT-0018] Total wirelength: 3190394 um
+[INFO GRT-0014] Routed nets: 53279
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GPL-0302] Target density 0.6000 is too low for the available free area.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO GPL-0036] Movable instances area:     475951.475 um^2
+[INFO GPL-0006] Number of instances:             59576
+[INFO GPL-0010] Number of nets:                  49259
+[INFO GPL-0011] Number of pins:                 165483
+[INFO GPL-0016] Core area:                  694446.029 um^2
+[INFO GPL-0018] Movable instances area:     537664.835 um^2
+[INFO GPL-0019] Utilization:                    79.001 %
+[WARNING GPL-0302] Target density 0.6000 is too low for the available free area.
+[INFO IFP-0102] Core area:                       694446.029 um^2
+[INFO IFP-0105] Number of instances:                  49240
+=== cell type reports (last of each step)
+--- runs/wokwi/13-openroad-floorplan/openroad-floorplan.log
+Cell type report:                       Count       Area
+  Buffer                                 1984    7861.29
+  Inverter                               4112   15519.88
+  Sequential cell                       10107  182463.75
+  Multi-Input combinational cell        33037  270106.55
+  Total                                 49240  475951.48
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-openroad-floor
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-openroad-floorp
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-ope
+--- runs/wokwi/18-openroad-cutrows/openroad-cutrows.log
+Cell type report:                       Count       Area
+  Buffer                                 1984    7861.29
+  Inverter                               4112   15519.88
+  Sequential cell                       10107  182463.75
+  Multi-Input combinational cell        33037  270106.55
+  Total                                 49240  475951.48
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/18-open
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/18-openroad-cutrow
+--- runs/wokwi/19-openroad-tapendcapinsertion/openroad-tapendcapinsertion.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 1984    7861.29
+  Inverter                               4112   15519.88
+  Sequential cell                       10107  182463.75
+  Multi-Input combinational cell        33037  270106.55
+  Total                                 59576  489814.77
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-openroad-tapen
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-openroad-tapend
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-ope
+--- runs/wokwi/21-openroad-generatepdn/openroad-generatepdn.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 1984    7861.29
+  Inverter                               4112   15519.88
+  Sequential cell                       10107  182463.75
+  Multi-Input combinational cell        33037  270106.55
+  Total                                 59576  489814.77
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-openroad-gener
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-openroad-genera
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-ope
+[INFO PSM-0040] All shapes on net VPWR are connected.
+[INFO PSM-0040] All shapes on net VGND are connected.
+--- runs/wokwi/28-openroad-globalplacement/openroad-globalplacement.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 1984    7861.29
+  Inverter                               4112   15519.88
+  Sequential cell                       10107  182463.75
+  Multi-Input combinational cell        33037  270106.55
+  Total                                 59576  489814.77
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-openroad-globa
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-openroad-global
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-ope
+--- runs/wokwi/32-openroad-repairdesignpostgpl/openroad-repairdesignpostgpl.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 1984    8311.72
+  Timing Repair Buffer                   2912   28095.70
+  Inverter                               4112   15521.14
+  Sequential cell                       10107  182471.25
+  Multi-Input combinational cell        33037  271706.84
+  Total                                 62488  519969.94
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-openroad-repai
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-openroad-repair
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-ope
+--- runs/wokwi/34-openroad-detailedplacement/openroad-detailedplacement.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 1984    8311.72
+  Timing Repair Buffer                   2912   28095.70
+  Inverter                               4112   15521.14
+  Sequential cell                       10107  182471.25
+  Multi-Input combinational cell        33037  271706.84
+  Total                                 62488  519969.94
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-openroad-detai
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-openroad-detail
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-ope
+--- runs/wokwi/35-openroad-cts/openroad-cts.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 1984    8311.72
+  Clock buffer                            501    6312.30
+  Timing Repair Buffer                   2912   28095.70
+  Inverter                               4110   15513.63
+  Clock inverter                          120    1438.88
+  Sequential cell                       10107  182471.25
+  Multi-Input combinational cell        33037  271706.84
+  Total                                 63107  527713.62
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/35-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/35-openroad-cts/t
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/35-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/35-openroad-cts/tt
+--- runs/wokwi/37-openroad-resizertimingpostcts/openroad-resizertimingpostcts.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 1984    8311.72
+  Clock buffer                            501    6312.30
+  Timing Repair Buffer                   3688   35863.15
+  Inverter                               4110   15513.63
+  Clock inverter                          120    1438.88
+  Sequential cell                       10107  182471.25
+  Multi-Input combinational cell        33037  271706.84
+  Total                                 63883  535481.07
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/37-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/37-openroad-resiz
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/37-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/37-openroad-resize
+--- runs/wokwi/39-openroad-globalrouting/openroad-globalrouting.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 1984    8311.72
+  Clock buffer                            501    6312.30
+  Timing Repair Buffer                   3688   35863.15
+  Inverter                               4110   15513.63
+  Clock inverter                          120    1438.88
+  Sequential cell                       10107  182471.25
+  Multi-Input combinational cell        33037  271706.84
+  Total                                 63883  535481.07
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/39-open
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/39-openroad-global
+--- runs/wokwi/41-openroad-repairdesignpostgrt/openroad-repairdesignpostgrt.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 1984    8317.98
+  Clock buffer                            501    6312.30
+  Timing Repair Buffer                   3705   34983.55
+  Inverter                               4110   15516.13
+  Clock inverter                          120    1438.88
+  Sequential cell                       10107  182483.77
+  Multi-Input combinational cell        33037  271997.12
+  Total                                 63900  534913.02
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/41-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/41-openroad-repai
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/41-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/41-openroad-repair
+--- runs/wokwi/43-openroad-repairantennas/1-openroad-diodeinsertion/openroad-diodeinsertion.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Antenna cell                            702    1756.68
+  Buffer                                 1984    8317.98
+  Clock buffer                            501    6312.30
+  Timing Repair Buffer                   3705   34983.55
+  Inverter                               4110   15516.13
+  Clock inverter                          120    1438.88
+  Sequential cell                       10107  182483.77
+  Multi-Input combinational cell        33037  271997.12
+  Total                                 64602  536669.71
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/43-open
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/43-openroad-repair
+=== congestion reports
+--- runs/wokwi/39-openroad-globalrouting/openroad-globalrouting.log
+[INFO GRT-0096] Final congestion report:
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow
+---------------------------------------------------------------------------------------
+li1                  0             0            0.00%             0 /  0 /  0
+met1            123714        105753           85.48%             9 /  1 / 1396
+met2            130670        112615           86.18%             1 / 10 / 2341
+met3             96328         62543           64.93%             8 /  1 / 1599
+met4             59203         31419           53.07%             1 /  6 / 984
+---------------------------------------------------------------------------------------
+Total           409915        312330           76.19%            19 / 18 / 6320
+
+[INFO GRT-0018] Total wirelength: 3190394 um
+[INFO GRT-0014] Routed nets: 53279
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO GRT-0303] Global routing runtime = 00:02:50
+--- runs/wokwi/41-openroad-repairdesignpostgrt/openroad-repairdesignpostgrt.log
+[INFO GRT-0096] Final congestion report:
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow
+---------------------------------------------------------------------------------------
+li1                  0             0            0.00%             0 /  0 /  0
+met1            123706        105716           85.46%             7 /  2 / 1412
+met2            130670        112698           86.25%             2 / 11 / 2596
+met3             96328         62422           64.80%             7 /  1 / 1652
+met4             59203         31578           53.34%             2 /  6 / 1109
+---------------------------------------------------------------------------------------
+Total           409907        312414           76.22%            18 / 20 / 6769
+
+[INFO GRT-0018] Total wirelength: 3190035 um
+[INFO GRT-0014] Routed nets: 53296
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO GRT-0303] Global routing runtime = 00:06:12
+--- runs/wokwi/44-openroad-resizertimingpostgrt/openroad-resizertimingpostgrt.log
+[INFO GRT-0096] Final congestion report:
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow
+---------------------------------------------------------------------------------------
+li1                  0             0            0.00%             0 /  0 /  0
+met1            123779        107967           87.23%            11 /  2 / 2108
+met2            130670        114571           87.68%             1 / 15 / 3336
+met3             96328         65591           68.09%             9 /  1 / 2049
+met4             59203         33019           55.77%             1 /  6 / 1350
+---------------------------------------------------------------------------------------
+Total           409980        321148           78.33%            22 / 24 / 8843
+
+[INFO GRT-0018] Total wirelength: 3288450 um
+[INFO GRT-0014] Routed nets: 53296
+[WARNING GRT-0115] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+[INFO GRT-0303] Global routing runtime = 00:09:18
+=== violation tables
+=== drc map (100 um bins, top row is top of die)
+file 
+=== hold buffer sources
+    231 u_lidar.u_frame_tx
+     88 u_lidar.u_motion
+     85 u_lidar.u_xyz
+     37 u_lidar.u_tx_fifo
+     20 u_lidar.u_cordic
+     19 u_lidar.u_rx
+     18 u_lidar.sweep_time_us
+     16 u_lidar.shift_x
+     16 u_lidar.fire_cos3
+     15 u_lidar.shift_y
+     14 u_lidar.cordic_sin
+     12 u_ukf.u_fp
+     12 u_lidar.cordic_cos
+     11 u_lidar.fire_cos2
+      9 u_lidar.u_buffer
+      9 u_lidar.firing_azimuth
+      8 u_ukf.cfg_set
+      8 u_lidar.fire_cos0
+      5 u_regs.sh_out
+      5 u_lidar.u_rx_fifo
+      5 u_lidar.pt_distance
+      5 u_lidar.fire_sin3
+      4 u_lidar.fire_cos1
+      3 u_ukf.pc
+      2 u_ukf.q
+      2 u_ukf.m_wdata
+      2 u_ukf.d_addr
+      2 u_timestamper.us_ctr
+      2 u_timestamper.tx_shift
+      2 u_timestamper.spi_pause_ctr
+      2 u_regs.sck_s
+      2 u_regs.cs_s
+      2 u_regs.cnt
+      2 u_lidar.pt_azimuth
+      2 dw_delta
+      1 u_ukf.f_done
+      1 u_ukf.cop
+      1 u_timestamper.vn_rx_sync
+      1 u_timestamper.sck_ctr
+      1 u_timestamper.s
+=== sta summary (after routing)
+=== slow-corner paths (after routing)
+
+=== yosys stat
+--- runs/wokwi/06-yosys-synthesis/reports/stat.rpt
+       40  300.288   sky130_fd_sc_hd__buf_4
+        9  101.347   sky130_fd_sc_hd__buf_6
+        2   30.029   sky130_fd_sc_hd__buf_8
+       17   63.811   sky130_fd_sc_hd__conb_1
+     1223 3.21E+04   sky130_fd_sc_hd__dfrtp_2
+      200  5255.04   sky130_fd_sc_hd__dfstp_2
+     2348 4.99E+04   sky130_fd_sc_hd__dfxtp_2
+     6336 9.51E+04   sky130_fd_sc_hd__dlxtp_1
+     4080 1.53E+04   sky130_fd_sc_hd__inv_2
+       31  193.936   sky130_fd_sc_hd__inv_4
+        1   11.261   sky130_fd_sc_hd__inv_8
+     1849 2.08E+04   sky130_fd_sc_hd__mux2_2
+    12780    8E+04   sky130_fd_sc_hd__nand2_2
+       14  157.651   sky130_fd_sc_hd__nand2_4
+        6  120.115   sky130_fd_sc_hd__nand2_8
+        7   61.309   sky130_fd_sc_hd__nand2b_2
+     1577 1.58E+04   sky130_fd_sc_hd__nand3_2
+        1   17.517   sky130_fd_sc_hd__nand3_4
+      272 3.06E+03   sky130_fd_sc_hd__nand3b_2
+     3088 1.93E+04   sky130_fd_sc_hd__nor2_2
+       32  360.346   sky130_fd_sc_hd__nor2_4
+        3   60.058   sky130_fd_sc_hd__nor2_8
+        1    8.758   sky130_fd_sc_hd__nor2b_2
+      104 1.04E+03   sky130_fd_sc_hd__nor3_2
+        6   75.072   sky130_fd_sc_hd__nor3b_2
+       74  925.888   sky130_fd_sc_hd__o2111a_2
+       21  315.302   sky130_fd_sc_hd__o2111ai_2
+      800  8007.68   sky130_fd_sc_hd__o211a_2
+       76  950.912   sky130_fd_sc_hd__o211ai_2
+      419  3669.77   sky130_fd_sc_hd__o21a_2
+     1043 9.14E+03   sky130_fd_sc_hd__o21ai_2
+        4   65.062   sky130_fd_sc_hd__o21ai_4
+       19  190.182   sky130_fd_sc_hd__o21ba_2
+       29  326.563   sky130_fd_sc_hd__o21bai_2
+      145 1.63E+03   sky130_fd_sc_hd__o221a_2
+       14  210.202   sky130_fd_sc_hd__o221ai_2
+      108 1.08E+03   sky130_fd_sc_hd__o22a_2
+        8  100.096   sky130_fd_sc_hd__o22ai_2
+       19  213.955   sky130_fd_sc_hd__o2bb2a_2
+        7  105.101   sky130_fd_sc_hd__o2bb2ai_2
+       34  382.867   sky130_fd_sc_hd__o311a_2
+        4   65.062   sky130_fd_sc_hd__o311ai_2
+       38  380.365   sky130_fd_sc_hd__o31a_2
+       22  275.264   sky130_fd_sc_hd__o31ai_2
+       12   135.13   sky130_fd_sc_hd__o32a_2
+        1   16.266   sky130_fd_sc_hd__o32ai_2
+        6   75.072   sky130_fd_sc_hd__o41a_2
+     1354 8.47E+03   sky130_fd_sc_hd__or2_2
+        2   17.517   sky130_fd_sc_hd__or2_4
+      232 2.03E+03   sky130_fd_sc_hd__or2b_2
+      246 1.85E+03   sky130_fd_sc_hd__or3_2
+      107  937.149   sky130_fd_sc_hd__or3b_2
+      251  2.2E+03   sky130_fd_sc_hd__or4_2
+        1   11.261   sky130_fd_sc_hd__or4_4
+       34  340.326   sky130_fd_sc_hd__or4b_2
+      141  2293.45   sky130_fd_sc_hd__xnor2_2
+      325  5286.32   sky130_fd_sc_hd__xor2_2
+
+   Area for cell type \sky130_fd_sc_hd__and2_1 is unknown!
+
+   Chip area for module '\tt_um_umigv_sensorfusion': 473912.019200
+--- runs/wokwi/06-yosys-synthesis/yosys-synthesis.log
+   Area for cell type $_ANDNOT_ is unknown!
+   Area for cell type $_AND_ is unknown!
+   Area for cell type $_MUX_ is unknown!
+   Area for cell type $_NAND_ is unknown!
+   Area for cell type $_NOR_ is unknown!
+   Area for cell type $_NOT_ is unknown!
+   Area for cell type $_ORNOT_ is unknown!
+   Area for cell type $_OR_ is unknown!
+   Area for cell type $_XNOR_ is unknown!
+   Area for cell type $_XOR_ is unknown!
+   Area for cell type \sky130_fd_sc_hd__and2_1 is unknown!
+
+   Chip area for module '\tt_um_umigv_sensorfusion': 182673.948800
+--
+       40  300.288   sky130_fd_sc_hd__buf_4
+        9  101.347   sky130_fd_sc_hd__buf_6
+        2   30.029   sky130_fd_sc_hd__buf_8
+       17   63.811   sky130_fd_sc_hd__conb_1
+     1223 3.21E+04   sky130_fd_sc_hd__dfrtp_2
+      200  5255.04   sky130_fd_sc_hd__dfstp_2
+     2348 4.99E+04   sky130_fd_sc_hd__dfxtp_2
+     6336 9.51E+04   sky130_fd_sc_hd__dlxtp_1
+     4080 1.53E+04   sky130_fd_sc_hd__inv_2
+       31  193.936   sky130_fd_sc_hd__inv_4
+        1   11.261   sky130_fd_sc_hd__inv_8
+     1849 2.08E+04   sky130_fd_sc_hd__mux2_2
+    12780    8E+04   sky130_fd_sc_hd__nand2_2
+       14  157.651   sky130_fd_sc_hd__nand2_4
+        6  120.115   sky130_fd_sc_hd__nand2_8
+        7   61.309   sky130_fd_sc_hd__nand2b_2
+     1577 1.58E+04   sky130_fd_sc_hd__nand3_2
+        1   17.517   sky130_fd_sc_hd__nand3_4
+      272 3.06E+03   sky130_fd_sc_hd__nand3b_2
+     3088 1.93E+04   sky130_fd_sc_hd__nor2_2
+       32  360.346   sky130_fd_sc_hd__nor2_4
+        3   60.058   sky130_fd_sc_hd__nor2_8
+        1    8.758   sky130_fd_sc_hd__nor2b_2
+      104 1.04E+03   sky130_fd_sc_hd__nor3_2
+        6   75.072   sky130_fd_sc_hd__nor3b_2
+       74  925.888   sky130_fd_sc_hd__o2111a_2
+       21  315.302   sky130_fd_sc_hd__o2111ai_2
+      800  8007.68   sky130_fd_sc_hd__o211a_2
+       76  950.912   sky130_fd_sc_hd__o211ai_2
+      419  3669.77   sky130_fd_sc_hd__o21a_2
+     1043 9.14E+03   sky130_fd_sc_hd__o21ai_2
+        4   65.062   sky130_fd_sc_hd__o21ai_4
+       19  190.182   sky130_fd_sc_hd__o21ba_2
+       29  326.563   sky130_fd_sc_hd__o21bai_2
+      145 1.63E+03   sky130_fd_sc_hd__o221a_2
+       14  210.202   sky130_fd_sc_hd__o221ai_2
+      108 1.08E+03   sky130_fd_sc_hd__o22a_2
+        8  100.096   sky130_fd_sc_hd__o22ai_2
+       19  213.955   sky130_fd_sc_hd__o2bb2a_2
+        7  105.101   sky130_fd_sc_hd__o2bb2ai_2
+       34  382.867   sky130_fd_sc_hd__o311a_2
+        4   65.062   sky130_fd_sc_hd__o311ai_2
+       38  380.365   sky130_fd_sc_hd__o31a_2
+       22  275.264   sky130_fd_sc_hd__o31ai_2
+       12   135.13   sky130_fd_sc_hd__o32a_2
+        1   16.266   sky130_fd_sc_hd__o32ai_2
+        6   75.072   sky130_fd_sc_hd__o41a_2
+     1354 8.47E+03   sky130_fd_sc_hd__or2_2
+        2   17.517   sky130_fd_sc_hd__or2_4
+      232 2.03E+03   sky130_fd_sc_hd__or2b_2
+      246 1.85E+03   sky130_fd_sc_hd__or3_2
+      107  937.149   sky130_fd_sc_hd__or3b_2
+      251  2.2E+03   sky130_fd_sc_hd__or4_2
+        1   11.261   sky130_fd_sc_hd__or4_4
+       34  340.326   sky130_fd_sc_hd__or4b_2
+      141  2293.45   sky130_fd_sc_hd__xnor2_2
+      325  5286.32   sky130_fd_sc_hd__xor2_2
+
+   Area for cell type \sky130_fd_sc_hd__and2_1 is unknown!
+
+   Chip area for module '\tt_um_umigv_sensorfusion': 473912.019200
+=== flow log tail
+[EST-0026] Missing route to pin _45744_/Y in net _00058_.
+[EST-0026] Missing route to pin _80667_/D in net _00058_.
+[EST-0026] Missing route to pin _67551_/A2 in net _00058_.
+[EST-0026] Missing route to pin _45744_/Y in net _00058_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] message limit (1000) reached. This message will no longer print.
+=== warnings and errors summary
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80668_/D in net _00059_.
+[EST-0026] Missing route to pin _67410_/A2 in net _00059_.
+[EST-0026] Missing route to pin _45742_/Y in net _00059_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80646_/D in net _00060_.
+[EST-0026] Missing route to pin _45740_/X in net _00060_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] Missing route to pin _80639_/D in net _00063_.
+[EST-0026] Missing route to pin _45637_/X in net _00063_.
+[EST-0026] message limit (1000) reached. This message will no longer print.
