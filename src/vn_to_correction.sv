@@ -1,4 +1,5 @@
-// Adapt the raw VN packet to the existing FP32 east/north converter.
+// Adapt the raw VN packet to the existing FP32 east/north converter,
+// sharing UKF_pred_sequencer's SPAD[0..3] and a single FP64->FP32 narrower.
 module vn_to_correction #(
     parameter logic [31:0] ORIGIN_LATITUDE = 32'b0,
     parameter logic [31:0] ORIGIN_LONGITUDE = 32'b0,
@@ -9,7 +10,9 @@ module vn_to_correction #(
     output logic busy, done,
     output ukf_defs::corr_measurement_t measurement,
     output ukf_defs::ukf_mac_request_t mac_request,
-    input ukf_defs::ukf_mac_response_t mac_response
+    input ukf_defs::ukf_mac_response_t mac_response,
+    output ukf_defs::ukf_spad_request_t spad_request,
+    input ukf_defs::ukf_spad_response_t spad_response
 );
     localparam logic [31:0] ONE = 32'h3f800000;
     localparam logic [31:0] DEG_TO_RAD = 32'h3c8efa35;
@@ -31,7 +34,6 @@ module vn_to_correction #(
             narrow = {word[63], 8'hff, 23'b0};
         else if (unbiased < -150)
             narrow = {word[63], 31'b0};
-
         else begin
         shift = unbiased < -126 ? -unbiased - 97 : 29;
         rounded = {1'b0, significand} >> shift;
@@ -48,19 +50,40 @@ module vn_to_correction #(
     endfunction
 
     typedef enum logic [2:0] {
-        IDLE, WAIT_XY, SEED_HEADING, WAIT_SEED, ISSUE_HEADING, WAIT_HEADING
+        IDLE, START_XY, WAIT_XY, SEED_HEADING, WAIT_SEED, ISSUE_HEADING, WAIT_HEADING
     } state_t;
     state_t state;
     ukf_defs::ukf_mac_request_t xy_mac_request;
     logic [6:0] address;
     logic write_enable, xy_valid;
-    logic [31:0] read_data, write_data, x, y;
-    logic [31:0] scratch [21:24];
+    logic [31:0] read_data, write_data, x, y, narrow_word;
+    logic [63:0] narrow_in;
 
     assign busy = state != IDLE;
     assign done = state == WAIT_HEADING && mac_response.valid;
     assign measurement = {x, y, mac_response.result,
                           ~packet.ukf_vn_rate_f32[31], packet.ukf_vn_rate_f32[30:0]};
+
+    assign narrow_in = (state == IDLE) ? packet.ukf_vn_lat_f64 : packet.ukf_vn_lon_f64;
+    assign narrow_word = narrow(narrow_in);
+
+    always_comb begin
+        spad_request = '0;
+        if (state == IDLE && start) begin
+            spad_request = {1'b1, 1'b1, 4'd0, 4'd0, 4'd0, narrow_word};
+        end else if (state == START_XY) begin
+            spad_request = {1'b1, 1'b0, 4'd0, 4'd0, 4'd0, 32'b0};
+        end else if (state == WAIT_XY) begin
+            spad_request = {
+                1'b1,
+                write_enable && address >= 7'd21 && address <= 7'd24,
+                address[3:0] - 4'd5,
+                4'd0,
+                address[3:0] - 4'd5,
+                write_data
+            };
+        end
+    end
 
     always_comb begin
         case (address)
@@ -75,13 +98,13 @@ module vn_to_correction #(
             7'd112: read_data = 32'h37d00d01;
             7'd113: read_data = 32'hb493f27e;
             7'd114: read_data = 32'h310f76c7;
-            default: read_data = address >= 7'd21 && address <= 7'd24 ? scratch[address] : '0;
+            default: read_data = address >= 7'd21 && address <= 7'd24 ? spad_response.a : '0;
         endcase
     end
 
     lat_to_xy coordinates (
-        .clk(clock), .rst_n(!reset), .start(start && !busy),
-        .latitude(narrow(packet.ukf_vn_lat_f64)), .longitude(narrow(packet.ukf_vn_lon_f64)),
+        .clk(clock), .rst_n(!reset), .start(state == START_XY),
+        .latitude(spad_response.a), .longitude(narrow_word),
         .mem_rdata(read_data), .mem_addr(address), .mem_we(write_enable), .mem_wdata(write_data),
         .mac_start(xy_mac_request.start), .mac_clear(xy_mac_request.clear),
         .mac_last(xy_mac_request.last), .mac_a(xy_mac_request.a), .mac_b(xy_mac_request.b),
@@ -100,17 +123,13 @@ module vn_to_correction #(
         endcase
     end
 
-    always_ff @(posedge clock) begin
-        if (write_enable)
-            scratch[address] <= write_data;
-    end
-
     always_ff @(posedge clock or posedge reset) begin
         if (reset)
             state <= IDLE;
         else begin
             case (state)
-                IDLE: if (start) state <= WAIT_XY;
+                IDLE: if (start) state <= START_XY;
+                START_XY: state <= WAIT_XY;
                 WAIT_XY: if (xy_valid) state <= SEED_HEADING;
                 SEED_HEADING: if (mac_request.start) state <= WAIT_SEED;
                 WAIT_SEED: if (mac_response.valid) state <= ISSUE_HEADING;

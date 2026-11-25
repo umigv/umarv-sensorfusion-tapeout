@@ -52,7 +52,7 @@ module UKF #(
     ukf_defs::meas_regfile_t time_pack, correction_packet, convert_input;
     ukf_defs::meas_s_factor_t active_measurement_s;
     logic load_shared_noise, load_shared_measurement, correction_update_failed;
-    ukf_defs::ukf_spad_request_t correction_spad_request;
+    ukf_defs::ukf_spad_request_t correction_spad_request, converter_spad_request, shared_spad_request;
     ukf_defs::ukf_spad_response_t correction_spad_response;
     ukf_defs::corr_measurement_t converted;
     ukf_defs::PRED_PACKET pred_packet, backend_result;
@@ -113,6 +113,8 @@ module UKF #(
                            !correction_spad_request.active};
     assign latest_s = correction_s;
 
+    assign shared_spad_request = converter_spad_request.active ? converter_spad_request : correction_spad_request;
+
     UKF_pred_sequencer #(
         .DT(PRED_DT), .SIGMA_SCALE(SIGMA_SCALE), .W_NONCENTRAL(W_NONCENTRAL),
         .SQRT_W_NONCENTRAL(SQRT_W_NONCENTRAL), .W_MEAN_CENTRAL(W_MEAN_CENTRAL),
@@ -126,7 +128,7 @@ module UKF #(
         .correction_noise(active_measurement_s),
         .load_correction_measurement(load_shared_measurement),
         .correction_measurement(converted),
-        .correction_spad_request(correction_spad_request),
+        .correction_spad_request(shared_spad_request),
         .correction_spad_response(correction_spad_response),
         .prior_s(prediction_prior_s), .wheel_velocity(prediction_wheel_velocity),
         .mac_grant(prediction_mac_grant), .div_grant(prediction_div_grant),
@@ -161,7 +163,8 @@ module UKF #(
     ) converter (
         .clock(clk), .reset(reset), .start(convert_start), .packet(convert_input),
         .busy(converter_busy), .done(convert_done), .measurement(converted),
-        .mac_request(converter_mac_request), .mac_response(sensor_mac_response)
+        .mac_request(converter_mac_request), .mac_response(sensor_mac_response),
+        .spad_request(converter_spad_request), .spad_response(correction_spad_response)
     );
 
     UKF_corr_engine #(
