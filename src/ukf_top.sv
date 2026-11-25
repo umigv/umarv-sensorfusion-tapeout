@@ -26,7 +26,14 @@
 //     One count of the latitude slice is 2^-27 degree (0.8 mm); of the longitude slice, 2^-26.
 //   - the wheel encoder has 16,384 counts per turn and moves fewer than 2^25 counts a beat
 //   - the beat is 2.5 ms (400 Hz); dt is a constant in the table
-// Tuning values are constants in the table; SPI writes to 6C-7F are not used yet.
+// The last NCFG constants (addresses 96 upward) can be replaced by the host: noise settings, the
+// encoder and wheel scale, the heading and turn-rate conventions, the position scales and the beat
+// period (ukf_prog.py lists them). Each keeps its table value until it is written. The host
+// reaches them through two SPI registers:
+//   6C       the address of a filter word (reset 96). Any time.
+//   70-73    that word. Reads work for every address (storage 0-61, constants 64-111, sensor
+//            words 112-126), which is also a way to look inside the filter. Writes are taken only
+//            for the tunable words, and only while enable is low and the filter is idle.
 //
 // The SPI block keeps no copy of the state or of the sensor words. It uses this block's storage
 // and selector instead, which saves about 200 flip-flops and two wide buses across the chip:
@@ -41,7 +48,9 @@
 // state_valid.
 //
 // Written in the plain SystemVerilog subset the Tiny Tapeout tools accept.
-module ukf_top (
+module ukf_top #(
+    parameter NCFG = 12                     // how many of the 16 tunable constants are kept in storage
+) (
     input  logic        clk,
     input  logic        rst_n,
     input  logic        enable,
@@ -60,7 +69,7 @@ module ukf_top (
     input  logic [6:0]  cfg_addr,
     input  logic [7:0]  cfg_wdata,
     input  logic        spi_rd,             // one clock: the SPI block wants the word at spi_raddr now
-    input  logic [6:0]  spi_raddr,          // 0-5 state words, 112-125 sensor words
+    input  logic [6:0]  spi_raddr,          // 0-5 state words, 112-125 sensor words, 127 the word picked by register 6C
     output logic [31:0] spi_rword,
 
     output logic        state_valid,        // one clock: the six words below are a new state
@@ -88,13 +97,18 @@ module ukf_top (
 
     // ---- storage, constants, sensor words -----------------------------------------------------
     logic        m_we;
-    logic [5:0]  m_waddr;
+    logic [6:0]  m_waddr;
     logic [31:0] m_wdata;
     logic [6:0]  rd_addr;
     wire  [31:0] m_rdata, k_value;
     wire  [191:0] m_first;
-    ukf_store u_store (.clk(clk), .we(m_we), .waddr(m_waddr), .wdata(m_wdata),
-                       .raddr(rd_addr[5:0]), .rdata(m_rdata), .first6(m_first));
+    // a tunable constant: read from storage (words 64 up) once the host has written it
+    logic [6:0]  cfg_index;
+    logic [15:0] cfg_set;
+    wire         rd_cfg = (rd_addr[6:4] == 3'b110) && ({1'b0, rd_addr[3:0]} < NCFG);
+    wire [6:0]   m_raddr = rd_cfg ? {3'b100, rd_addr[3:0]} : {1'b0, rd_addr[5:0]};
+    ukf_store #(.NCFG(NCFG)) u_store (.clk(clk), .we(m_we), .waddr(m_waddr), .wdata(m_wdata),
+                       .raddr(m_raddr), .rdata(m_rdata), .first6(m_first));
     ukf_consts u_consts (.index(rd_addr[5:0]), .value(k_value));
 
     logic [31:0] ext;
@@ -115,8 +129,9 @@ module ukf_top (
             default: ext = 32'd0;
         endcase
     end
-    wire [31:0] din = !rd_addr[6]             ? m_rdata :
-                      (rd_addr[6:4] == 3'd7)  ? ext     : k_value;
+    wire [31:0] din = !rd_addr[6]                        ? m_rdata :
+                      (rd_addr[6:4] == 3'd7)             ? ext     :
+                      (rd_cfg && cfg_set[rd_addr[3:0]])  ? m_rdata : k_value;
     assign spi_rword = din;
 
     // ---- arithmetic ---------------------------------------------------------------------------
@@ -141,6 +156,9 @@ module ukf_top (
     // a host write of one byte of the state: read the word, replace the byte, write it back
     wire host_wr = cfg_we && !enable && (q == Q_IDLE) && (cfg_addr >= HOST_STATE_FIRST) && (cfg_addr < HOST_STATE_END);
     wire [4:0] host_word = cfg_addr[6:2] - 5'd9;
+    // a host write of one byte of a tunable constant (registers 70-73), done the same way
+    wire host_cfg = cfg_we && !enable && (q == Q_IDLE) && (cfg_addr[6:2] == 5'h1C) &&
+                    (cfg_index[6:4] == 3'b110) && ({1'b0, cfg_index[3:0]} < NCFG);
     logic [31:0] host_merged;
     always_comb begin
         host_merged = din;
@@ -151,8 +169,9 @@ module ukf_top (
     assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && !stall;
     assign f_load_b = (q == Q_B) && !stall;
     assign f_start  = (q == Q_GO);
-    assign rd_addr  = spi_rd      ? spi_raddr :
+    assign rd_addr  = spi_rd      ? ((spi_raddr == 7'd127) ? cfg_index : spi_raddr) :
                       host_wr     ? {2'b00, host_word} :
+                      host_cfg    ? cfg_index :
                       (q == Q_B)  ? b_addr : a_addr;
 
     wire write_ok = (wcond == 2'd0) || (wcond == 2'd2 && flag) || (wcond == 2'd3 && !flag);    // 1: never
@@ -175,19 +194,25 @@ module ukf_top (
         if (!rst_n) begin
             q <= Q_CLEAR; clr <= 5'd0; pc <= 10'd0; flag <= 1'b0; started <= 1'b0; vn_ok <= 1'b0; dw_ok <= 1'b0;
             ret0 <= 10'd0; ret1 <= 10'd0; depth <= 2'd0; overruns <= 8'd0;
-            m_we <= 1'b0; m_waddr <= 6'd0; m_wdata <= 32'd0; state_valid <= 1'b0;
+            m_we <= 1'b0; m_waddr <= 7'd0; m_wdata <= 32'd0; state_valid <= 1'b0;
+            cfg_index <= 7'd96; cfg_set <= 16'd0;
         end else begin
+            if (cfg_we && cfg_addr == 7'h6C) cfg_index <= cfg_wdata[6:0];
             m_we <= 1'b0; state_valid <= 1'b0;
             if (!enable) started <= 1'b0;
             if (meas_pulse && enable && running && overruns != 8'hFF) overruns <= overruns + 8'd1;
             case (q)
                 Q_CLEAR: begin
                     clr <= clr + 5'd1;
-                    if (clr[1:0] == 2'd0) begin m_we <= 1'b1; m_waddr <= {3'd0, clr[4:2]}; m_wdata <= 32'd0; end
+                    if (clr[1:0] == 2'd0) begin m_we <= 1'b1; m_waddr <= {4'd0, clr[4:2]}; m_wdata <= 32'd0; end
                     if (clr == 5'd23) q <= Q_IDLE;
                 end
                 Q_IDLE: begin
-                    if (host_wr) begin m_we <= 1'b1; m_waddr <= {1'b0, host_word}; m_wdata <= host_merged; end
+                    if (host_wr) begin m_we <= 1'b1; m_waddr <= {2'b00, host_word}; m_wdata <= host_merged; end
+                    else if (host_cfg) begin
+                        m_we <= 1'b1; m_waddr <= {3'b100, cfg_index[3:0]}; m_wdata <= host_merged;
+                        cfg_set[cfg_index[3:0]] <= 1'b1;
+                    end
                     if (meas_pulse && enable) begin
                         vn_ok <= vn_valid; dw_ok <= dw_valid; pc <= 10'd0; depth <= 2'd0; q <= Q_A;
                     end
@@ -210,7 +235,7 @@ module ukf_top (
                             default: q <= Q_IDLE;       // C_HALT
                         endcase
                     end else if (fn == FN_RAW) begin
-                        if (write_ok) begin m_we <= 1'b1; m_waddr <= d_addr; m_wdata <= din; end
+                        if (write_ok) begin m_we <= 1'b1; m_waddr <= {1'b0, d_addr}; m_wdata <= din; end
                         if (setf) flag <= din[31];
                         q <= Q_SETTLE1;
                     end else begin
@@ -220,7 +245,7 @@ module ukf_top (
                 Q_B:  if (!stall) q <= Q_GO;
                 Q_GO: q <= Q_WAIT;
                 Q_WAIT: if (f_done) begin
-                    if (write_ok) begin m_we <= 1'b1; m_waddr <= d_addr; m_wdata <= f_result; end
+                    if (write_ok) begin m_we <= 1'b1; m_waddr <= {1'b0, d_addr}; m_wdata <= f_result; end
                     if (setf) flag <= f_result[31];
                     q <= Q_SETTLE1;
                 end
@@ -243,21 +268,23 @@ module ukf_top (
     wire _unused = &{f_busy, overruns, 1'b0};
 endmodule
 
-// 62 x 32 latch memory (addresses 62 and 63 read as zero). Same write scheme as lidar_latch_mem: the data is registered and held,
-// one falling-edge flip-flop per word is that word's latch enable, and writes must be at least
-// 3 clocks apart (the sequencer above leaves 3 or more). A word must not be read until 2 clocks
-// after its write.
-module ukf_store (
+// Latch memory: words 0-61 for the filter, and words 64 to 64+NCFG-1 for the tunable constants
+// (every other address reads as zero). Same write scheme as lidar_latch_mem: the data is
+// registered and held, and writes must be at least 3 clocks apart (the sequencer above leaves 3
+// or more). A word must not be read until 2 clocks after its write.
+module ukf_store #(
+    parameter NCFG = 16
+) (
     input  logic        clk,
     input  logic        we,
-    input  logic [5:0]  waddr,
+    input  logic [6:0]  waddr,
     input  logic [31:0] wdata,
-    input  logic [5:0]  raddr,
+    input  logic [6:0]  raddr,
     output logic [31:0] rdata,
     output logic [191:0] first6
 );
     logic        we_q;
-    logic [5:0]  wa_q;
+    logic [6:0]  wa_q;
     logic [31:0] wd_q;
     always_ff @(posedge clk) begin
         we_q <= we;
@@ -274,15 +301,15 @@ module ukf_store (
     // clocks apart), so each AND output is a clean pulse.
     logic pulse;
     always_ff @(negedge clk) pulse <= we_q;
-    wire [WORDS-1:0] sel, gate;
+    wire [127:0] sel, gate;
 
-    wire [31:0] q [0:63];
+    wire [31:0] q [0:127];
     assign rdata = q[raddr];
 
     genvar i;
     generate
-        for (i = 0; i < 64; i = i + 1) begin : word
-            if (i < WORDS) begin : real_
+        for (i = 0; i < 128; i = i + 1) begin : word
+            if (i < WORDS || (i >= 64 && i < 64 + NCFG)) begin : real_
                 assign sel[i] = (wa_q == i);
 `ifdef SYNTHESIS
                 sky130_fd_sc_hd__and2_1 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
@@ -300,6 +327,8 @@ module ukf_store (
                 assign q[i] = d;
 `endif
             end else begin : none_
+                assign sel[i] = 1'b0;
+                assign gate[i] = 1'b0;
                 assign q[i] = 32'd0;
             end
         end
