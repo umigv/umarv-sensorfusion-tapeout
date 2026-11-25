@@ -57,6 +57,10 @@ jobs:
             if [ -n "$N" ]; then
               grep -A1 -E " hold[0-9]+ \(" "$N" | grep -oE "\.A\([^ )]+" | sed -E 's/^\.A\(.?//; s/\[.*//' | cut -d. -f1-2 | sort | uniq -c | sort -rn | head -40
             fi
+            echo "=== sta summary (after routing)"
+            for f in $(find runs/wokwi -path '*stapostpnr*' -name 'summary.rpt' 2>/dev/null); do cat "$f" | cut -c1-200; done
+            for f in $(find runs/wokwi -path '*checkantennas-1*' -name '*.log' 2>/dev/null); do echo "--- $f"; grep -ciE "violat" "$f"; grep -E "Net violations|Pin violations|violated" "$f" | tail -3; done
+            find runs/wokwi -path '*checkantennas-1*' -name '*.rpt' -exec sh -c 'echo "--- $1"; head -40 "$1" | cut -c1-160' _ {} \;
             echo "=== yosys stat"
             for f in $(grep -rlsE "Chip area for" runs/wokwi --include='*.log' --include='*.rpt' | sort | tail -2); do echo "--- $f"; grep -B60 "Chip area for" "$f" | tail -75 | cut -c1-120; done
             echo "=== flow log tail"
