@@ -312,14 +312,20 @@ module ukf_store #(
             if (i < WORDS || (i >= 64 && i < 64 + NCFG)) begin : real_
                 assign sel[i] = (wa_q == i);
 `ifdef SYNTHESIS
-                sky130_fd_sc_hd__and2_1 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
+                // two enable gates per word, one for each half, so that each drives 16 latches directly
+                wire gate_hi;
+                sky130_fd_sc_hd__and2_4 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
+                sky130_fd_sc_hd__and2_4 u_gate_hi (.A(sel[i]), .B(pulse), .X(gate_hi));
 `else
                 assign gate[i] = sel[i] & pulse;
 `endif
 `ifdef SYNTHESIS
                 genvar b;
-                for (b = 0; b < 32; b = b + 1) begin : bit_
+                for (b = 0; b < 16; b = b + 1) begin : bit_
                     sky130_fd_sc_hd__dlxtp_1 u_latch (.D(wd_q[b]), .GATE(gate[i]), .Q(q[i][b]));
+                end
+                for (b = 16; b < 32; b = b + 1) begin : bith_
+                    sky130_fd_sc_hd__dlxtp_1 u_latch (.D(wd_q[b]), .GATE(gate_hi), .Q(q[i][b]));
                 end
 `else
                 reg [31:0] d;
