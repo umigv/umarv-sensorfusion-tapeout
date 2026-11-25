@@ -312,7 +312,7 @@ module ukf_store #(
             if (i < WORDS || (i >= 64 && i < 64 + NCFG)) begin : real_
                 assign sel[i] = (wa_q == i);
 `ifdef SYNTHESIS
-                sky130_fd_sc_hd__and2_1 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
+                sky130_fd_sc_hd__and2_4 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
 `else
                 assign gate[i] = sel[i] & pulse;
 `endif
