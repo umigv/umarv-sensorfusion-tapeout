@@ -133,13 +133,19 @@ module ukf_top #(
                       (rd_addr[6:4] == 3'd7)             ? ext     :
                       (rd_cfg && cfg_set[rd_addr[3:0]])  ? m_rdata : k_value;
     assign spi_rword = din;
+    // An operand is read into din_q in one clock and used in the next, so that looking a step up,
+    // selecting the word and using it are not all in one clock (that was the longest path on the
+    // chip). got is high in the second of the two clocks.
+    logic [31:0] din_q;
+    logic        got;
+    always_ff @(posedge clk) din_q <= din;
 
     // ---- arithmetic ---------------------------------------------------------------------------
     logic        f_load_a, f_load_b, f_start;
     wire         f_busy, f_done;
     wire  [31:0] f_result;
     fp_serial u_fp (.clk(clk), .rst_n(rst_n), .load_a(f_load_a), .load_b(f_load_b), .start(f_start), .op(fn),
-                    .din(din), .busy(f_busy), .done(f_done), .result(f_result));
+                    .din(din_q), .busy(f_busy), .done(f_done), .result(f_result));
 
     // ---- sequencer ----------------------------------------------------------------------------
     localparam [2:0] Q_CLEAR = 3'd0, Q_IDLE = 3'd1, Q_A = 3'd2, Q_B = 3'd3, Q_GO = 3'd4, Q_WAIT = 3'd5,
@@ -166,8 +172,8 @@ module ukf_top #(
     end
 
     wire stall = spi_rd;                // the read path is lent to the SPI block for this clock
-    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && !stall;
-    assign f_load_b = (q == Q_B) && !stall;
+    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && got;
+    assign f_load_b = (q == Q_B) && got;
     assign f_start  = (q == Q_GO);
     assign rd_addr  = spi_rd      ? ((spi_raddr == 7'd127) ? cfg_index : spi_raddr) :
                       host_wr     ? {2'b00, host_word} :
@@ -193,7 +199,7 @@ module ukf_top #(
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             q <= Q_CLEAR; clr <= 5'd0; pc <= 10'd0; flag <= 1'b0; started <= 1'b0; vn_ok <= 1'b0; dw_ok <= 1'b0;
-            ret0 <= 10'd0; ret1 <= 10'd0; depth <= 2'd0; overruns <= 8'd0;
+            ret0 <= 10'd0; ret1 <= 10'd0; depth <= 2'd0; overruns <= 8'd0; got <= 1'b0;
             m_we <= 1'b0; m_waddr <= 7'd0; m_wdata <= 32'd0; state_valid <= 1'b0;
             cfg_index <= 7'd96; cfg_set <= 16'd0;
         end else begin
@@ -217,8 +223,8 @@ module ukf_top #(
                         vn_ok <= vn_valid; dw_ok <= dw_valid; pc <= 10'd0; depth <= 2'd0; q <= Q_A;
                     end
                 end
-                Q_A: if (!stall) begin
-                    if (is_ctl) begin
+                Q_A: if (is_ctl) begin
+                    if (!stall) begin
                         pc <= pc + 10'd1;
                         case (cop)
                             C_JMP:  if (take) pc <= target;
@@ -234,15 +240,25 @@ module ukf_top #(
                             C_DONE: begin state_valid <= 1'b1; q <= Q_IDLE; end
                             default: q <= Q_IDLE;       // C_HALT
                         endcase
-                    end else if (fn == FN_RAW) begin
-                        if (write_ok) begin m_we <= 1'b1; m_waddr <= {1'b0, d_addr}; m_wdata <= din; end
-                        if (setf) flag <= din[31];
+                    end
+                end else if (!got) begin
+                    if (!stall) got <= 1'b1;        // the first operand is going into din_q now
+                end else begin
+                    got <= 1'b0;
+                    if (fn == FN_RAW) begin
+                        if (write_ok) begin m_we <= 1'b1; m_waddr <= {1'b0, d_addr}; m_wdata <= din_q; end
+                        if (setf) flag <= din_q[31];
                         q <= Q_SETTLE1;
                     end else begin
                         q <= Q_B;
                     end
                 end
-                Q_B:  if (!stall) q <= Q_GO;
+                Q_B: if (!got) begin
+                    if (!stall) got <= 1'b1;        // the second operand is going into din_q now
+                end else begin
+                    got <= 1'b0;
+                    q <= Q_GO;
+                end
                 Q_GO: q <= Q_WAIT;
                 Q_WAIT: if (f_done) begin
                     if (write_ok) begin m_we <= 1'b1; m_waddr <= {1'b0, d_addr}; m_wdata <= f_result; end
@@ -312,7 +328,7 @@ module ukf_store #(
             if (i < WORDS || (i >= 64 && i < 64 + NCFG)) begin : real_
                 assign sel[i] = (wa_q == i);
 `ifdef SYNTHESIS
-                sky130_fd_sc_hd__and2_1 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
+                sky130_fd_sc_hd__and2_4 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
 `else
                 assign gate[i] = sel[i] & pulse;
 `endif
