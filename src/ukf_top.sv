@@ -78,8 +78,18 @@ module ukf_top #(
 );
     // ---- the current step ----------------------------------------------------------------------
     logic [9:0]  pc;
-    wire  [25:0] word;
-    ukf_steps u_steps (.pc(pc), .word(word));
+    // The step table's output is registered: looking a step up and reading its operands are in
+    // separate clocks (together they were the longest path on the chip). word_ok is low for the
+    // one clock after pc changes, while the new step is on its way into the register.
+    wire  [25:0] word_rom;
+    ukf_steps u_steps (.pc(pc), .word(word_rom));
+    logic [25:0] word;
+    logic [9:0]  pc_q;
+    always_ff @(posedge clk) begin
+        word <= word_rom;
+        pc_q <= pc;
+    end
+    wire word_ok = (pc_q == pc);
 
     wire [2:0] fn     = word[25:23];
     wire       setf   = word[22];
@@ -166,7 +176,7 @@ module ukf_top #(
     end
 
     wire stall = spi_rd;                // the read path is lent to the SPI block for this clock
-    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && !stall;
+    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && !stall && word_ok;
     assign f_load_b = (q == Q_B) && !stall;
     assign f_start  = (q == Q_GO);
     assign rd_addr  = spi_rd      ? ((spi_raddr == 7'd127) ? cfg_index : spi_raddr) :
@@ -217,7 +227,7 @@ module ukf_top #(
                         vn_ok <= vn_valid; dw_ok <= dw_valid; pc <= 10'd0; depth <= 2'd0; q <= Q_A;
                     end
                 end
-                Q_A: if (!stall) begin
+                Q_A: if (!stall && word_ok) begin
                     if (is_ctl) begin
                         pc <= pc + 10'd1;
                         case (cop)
@@ -273,7 +283,7 @@ endmodule
 // registered and held, and writes must be at least 3 clocks apart (the sequencer above leaves 3
 // or more). A word must not be read until 2 clocks after its write.
 module ukf_store #(
-    parameter NCFG = 16
+    parameter NCFG = 8 
 ) (
     input  logic        clk,
     input  logic        we,
