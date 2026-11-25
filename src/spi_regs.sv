@@ -271,16 +271,19 @@ module spi_regs (
     // two clocks to match. For both clocks the filter's read path is borrowed (spi_rd).
     logic [6:0] rd_addr_q;
     logic [1:0] fetch;
-    assign rd_addr = rd_addr_q;
 `ifndef SYNTHESIS
-    // in simulation the byte is unknown in the first of the two clocks, so a use that did not
-    // wait would show up as unknowns in the tests
+    // in simulation the address, and so everything worked out from it, is unknown in the first
+    // of the two clocks, so a use that did not wait would show up as unknowns in the tests
+    assign rd_addr = fetch[0] ? 7'hxx : rd_addr_q;
     wire [7:0] rd_data_v = fetch[0] ? 8'hxx : rd_data;
 `else
+    assign rd_addr = rd_addr_q;
     wire [7:0] rd_data_v = rd_data;
 `endif
 `ifdef WITH_UKF
-    assign spi_rd = (fetch != 2'b00) && from_filter;
+    // The filter is held for both clocks of every read, whatever the address: the hold must not
+    // itself depend on the address, which is allowed two clocks to settle.
+    assign spi_rd = (fetch != 2'b00);
 `else
     assign spi_rd = 1'b0;
 `endif
