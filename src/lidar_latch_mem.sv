@@ -62,7 +62,7 @@ module lidar_latch_mem (
         for (i = 0; i < 256; i = i + 1) begin : word
             assign sel[i] = (wa_q == i);
 `ifdef SYNTHESIS
-            sky130_fd_sc_hd__and2_1 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
+            sky130_fd_sc_hd__and2_2 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
 `else
             assign gate[i] = sel[i] & pulse;
 `endif
