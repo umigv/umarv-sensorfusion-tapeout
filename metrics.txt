@@ -1,0 +1,12 @@
+branch trial/tun12-h05g  commit 55613759c5613d03c641e31a6af8e11ccf9f5460  2026-11-25T03:13:59Z
+=== steps reached
+=== key lines
+=== cell type reports (last of each step)
+=== congestion reports
+=== violation tables
+=== drc map (100 um bins, top row is top of die)
+file 
+=== hold buffer sources
+=== yosys stat
+=== flow log tail
+=== warnings and errors summary
