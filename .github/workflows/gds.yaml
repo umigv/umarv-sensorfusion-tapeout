@@ -58,6 +58,11 @@ jobs:
             for f in $(find runs/wokwi -path '*stapostpnr*' -name 'summary.rpt' 2>/dev/null); do cat "$f" | cut -c1-200; done
             for f in $(find runs/wokwi -path '*checkantennas-1*' -name '*.log' 2>/dev/null); do echo "--- $f"; grep -ciE "violat" "$f"; grep -E "Net violations|Pin violations|violated" "$f" | tail -3; done
             find runs/wokwi -path '*checkantennas-1*' -name '*.rpt' -exec sh -c 'echo "--- $1"; head -40 "$1" | cut -c1-160' _ {} \;
+            echo "=== slow-corner paths (after routing)"
+            P=$(find runs/wokwi -path '*stapostpnr*' -path '*max_ss_100C_1v60*' -type f 2>/dev/null)
+            echo "$P" | head -20
+            for f in $P; do case "$f" in *max.rpt) echo "--- $f"; grep -E "^Startpoint|^Endpoint|slack" "$f" | head -90 | cut -c1-170; echo "--- worst path in full"; awk '/^Startpoint/{n++} n==1' "$f" | head -90 | cut -c1-150;; esac; done
+            for f in $P; do case "$f" in *violator*|*checks*) echo "--- $f"; grep -oE "(u_[a-z_]+\.)?u_[a-z_0-9]+\.[a-zA-Z_0-9]+" "$f" | cut -d. -f1-2 | sort | uniq -c | sort -rn | head -30;; esac; done
             echo "=== yosys stat"
             for f in $(grep -rlsE "Chip area for" runs/wokwi --include='*.log' --include='*.rpt' | sort | tail -2); do echo "--- $f"; grep -B60 "Chip area for" "$f" | tail -75 | cut -c1-120; done
             echo "=== flow log tail"
