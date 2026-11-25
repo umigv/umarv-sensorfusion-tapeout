@@ -27,7 +27,6 @@ project:
     - "pred_sequencer.sv"
     - "corr_microcode.sv"
     - "corr_engine.sv"
-    - "lat_to_xy.sv"
     - "vn_to_correction.sv"
     - "UKF.sv"
     - "timestamper.sv"
