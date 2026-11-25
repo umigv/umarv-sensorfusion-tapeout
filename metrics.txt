@@ -1,0 +1,13 @@
+branch trial/r2-wl15-h05g-dr  commit cebcf5a7ebac42ae548a59e3dbdf63e7301708a2  2026-11-25T02:42:42Z
+=== steps reached
+=== key lines
+=== cell type reports (last of each step)
+=== congestion reports
+=== violation tables
+=== drc map (100 um bins, top row is top of die)
+file 
+=== hold buffer sources
+=== sta summary (after routing)
+=== yosys stat
+=== flow log tail
+=== warnings and errors summary
