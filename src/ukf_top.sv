@@ -78,8 +78,14 @@ module ukf_top #(
 );
     // ---- the current step ----------------------------------------------------------------------
     logic [9:0]  pc;
-    wire  [25:0] word;
-    ukf_steps u_steps (.pc(pc), .word(word));
+    // The step table's output is registered: looking a step up and reading its operands are in
+    // separate clocks (together they were the longest path on the chip). Each time the sequencer
+    // arrives at a step it spends one clock with word_ok low while the step goes into the register.
+    wire  [25:0] word_rom;
+    ukf_steps u_steps (.pc(pc), .word(word_rom));
+    logic [25:0] word;
+    logic        word_ok;
+    always_ff @(posedge clk) word <= word_rom;
 
     wire [2:0] fn     = word[25:23];
     wire       setf   = word[22];
@@ -166,7 +172,7 @@ module ukf_top #(
     end
 
     wire stall = spi_rd;                // the read path is lent to the SPI block for this clock
-    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && !stall;
+    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && !stall && word_ok;
     assign f_load_b = (q == Q_B) && !stall;
     assign f_start  = (q == Q_GO);
     assign rd_addr  = spi_rd      ? ((spi_raddr == 7'd127) ? cfg_index : spi_raddr) :
@@ -193,7 +199,7 @@ module ukf_top #(
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             q <= Q_CLEAR; clr <= 5'd0; pc <= 10'd0; flag <= 1'b0; started <= 1'b0; vn_ok <= 1'b0; dw_ok <= 1'b0;
-            ret0 <= 10'd0; ret1 <= 10'd0; depth <= 2'd0; overruns <= 8'd0;
+            ret0 <= 10'd0; ret1 <= 10'd0; depth <= 2'd0; overruns <= 8'd0; word_ok <= 1'b0;
             m_we <= 1'b0; m_waddr <= 7'd0; m_wdata <= 32'd0; state_valid <= 1'b0;
             cfg_index <= 7'd96; cfg_set <= 16'd0;
         end else begin
@@ -217,7 +223,9 @@ module ukf_top #(
                         vn_ok <= vn_valid; dw_ok <= dw_valid; pc <= 10'd0; depth <= 2'd0; q <= Q_A;
                     end
                 end
-                Q_A: if (!stall) begin
+                Q_A: if (!word_ok) word_ok <= 1'b1;
+                else if (!stall) begin
+                    word_ok <= 1'b0;
                     if (is_ctl) begin
                         pc <= pc + 10'd1;
                         case (cop)
@@ -273,7 +281,7 @@ endmodule
 // registered and held, and writes must be at least 3 clocks apart (the sequencer above leaves 3
 // or more). A word must not be read until 2 clocks after its write.
 module ukf_store #(
-    parameter NCFG = 16
+    parameter NCFG = 8 
 ) (
     input  logic        clk,
     input  logic        we,
@@ -312,7 +320,7 @@ module ukf_store #(
             if (i < WORDS || (i >= 64 && i < 64 + NCFG)) begin : real_
                 assign sel[i] = (wa_q == i);
 `ifdef SYNTHESIS
-                sky130_fd_sc_hd__and2_1 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
+                sky130_fd_sc_hd__and2_4 u_gate (.A(sel[i]), .B(pulse), .X(gate[i]));
 `else
                 assign gate[i] = sel[i] & pulse;
 `endif
