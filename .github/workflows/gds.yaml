@@ -4,7 +4,6 @@ on:
   push:
     branches-ignore:
       - 'results/**'
-  workflow_dispatch:
 
 concurrency:
   group: gds-${{ github.ref }}
@@ -13,93 +12,6 @@ concurrency:
 jobs:
   gds:
     runs-on: ubuntu-24.04
-    permissions:
-      contents: write
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v6
-        with:
-          submodules: recursive
-
-      # Trial branches only: publish the key numbers every few minutes while the build runs,
-      # and once more at the end, to a results/<name> branch that can be read with git.
-      - name: Start metrics publisher
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          cat > /tmp/pub.sh <<'PUBEOF'
-          cd "$GITHUB_WORKSPACE"
-          OUT=/tmp/metrics.txt
-          {
-            echo "branch $GITHUB_REF_NAME  commit $GITHUB_SHA  $(date -u +%FT%TZ)"
-            echo "=== steps reached"
-            ls runs/wokwi 2>/dev/null | tail -70
-            echo "=== key lines"
-            grep -rhsE "Utilization:|Movable instances area|Core area|Design area|hold buffers|Inserted [0-9]+ buffers|Resized [0-9]+ instances|Number of violations =|Completing 100%|Total wirelength|Routed nets|Number of instances:|Number of nets:|Number of pins:|worst slack|tns |wns |Chip area|Number of cells:|DPL-0036|GPL-0302|GRT-0115|\[ERROR" runs/wokwi --include='*.log' | cut -c1-200 | tail -400
-            echo "=== cell type reports (last of each step)"
-            for f in $(grep -rlsE "Cell type report" runs/wokwi --include='*.log' | sort); do echo "--- $f"; grep -A14 "Cell type report" "$f" | tail -15 | cut -c1-120; done
-            echo "=== congestion reports"
-            for f in $(grep -rlsE "Final congestion report" runs/wokwi --include='*.log' | sort); do echo "--- $f"; grep -A14 "Final congestion report" "$f" | tail -15 | cut -c1-140; done
-            echo "=== violation tables"
-            for f in $(grep -rlsE "Viol/Layer" runs/wokwi --include='*.log' | sort); do echo "--- $f"; grep -A8 "Viol/Layer" "$f" | head -30 | cut -c1-140; done
-            echo "=== drc map (100 um bins, top row is top of die)"
-            D=$(ls -t $(find runs/wokwi -name '*.drc*' -path '*detailedrouting*' 2>/dev/null) 2>/dev/null | head -1)
-            echo "file $D"
-            if [ -n "$D" ]; then
-              awk '/bbox/ {gsub(/[(),]/," "); x=int($3/100); y=int($4/100); c[y" "x]++; if(x>mx)mx=x; if(y>my)my=y; n++} END {print n" violations"; for(y=my;y>=0;y--){l=""; for(x=0;x<=mx;x++) l=l sprintf("%5d",c[y" "x]); print l}}' "$D"
-              grep -h "violation type" "$D" | sort | uniq -c
-            fi
-            echo "=== hold buffer sources"
-            N=$(find runs/wokwi -name '*.nl.v' -path '*resizertimingpostcts*' 2>/dev/null | head -1)
-            if [ -n "$N" ]; then
-              grep -A1 -E " hold[0-9]+ \(" "$N" | grep -oE "\.A\([^ )]+" | sed -E 's/^\.A\(.?//; s/\[.*//' | cut -d. -f1-2 | sort | uniq -c | sort -rn | head -40
-            fi
-            echo "=== yosys stat"
-            for f in $(grep -rlsE "Chip area for" runs/wokwi --include='*.log' --include='*.rpt' | sort | tail -2); do echo "--- $f"; grep -B60 "Chip area for" "$f" | tail -75 | cut -c1-120; done
-            echo "=== flow log tail"
-            tail -60 runs/wokwi/flow.log 2>/dev/null | cut -c1-220
-            echo "=== warnings and errors summary"
-            tail -40 runs/wokwi/warning.log 2>/dev/null | cut -c1-220
-            tail -40 runs/wokwi/error.log 2>/dev/null | cut -c1-220
-          } > $OUT 2>&1 || true
-          wc -c $OUT
-          rm -rf /tmp/res && mkdir /tmp/res && cd /tmp/res && git init -q && cp $OUT metrics.txt
-          git -c user.name=trial -c user.email=trial@users.noreply.github.com add metrics.txt
-          git -c user.name=trial -c user.email=trial@users.noreply.github.com commit -q -m "metrics for $GITHUB_REF_NAME $GITHUB_SHA"
-          git push -f "https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git" "HEAD:refs/heads/results/${GITHUB_REF_NAME#trial/}"
-          PUBEOF
-          sed -i "1i export GH_TOKEN='$GH_TOKEN' GITHUB_WORKSPACE='$GITHUB_WORKSPACE' GITHUB_REF_NAME='$GITHUB_REF_NAME' GITHUB_SHA='$GITHUB_SHA' GITHUB_REPOSITORY='$GITHUB_REPOSITORY'" /tmp/pub.sh
-          nohup bash -c 'while sleep 300; do bash /tmp/pub.sh; done' > /tmp/pub.log 2>&1 &
-          echo $! > /tmp/pub.pid
-
-      - name: Build GDS
-        uses: TinyTapeout/tt-gds-action@ttsky26d
-        timeout-minutes: 350
-        with:
-          pdk: sky130A
-
-      - name: Publish metrics
-        if: always()
-        run: |
-          kill $(cat /tmp/pub.pid) 2>/dev/null || true
-          sleep 2
-          bash /tmp/pub.sh
-
-  precheck:
-    needs: gds
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Run Tiny Tapeout Precheck
-        uses: TinyTapeout/tt-gds-action/precheck@ttsky26d
-
-  gl_test:
-    needs: gds
-    runs-on: ubuntu-24.04
-    steps:
-      - name: checkout repo
-        uses: actions/checkout@v6
-        with:
-          submodules: recursive
-
-      - name: GL test
-        uses: TinyTapeout/tt-gds-action/gl_test@ttsky26d
+      - name: Stopped
+        run: echo "This trial build was stopped once its result was known. The previous commit on this branch is the design that was built."
