@@ -130,21 +130,47 @@ module ukf_top #(
                        .raddr(m_raddr), .rdata(m_rdata), .first6(m_first));
     ukf_consts u_consts (.index(rd_addr[5:0]), .value(k_value));
 
-    wire running;
+    wire running, clearing;
     // The VN-300 words the filter uses, held for the whole beat. The timestamper shifts each new
     // message straight into its registers, and the filter reads these words near the end of its
-    // beat, which can be after the next message has started to arrive. They are taken at every
+    // beat, which can be after the next message has started to arrive. They are copied at every
     // measurement pulse that finds the filter idle, so the host also reads the latest ones.
     // (The wheel count, the single-precision latitude and the beat time are read in the first
     // few steps of a beat, the last of them into storage, and need no copy here.)
-    logic [31:0] yaw_h, rate_h;
-    logic [25:0] lat_h, lon_h;
+    //
+    // The copy is kept in latches, a quarter of the area of flip-flops with an enable. They are
+    // open for the one clock after the pulse (cap, straight from a flip-flop, so a clean pulse).
+    // The timestamper's words do not change in that clock or the next: the pulse marks the end of
+    // a message, and the next byte is hundreds of clocks away. The filter's first read of these
+    // words is more than ten clocks after the pulse. They are also copied while the storage is
+    // cleared after reset, so that they read zero from the start.
+    logic cap;
     always_ff @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin yaw_h <= 32'd0; rate_h <= 32'd0; lat_h <= 26'd0; lon_h <= 26'd0; end
-        else if (meas_pulse && !running) begin
-            yaw_h <= vn_yaw_f32; rate_h <= vn_rate_f32; lat_h <= vn_lat_f64[45:20]; lon_h <= vn_lon_f64[45:20];
-        end
+        if (!rst_n) cap <= 1'b0;
+        else        cap <= (meas_pulse && !running) || clearing;
     end
+    wire [115:0] hold_d = {vn_yaw_f32, vn_rate_f32, vn_lat_f64[45:20], vn_lon_f64[45:20]};
+    wire [115:0] hold_q;
+    wire [31:0] yaw_h  = hold_q[115:84];
+    wire [31:0] rate_h = hold_q[83:52];
+    wire [25:0] lat_h  = hold_q[51:26];
+    wire [25:0] lon_h  = hold_q[25:0];
+`ifdef SYNTHESIS
+    wire [7:0] hgate;
+    genvar hg, hb;
+    generate
+        for (hg = 0; hg < 8; hg = hg + 1) begin : holdg         // one enable buffer for each 16 latches or fewer
+            sky130_fd_sc_hd__buf_4 u_hgate (.A(cap), .X(hgate[hg]));
+        end
+        for (hb = 0; hb < 116; hb = hb + 1) begin : holdb
+            sky130_fd_sc_hd__dlxtp_1 u_hlatch (.D(hold_d[hb]), .GATE(hgate[hb / 16]), .Q(hold_q[hb]));
+        end
+    endgenerate
+`else
+    reg [115:0] hold_r;
+    always_latch if (cap) hold_r = hold_d;
+    assign hold_q = hold_r;
+`endif
 
     logic [31:0] ext;
     always_comb begin
@@ -218,6 +244,7 @@ module ukf_top #(
 
     wire is_ctl = (fn == FN_CTL);
     assign running = (q != Q_CLEAR) && (q != Q_IDLE);
+    assign clearing = (q == Q_CLEAR);
     // a host write of one byte of the state: read the word, replace the byte, write it back
     wire host_wr = cfg_we && !enable && (q == Q_IDLE) && (cfg_addr >= HOST_STATE_FIRST) && (cfg_addr < HOST_STATE_END);
     wire [4:0] host_word = cfg_addr[6:2] - 5'd9;
