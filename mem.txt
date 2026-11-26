@@ -548,3 +548,14 @@ Swap:           3071         145        2926
 72452    1083 Runner.Worker
 61708    1084 Runner.Listener
 
+11:14:32
+Mem:           15983        2797       12415          40        1158       13186
+Swap:           3071         144        2927
+  RSS ELAPSED COMMAND
+1458120    15 yowasp-yosys
+447320   1010 python
+141604   1106 provjobd2284307
+72436    1103 Runner.Worker
+61708    1104 Runner.Listener
+
+=== precheck step ended: success
