@@ -3,12 +3,12 @@ project:
   title:        "UMARV sensor fusion"      # Project title
   author:       "cheerfulconnor78"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "Time-synchronised sensor front end for a ground robot: VN-300 and dead-wheel encoder"      # One line description of what your project does
+  description:  "Sensor front end for a ground robot: time-synchronised VN-300 and encoder readout, five-state Kalman filter, lidar motion correction"      # One line description of what your project does
   language:     "SystemVerilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     50000000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
-  tiles: "2x2"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
+  tiles: "8x4"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
 
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
   top_module:  "tt_um_umigv_sensorfusion"
@@ -18,6 +18,24 @@ project:
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
     - "timestamper.sv"
+    - "v16PacketParser.v"
+    - "lidar_vlp16_rx.sv"
+    - "lidar_cordic.sv"
+    - "mii_recv.sv"
+    - "mii_send.sv"
+    - "async_fifo.sv"
+    - "reset_release.sv"
+    - "lidar_laser_table.sv"
+    - "lidar_motion.sv"
+    - "lidar_latch_mem.sv"
+    - "lidar_point_buffer.sv"
+    - "lidar_xyz.sv"
+    - "lidar_frame_tx.sv"
+    - "lidar_top.sv"
+    - "spi_regs.sv"
+    - "fp_serial.sv"
+    - "ukf_tables.sv"
+    - "ukf_top.sv"
     - "tt_um_umigv_sensorfusion.sv"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
@@ -26,12 +44,12 @@ pinout:
   # Inputs
   ui[0]: "VN-300 serial data (vn_rx)"
   ui[1]: "Encoder SPI MISO"
-  ui[2]: "Enable (1 = run)"
-  ui[3]: "Check encoder turn-count parity (1 = on)"
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  ui[2]: "Host SPI SCK"
+  ui[3]: "Host SPI CS_N"
+  ui[4]: "Host SPI MOSI"
+  ui[5]: "Lidar MII RX_DV"
+  ui[6]: "Host-side MII TX_CLK"
+  ui[7]: "Lidar MII RX_CLK"
 
   # Outputs
   uo[0]: "VN-300 SyncIn pulse"
@@ -39,19 +57,19 @@ pinout:
   uo[2]: "Encoder SPI SCK"
   uo[3]: "Encoder SPI MOSI"
   uo[4]: "Measurements ready pulse"
-  uo[5]: "Debug stream data"
-  uo[6]: "Debug stream frame"
-  uo[7]: ""
+  uo[5]: "Host SPI MISO"
+  uo[6]: ""
+  uo[7]: "Host-side MII TX_EN"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
-  uio[6]: ""
-  uio[7]: ""
+  uio[0]: "Lidar MII RXD[0] (input)"
+  uio[1]: "Lidar MII RXD[1] (input)"
+  uio[2]: "Lidar MII RXD[2] (input)"
+  uio[3]: "Lidar MII RXD[3] (input)"
+  uio[4]: "Host-side MII TXD[0] (output)"
+  uio[5]: "Host-side MII TXD[1] (output)"
+  uio[6]: "Host-side MII TXD[2] (output)"
+  uio[7]: "Host-side MII TXD[3] (output)"
 
 # Do not change!
 yaml_version: 6
