@@ -1,0 +1,60 @@
+10:56:11
+Mem:           15983         992       14438          41         879       14991
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+140504      3 provjobd3582028
+125672      2 Runner.Worker
+94844       3 Runner.Listener
+69080      19 dockerd
+49864      19 php-fpm8.3
+
+10:56:31
+Mem:           15983        1869       10364          47        4141       14114
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+241644      0 MainThread
+150792     23 provjobd3582028
+134820     22 Runner.Worker
+94928      23 Runner.Listener
+69080      39 dockerd
+
+10:56:51
+Mem:           15983        1636        7858          47        6882       14347
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+149060     43 provjobd3582028
+136748     42 Runner.Worker
+94932      43 Runner.Listener
+69080      59 dockerd
+49864      59 php-fpm8.3
+
+10:57:11
+Mem:           15983        1490        7248          48        7639       14493
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+209016     25 nix-build
+149536     64 provjobd3582028
+136832     62 Runner.Worker
+96440      63 Runner.Listener
+69080      79 dockerd
+
+10:57:31
+Mem:           15983        2653        5711          48        8013       13330
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+1111260     2 magicdnull
+140976     84 provjobd3582028
+140496     82 Runner.Worker
+122484      2 python
+97268      83 Runner.Listener
+
+10:57:51
+Mem:           15983        5019        3345          48        8013       10964
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+3994380    22 magicdnull
+141112    104 provjobd3582028
+138904    102 Runner.Worker
+122484     22 python
+97276     103 Runner.Listener
+
