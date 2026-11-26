@@ -1,0 +1,438 @@
+branch trial/x-na  commit cbb939520490df3c94e390eb2ff63afb72dea1a4  2026-11-26T00:11:30Z
+=== steps reached
+01-verilator-lint
+02-checker-linttimingconstructs
+03-checker-linterrors
+04-checker-lintwarnings
+05-yosys-jsonheader
+06-yosys-synthesis
+07-checker-yosysunmappedcells
+08-checker-yosyssynthchecks
+09-checker-netlistassignstatements
+10-openroad-checksdcfiles
+11-openroad-checkmacroinstances
+12-openroad-staprepnr
+13-openroad-floorplan
+14-openroad-dumprcvalues
+15-odb-checkmacroantennaproperties
+16-odb-setpowerconnections
+17-odb-manualmacroplacement
+18-openroad-cutrows
+19-openroad-tapendcapinsertion
+20-odb-addpdnobstructions
+21-openroad-generatepdn
+22-odb-removepdnobstructions
+23-odb-addroutingobstructions
+24-openroad-globalplacementskipio
+25-openroad-ioplacement
+26-odb-customioplacement
+27-odb-applydeftemplate
+28-openroad-globalplacement
+29-odb-writeverilogheader
+30-checker-powergridviolations
+31-openroad-stamidpnr
+32-openroad-repairdesignpostgpl
+33-odb-manualglobalplacement
+34-openroad-detailedplacement
+35-openroad-cts
+error.log
+flow.log
+resolved.json
+tmp
+warning.log
+=== key lines
+[GPL-0302] Target density 0.6000 is too low for the available free area.
+   Chip area for module '\tt_um_umigv_sensorfusion': 103541.804800
+   Chip area for top module '\tt_um_umigv_sensorfusion': 103541.804800
+   Chip area for module '\tt_um_umigv_sensorfusion': 190686.633600
+   Chip area for top module '\tt_um_umigv_sensorfusion': 190686.633600
+   Chip area for module '\tt_um_umigv_sensorfusion': 451885.894400
+   Chip area for module '\ukf_steps': 14730.377600
+   Chip area for top module '\tt_um_umigv_sensorfusion': 466616.272000
+[GPL-0302] Target density 0.6000 is too low for the available free area.
+[INFO IFP-0102] Core area:                       694446.029 um^2
+[INFO IFP-0105] Number of instances:                  46955
+[INFO RSZ-0039] Resized 780 instances.
+[INFO RSZ-0038] Inserted 3626 buffers in 1565 nets.
+[INFO GPL-0036] Movable instances area:     466616.272 um^2
+[INFO GPL-0006] Number of instances:             57291
+[INFO GPL-0010] Number of nets:                  46974
+[INFO GPL-0011] Number of pins:                 161125
+[INFO GPL-0016] Core area:                  694446.029 um^2
+[INFO GPL-0018] Movable instances area:     527418.947 um^2
+[INFO GPL-0019] Utilization:                    77.495 %
+[WARNING GPL-0302] Target density 0.6000 is too low for the available free area.
+=== cell type reports (last of each step)
+--- runs/wokwi/13-openroad-floorplan/openroad-floorplan.log
+Cell type report:                       Count       Area
+  Buffer                                 2899   13571.77
+  Inverter                               3695   14104.78
+  Sequential cell                       10117  182546.33
+  Multi-Input combinational cell        30244  256393.40
+  Total                                 46955  466616.27
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-openroad-floor
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-openroad-floorp
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/13-ope
+--- runs/wokwi/18-openroad-cutrows/openroad-cutrows.log
+Cell type report:                       Count       Area
+  Buffer                                 2899   13571.77
+  Inverter                               3695   14104.78
+  Sequential cell                       10117  182546.33
+  Multi-Input combinational cell        30244  256393.40
+  Total                                 46955  466616.27
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/18-open
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/18-openroad-cutrow
+--- runs/wokwi/19-openroad-tapendcapinsertion/openroad-tapendcapinsertion.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 2899   13571.77
+  Inverter                               3695   14104.78
+  Sequential cell                       10117  182546.33
+  Multi-Input combinational cell        30244  256393.40
+  Total                                 57291  480479.57
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-openroad-tapen
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-openroad-tapend
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/19-ope
+--- runs/wokwi/21-openroad-generatepdn/openroad-generatepdn.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 2899   13571.77
+  Inverter                               3695   14104.78
+  Sequential cell                       10117  182546.33
+  Multi-Input combinational cell        30244  256393.40
+  Total                                 57291  480479.57
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-openroad-gener
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-openroad-genera
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/21-ope
+[INFO PSM-0040] All shapes on net VPWR are connected.
+[INFO PSM-0040] All shapes on net VGND are connected.
+--- runs/wokwi/28-openroad-globalplacement/openroad-globalplacement.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 2899   13571.77
+  Inverter                               3695   14104.78
+  Sequential cell                       10117  182546.33
+  Multi-Input combinational cell        30244  256393.40
+  Total                                 57291  480479.57
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-openroad-globa
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-openroad-global
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/28-ope
+--- runs/wokwi/32-openroad-repairdesignpostgpl/openroad-repairdesignpostgpl.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 2899   14348.76
+  Timing Repair Buffer                   3639   28721.30
+  Inverter                               3695   14107.28
+  Sequential cell                       10117  182546.33
+  Multi-Input combinational cell        30244  256581.08
+  Total                                 60930  510168.04
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-openroad-repai
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-openroad-repair
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/32-ope
+--- runs/wokwi/34-openroad-detailedplacement/openroad-detailedplacement.log
+Cell type report:                       Count       Area
+  Fill cell                               372    1396.34
+  Tap cell                               9964   12466.96
+  Buffer                                 2899   14348.76
+  Timing Repair Buffer                   3639   28721.30
+  Inverter                               3695   14107.28
+  Sequential cell                       10117  182546.33
+  Multi-Input combinational cell        30244  256581.08
+  Total                                 60930  510168.04
+Writing OpenROAD database to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-open
+Writing netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-openroad-detai
+Writing powered netlist to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-openro
+Writing layout to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-openroad-detail
+Writing timing constraints to '/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/runs/wokwi/34-ope
+=== congestion reports
+=== violation tables
+=== drc map (100 um bins, top row is top of die)
+file 
+=== hold buffer sources
+=== sta summary (after routing)
+=== slow-corner paths (after routing)
+
+=== timing detail v2
+--- corners and constraints the flow resolved
+{"DEFAULT_CORNER":"nom_tt_025C_1v80","PNR_CORNERS":["nom_tt_025C_1v80","nom_ss_100C_1v60","nom_ff_n40C_1v95"],"RSZ_CORNERS":null,"STA_CORNERS":["nom_tt_025C_1v80","nom_ss_100C_1v60","nom_ff_n40C_1v95","min_tt_025C_1v80","min_ss_100C_1v60","min_ff_n40C_1v95","max_tt_025C_1v80","max_ss_100C_1v60","max_ff_n40C_1v95"],"MAX_TRANSITION_CONSTRAINT":0.75,"MAX_FANOUT_CONSTRAINT":20,"MAX_CAPACITANCE_CONSTRAINT":0.2,"SYNTH_STRATEGY":"AREA 3","SYNTH_ADDER_TYPE":"YOSYS","DESIGN_REPAIR_MAX_SLEW_PCT":10,"GRT_DESIGN_REPAIR_MAX_SLEW_PCT":10,"CLOCK_UNCERTAINTY_CONSTRAINT":0.25,"TIME_DERATING_CONSTRAINT":5,"IO_DELAY_CONSTRAINT":20,"PL_RESIZER_SETUP_SLACK_MARGIN":0.05,"PL_RESIZER_SETUP_MAX_BUFFER_PCT":50,"RUN_POST_GRT_DESIGN_REPAIR":true,"RUN_POST_GRT_RESIZER_TIMING":true,"DRT_ANTENNA_REPAIR_ITERS":0}
+--- timing exception
+{"PNR_SDC_FILE":"/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/src/project.sdc","SIGNOFF_SDC_FILE":"/home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/src/project.sdc"}
+     12 [INFO] UKF two-clock path, SPI read address: 7 nets
+     12 [INFO] UKF two-clock path, filter program counter: 10 nets
+     12 [INFO] UKF two-clock path, filter storage read: 14 address and borrow nets, 32 buffer pins
+     12 [INFO] UKF two-clock path, lidar buffer read: 9 pointer nets, 16 output buffer pins
+--- resizer messages
+      2 [RSZ-N] max wire length less than Nu increases wire delays.
+      2 [RSZ-N] found N floating nets.
+      2 [INFO RSZ-N] Inserted N tie skyN_fd_sc_hd__conb_N instances.
+      1 [WARNING RSZ-N] max wire length less than Nu increases wire delays.
+      1 [WARNING RSZ-N] found N floating nets.
+      1 [INFO RSZ-N] Resized N instances.
+      1 [INFO RSZ-N] Inserted N skyN_fd_sc_hd__clkdlybufNsN_N input buffers.
+      1 [INFO RSZ-N] Inserted N buffers in N nets.
+      1 [INFO RSZ-N] Found N slew violations.
+      1 [INFO RSZ-N] Found N long wires.
+      1 [INFO RSZ-N] Found N fanout violations.
+      1 [INFO RSZ-N] Found N capacitance violations.
+--- runs/wokwi/32-openroad-repairdesignpostgpl/openroad-repairdesignpostgpl.log
+[INFO RSZ-0035] Found 141 fanout violations.
+[INFO RSZ-0036] Found 6 capacitance violations.
+[INFO RSZ-0037] Found 944 long wires.
+[INFO RSZ-0039] Resized 780 instances.
+[INFO RSZ-0038] Inserted 3626 buffers in 1565 nets.
+[INFO RSZ-0042] Inserted 12 tie sky130_fd_sc_hd__conb_1 instances.
+[INFO RSZ-0042] Inserted 5 tie sky130_fd_sc_hd__conb_1 instances.
+[WARNING RSZ-0020] found 2 floating nets.
+=== detail files v3
+netlist runs/wokwi/34-openroad-detailedplacement/tt_um_umigv_sensorfusion.nl.v
+total 16
+drwxr-xr-x  2 runner runner  4096 Nov 26 00:10 .
+drwxrwxrwt 15 root   root   12288 Nov 26 00:10 ..
+=== yosys stat
+--- runs/wokwi/06-yosys-synthesis/reports/stat.rpt
+        1   11.261   sky130_fd_sc_hd__o21bai_2
+        1   15.014   sky130_fd_sc_hd__o221ai_2
+        3   30.029   sky130_fd_sc_hd__o22a_2
+        2   25.024   sky130_fd_sc_hd__o22ai_2
+        3   30.029   sky130_fd_sc_hd__o31a_2
+        3   37.536   sky130_fd_sc_hd__o31ai_2
+       21  131.376   sky130_fd_sc_hd__or2_2
+        1    8.758   sky130_fd_sc_hd__or2_4
+        1    8.758   sky130_fd_sc_hd__or2b_2
+        3   22.522   sky130_fd_sc_hd__or3_2
+        1   11.261   sky130_fd_sc_hd__or3_4
+
+   Chip area for module '\ukf_steps': 14730.377600
+--
+        1   16.266   sky130_fd_sc_hd__inv_12
+        2   40.038   sky130_fd_sc_hd__inv_16
+     3651 1.37E+04   sky130_fd_sc_hd__inv_2
+       26  162.656   sky130_fd_sc_hd__inv_4
+        5   43.792   sky130_fd_sc_hd__inv_6
+        6   67.565   sky130_fd_sc_hd__inv_8
+        1   11.261   sky130_fd_sc_hd__mux2_1
+     1839 2.07E+04   sky130_fd_sc_hd__mux2_2
+     8911 5.57E+04   sky130_fd_sc_hd__nand2_2
+       86  968.429   sky130_fd_sc_hd__nand2_4
+        8  160.154   sky130_fd_sc_hd__nand2_8
+       55  481.712   sky130_fd_sc_hd__nand2b_2
+        1   13.763   sky130_fd_sc_hd__nand2b_4
+     1443 1.44E+04   sky130_fd_sc_hd__nand3_2
+        5   87.584   sky130_fd_sc_hd__nand3_4
+      216 2.43E+03   sky130_fd_sc_hd__nand3b_2
+        2   40.038   sky130_fd_sc_hd__nand3b_4
+     2413 1.51E+04   sky130_fd_sc_hd__nor2_2
+       34  382.867   sky130_fd_sc_hd__nor2_4
+       11  220.211   sky130_fd_sc_hd__nor2_8
+       12  105.101   sky130_fd_sc_hd__nor2b_2
+       48  480.461   sky130_fd_sc_hd__nor3_2
+        3   37.536   sky130_fd_sc_hd__nor3b_2
+        1   18.768   sky130_fd_sc_hd__nor3b_4
+       15   187.68   sky130_fd_sc_hd__o2111a_2
+       18  270.259   sky130_fd_sc_hd__o2111ai_2
+      826  8267.93   sky130_fd_sc_hd__o211a_2
+      125     1564   sky130_fd_sc_hd__o211ai_2
+      431  3774.87   sky130_fd_sc_hd__o21a_2
+        1   15.014   sky130_fd_sc_hd__o21a_4
+      954 8.36E+03   sky130_fd_sc_hd__o21ai_2
+       68 1.11E+03   sky130_fd_sc_hd__o21ai_4
+       31  310.298   sky130_fd_sc_hd__o21ba_2
+       32  360.346   sky130_fd_sc_hd__o21bai_2
+      139 1.57E+03   sky130_fd_sc_hd__o221a_2
+       27  405.389   sky130_fd_sc_hd__o221ai_2
+      149  1491.43   sky130_fd_sc_hd__o22a_2
+       10   125.12   sky130_fd_sc_hd__o22ai_2
+       16  180.173   sky130_fd_sc_hd__o2bb2a_2
+        1   15.014   sky130_fd_sc_hd__o2bb2ai_2
+       30  337.824   sky130_fd_sc_hd__o311a_2
+       30  300.288   sky130_fd_sc_hd__o31a_2
+       21  262.752   sky130_fd_sc_hd__o31ai_2
+      209 2.35E+03   sky130_fd_sc_hd__o32a_2
+       13  162.656   sky130_fd_sc_hd__o41a_2
+     1539 9.63E+03   sky130_fd_sc_hd__or2_2
+       34  297.786   sky130_fd_sc_hd__or2_4
+      192 1.68E+03   sky130_fd_sc_hd__or2b_2
+      245 1.84E+03   sky130_fd_sc_hd__or3_2
+        9  101.347   sky130_fd_sc_hd__or3_4
+      208 1.82E+03   sky130_fd_sc_hd__or3b_2
+        1   11.261   sky130_fd_sc_hd__or3b_4
+      264 2.31E+03   sky130_fd_sc_hd__or4_2
+        7   78.826   sky130_fd_sc_hd__or4_4
+       15  150.144   sky130_fd_sc_hd__or4b_2
+      134  2179.59   sky130_fd_sc_hd__xnor2_2
+      321 5.22E+03   sky130_fd_sc_hd__xor2_2
+        1 1.47E+04 submodules
+        1 1.47E+04   ukf_steps
+
+   Chip area for top module '\tt_um_umigv_sensorfusion': 466616.272000
+--- runs/wokwi/06-yosys-synthesis/yosys-synthesis.log
+        1   11.261   sky130_fd_sc_hd__o21bai_2
+        1   15.014   sky130_fd_sc_hd__o221ai_2
+        3   30.029   sky130_fd_sc_hd__o22a_2
+        2   25.024   sky130_fd_sc_hd__o22ai_2
+        3   30.029   sky130_fd_sc_hd__o31a_2
+        3   37.536   sky130_fd_sc_hd__o31ai_2
+       21  131.376   sky130_fd_sc_hd__or2_2
+        1    8.758   sky130_fd_sc_hd__or2_4
+        1    8.758   sky130_fd_sc_hd__or2b_2
+        3   22.522   sky130_fd_sc_hd__or3_2
+        1   11.261   sky130_fd_sc_hd__or3_4
+
+   Chip area for module '\ukf_steps': 14730.377600
+--
+        1   16.266   sky130_fd_sc_hd__inv_12
+        2   40.038   sky130_fd_sc_hd__inv_16
+     3651 1.37E+04   sky130_fd_sc_hd__inv_2
+       26  162.656   sky130_fd_sc_hd__inv_4
+        5   43.792   sky130_fd_sc_hd__inv_6
+        6   67.565   sky130_fd_sc_hd__inv_8
+        1   11.261   sky130_fd_sc_hd__mux2_1
+     1839 2.07E+04   sky130_fd_sc_hd__mux2_2
+     8911 5.57E+04   sky130_fd_sc_hd__nand2_2
+       86  968.429   sky130_fd_sc_hd__nand2_4
+        8  160.154   sky130_fd_sc_hd__nand2_8
+       55  481.712   sky130_fd_sc_hd__nand2b_2
+        1   13.763   sky130_fd_sc_hd__nand2b_4
+     1443 1.44E+04   sky130_fd_sc_hd__nand3_2
+        5   87.584   sky130_fd_sc_hd__nand3_4
+      216 2.43E+03   sky130_fd_sc_hd__nand3b_2
+        2   40.038   sky130_fd_sc_hd__nand3b_4
+     2413 1.51E+04   sky130_fd_sc_hd__nor2_2
+       34  382.867   sky130_fd_sc_hd__nor2_4
+       11  220.211   sky130_fd_sc_hd__nor2_8
+       12  105.101   sky130_fd_sc_hd__nor2b_2
+       48  480.461   sky130_fd_sc_hd__nor3_2
+        3   37.536   sky130_fd_sc_hd__nor3b_2
+        1   18.768   sky130_fd_sc_hd__nor3b_4
+       15   187.68   sky130_fd_sc_hd__o2111a_2
+       18  270.259   sky130_fd_sc_hd__o2111ai_2
+      826  8267.93   sky130_fd_sc_hd__o211a_2
+      125     1564   sky130_fd_sc_hd__o211ai_2
+      431  3774.87   sky130_fd_sc_hd__o21a_2
+        1   15.014   sky130_fd_sc_hd__o21a_4
+      954 8.36E+03   sky130_fd_sc_hd__o21ai_2
+       68 1.11E+03   sky130_fd_sc_hd__o21ai_4
+       31  310.298   sky130_fd_sc_hd__o21ba_2
+       32  360.346   sky130_fd_sc_hd__o21bai_2
+      139 1.57E+03   sky130_fd_sc_hd__o221a_2
+       27  405.389   sky130_fd_sc_hd__o221ai_2
+      149  1491.43   sky130_fd_sc_hd__o22a_2
+       10   125.12   sky130_fd_sc_hd__o22ai_2
+       16  180.173   sky130_fd_sc_hd__o2bb2a_2
+        1   15.014   sky130_fd_sc_hd__o2bb2ai_2
+       30  337.824   sky130_fd_sc_hd__o311a_2
+       30  300.288   sky130_fd_sc_hd__o31a_2
+       21  262.752   sky130_fd_sc_hd__o31ai_2
+      209 2.35E+03   sky130_fd_sc_hd__o32a_2
+       13  162.656   sky130_fd_sc_hd__o41a_2
+     1539 9.63E+03   sky130_fd_sc_hd__or2_2
+       34  297.786   sky130_fd_sc_hd__or2_4
+      192 1.68E+03   sky130_fd_sc_hd__or2b_2
+      245 1.84E+03   sky130_fd_sc_hd__or3_2
+        9  101.347   sky130_fd_sc_hd__or3_4
+      208 1.82E+03   sky130_fd_sc_hd__or3b_2
+        1   11.261   sky130_fd_sc_hd__or3b_4
+      264 2.31E+03   sky130_fd_sc_hd__or4_2
+        7   78.826   sky130_fd_sc_hd__or4_4
+       15  150.144   sky130_fd_sc_hd__or4b_2
+      134  2179.59   sky130_fd_sc_hd__xnor2_2
+      321 5.22E+03   sky130_fd_sc_hd__xor2_2
+        1 1.47E+04 submodules
+        1 1.47E+04   ukf_steps
+
+   Chip area for top module '\tt_um_umigv_sensorfusion': 466616.272000
+=== flow log tail
+No cells provided, skipping 'Odb.CheckMacroAntennaProperties'…
+Running 'Odb.SetPowerConnections' at 'runs/wokwi/16-odb-setpowerconnections'…
+Logging subprocess to [repr.filename]'runs/wokwi/16-odb-setpowerconnections/odb-setpowerconnections.log'[/repr.filename]…
+Macros inside hierarchical netlists are not currently supported in LibreLane: skipping submodule 'u_ukf.u_steps' of type 'ukf_steps'.
+Running 'Odb.ManualMacroPlacement' at 'runs/wokwi/17-odb-manualmacroplacement'…
+No instances found, skipping 'Odb.ManualMacroPlacement'…
+Running 'OpenROAD.CutRows' at 'runs/wokwi/18-openroad-cutrows'…
+Logging subprocess to [repr.filename]'runs/wokwi/18-openroad-cutrows/openroad-cutrows.log'[/repr.filename]…
+Running 'OpenROAD.TapEndcapInsertion' at 'runs/wokwi/19-openroad-tapendcapinsertion'…
+Logging subprocess to [repr.filename]'runs/wokwi/19-openroad-tapendcapinsertion/openroad-tapendcapinsertion.log'[/repr.filename]…
+Running 'Odb.AddPDNObstructions' at 'runs/wokwi/20-odb-addpdnobstructions'…
+'PDN_OBSTRUCTIONS' is not defined. Skipping 'Odb.AddPDNObstructions'…
+Running 'OpenROAD.GeneratePDN' at 'runs/wokwi/21-openroad-generatepdn'…
+'PDN_CFG' not explicitly set, setting it to /nix/store/8y4m6wgn5kqlbig1qwnwbxijqqp0jwib-python3-3.13.9-env/lib/python3.13/site-packages/librelane/scripts/openroad/common/pdn_cfg.tcl…
+Logging subprocess to [repr.filename]'runs/wokwi/21-openroad-generatepdn/openroad-generatepdn.log'[/repr.filename]…
+Running 'Odb.RemovePDNObstructions' at 'runs/wokwi/22-odb-removepdnobstructions'…
+'PDN_OBSTRUCTIONS' is not defined. Skipping 'Odb.RemovePDNObstructions'…
+Running 'Odb.AddRoutingObstructions' at 'runs/wokwi/23-odb-addroutingobstructions'…
+'ROUTING_OBSTRUCTIONS' is not defined. Skipping 'Odb.AddRoutingObstructions'…
+Running 'OpenROAD.GlobalPlacementSkipIO' at 'runs/wokwi/24-openroad-globalplacementskipio'…
+I/O pins were loaded from /home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/tt/tech/sky130A/def/tt_block_8x4_pg.def. Returning state unaltered…
+Running 'OpenROAD.IOPlacement' at 'runs/wokwi/25-openroad-ioplacement'…
+I/O pins were loaded from /home/runner/work/umarv-sensorfusion-tapeout/umarv-sensorfusion-tapeout/tt/tech/sky130A/def/tt_block_8x4_pg.def. Skipping OpenROAD.IOPlacement…
+Running 'Odb.CustomIOPlacement' at 'runs/wokwi/26-odb-customioplacement'…
+No custom I/O placement file configured, skipping 'Odb.CustomIOPlacement'…
+Running 'Odb.ApplyDEFTemplate' at 'runs/wokwi/27-odb-applydeftemplate'…
+Logging subprocess to [repr.filename]'runs/wokwi/27-odb-applydeftemplate/odb-applydeftemplate.log'[/repr.filename]…
+Bterm VPWR is declared as a 'POWER' pin. It will be ignored.
+Bterm VGND is declared as a 'GROUND' pin. It will be ignored.
+Running 'OpenROAD.GlobalPlacement' at 'runs/wokwi/28-openroad-globalplacement'…
+Logging subprocess to [repr.filename]'runs/wokwi/28-openroad-globalplacement/openroad-globalplacement.log'[/repr.filename]…
+[GPL-0302] Target density 0.6000 is too low for the available free area.
+Running 'Odb.WriteVerilogHeader' at 'runs/wokwi/29-odb-writeverilogheader'…
+Logging subprocess to [repr.filename]'runs/wokwi/29-odb-writeverilogheader/odb-writeverilogheader.log'[/repr.filename]…
+Running 'Checker.PowerGridViolations' at 'runs/wokwi/30-checker-powergridviolations'…
+Check for power grid violations (as reported by OpenROAD PSM- you may ignore these if LVS passes) clear.
+Running 'OpenROAD.STAMidPNR' at 'runs/wokwi/31-openroad-stamidpnr'…
+Logging subprocess to [repr.filename]'runs/wokwi/31-openroad-stamidpnr/openroad-stamidpnr.log'[/repr.filename]…
+Running 'OpenROAD.RepairDesignPostGPL' at 'runs/wokwi/32-openroad-repairdesignpostgpl'…
+Logging subprocess to [repr.filename]'runs/wokwi/32-openroad-repairdesignpostgpl/openroad-repairdesignpostgpl.log'[/repr.filename]…
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exi
+[RSZ-0065] max wire length less than 6884u increases wire delays.
+[RSZ-0020] found 2 floating nets.
+Running 'Odb.ManualGlobalPlacement' at 'runs/wokwi/33-odb-manualglobalplacement'…
+'MANUAL_GLOBAL_PLACEMENTS' not set. Skipping 'Odb.ManualGlobalPlacement'…
+Running 'OpenROAD.DetailedPlacement' at 'runs/wokwi/34-openroad-detailedplacement'…
+Logging subprocess to [repr.filename]'runs/wokwi/34-openroad-detailedplacement/openroad-detailedplacement.log'[/repr.filename]…
+Running 'OpenROAD.CTS' at 'runs/wokwi/35-openroad-cts'…
+Logging subprocess to [repr.filename]'runs/wokwi/35-openroad-cts/openroad-cts.log'[/repr.filename]…
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exi
+=== warnings and errors summary
+22 Lint warnings found.
+Macros inside hierarchical netlists are not currently supported in LibreLane: skipping submodule 'u_ukf.u_steps' of type 'ukf_steps'.
+Bterm VPWR is declared as a 'POWER' pin. It will be ignored.
+Bterm VGND is declared as a 'GROUND' pin. It will be ignored.
+[GPL-0302] Target density 0.6000 is too low for the available free area.
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exi
+[RSZ-0065] max wire length less than 6884u increases wire delays.
+[RSZ-0020] found 2 floating nets.
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exi
+[STA-1140] /home/runner/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exi
