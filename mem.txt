@@ -308,3 +308,63 @@ Swap:          24575        3182       21393
 51580     606 Runner.Listener
 51536     504 python
 
+11:06:34
+Mem:           15983        1457       13890          33        1016       14526
+Swap:          24575         144       24431
+  RSS ELAPSED COMMAND
+749920     10 .klayout-wrappe
+116564    627 provjobd1454848
+64588     624 Runner.Worker
+54088     524 python
+51388     626 Runner.Listener
+
+11:06:54
+Mem:           15983        1429       13915          33        1018       14554
+Swap:          24575         144       24431
+  RSS ELAPSED COMMAND
+715240     30 .klayout-wrappe
+116632    647 provjobd1454848
+70416     644 Runner.Worker
+54088     544 python
+50428     646 Runner.Listener
+
+11:07:14
+Mem:           15983        1431       13913          33        1018       14552
+Swap:          24575         144       24431
+  RSS ELAPSED COMMAND
+719020     50 .klayout-wrappe
+116644    667 provjobd1454848
+70428     664 Runner.Worker
+54088     564 python
+52044     666 Runner.Listener
+
+11:07:34
+Mem:           15983        1270       14066          33        1026       14713
+Swap:          24575         144       24431
+  RSS ELAPSED COMMAND
+541480      3 .klayout-wrappe
+116652    687 provjobd1454848
+70528     684 Runner.Worker
+58440     584 python
+52628     686 Runner.Listener
+
+11:07:54
+Mem:           15983        1612       13724          33        1026       14371
+Swap:          24575         144       24431
+  RSS ELAPSED COMMAND
+877280     23 .klayout-wrappe
+116652    707 provjobd1454848
+70556     704 Runner.Worker
+58440     604 python
+51364     706 Runner.Listener
+
+11:08:14
+Mem:           15983        1586       13750          33        1027       14397
+Swap:          24575         144       24431
+  RSS ELAPSED COMMAND
+877664     43 .klayout-wrappe
+116664    727 provjobd1454848
+70556     724 Runner.Worker
+58440     624 python
+52204     726 Runner.Listener
+
