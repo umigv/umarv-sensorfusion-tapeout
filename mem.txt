@@ -58,3 +58,73 @@ Swap:          24575           0       24575
 122484     22 python
 97276     103 Runner.Listener
 
+10:58:11
+Mem:           15983        5919        2445          48        8014       10064
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+4929116    42 magicdnull
+141116    124 provjobd3582028
+138900    122 Runner.Worker
+122484     42 python
+97572     123 Runner.Listener
+
+10:58:31
+Mem:           15983        6400        1963          48        8014        9583
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+5451612    62 magicdnull
+141188    144 provjobd3582028
+138908    142 Runner.Worker
+122484     62 python
+98184     143 Runner.Listener
+
+10:58:51
+Mem:           15983        7381         982          48        8014        8602
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+6452288    82 magicdnull
+141188    164 provjobd3582028
+138912    162 Runner.Worker
+122484     82 python
+98248     163 Runner.Listener
+
+10:59:11
+Mem:           15983        7691         673          48        8014        8292
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+6760032   102 magicdnull
+141208    184 provjobd3582028
+138972    182 Runner.Worker
+122484    102 python
+99968     183 Runner.Listener
+
+10:59:31
+Mem:           15983        8888         263          48        7226        7095
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+8025612   122 magicdnull
+139488    204 provjobd3582028
+136932    202 Runner.Worker
+122448    122 python
+99540     203 Runner.Listener
+
+10:59:51
+Mem:           15983        8903         246          48        7228        7080
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+8037456   142 magicdnull
+140124    224 provjobd3582028
+136932    222 Runner.Worker
+122448    142 python
+97440     223 Runner.Listener
+
+11:00:11
+Mem:           15983        9781         245          48        6352        6202
+Swap:          24575           0       24575
+  RSS ELAPSED COMMAND
+8940280   162 magicdnull
+140124    244 provjobd3582028
+136956    242 Runner.Worker
+121680    162 python
+98312     243 Runner.Listener
+
