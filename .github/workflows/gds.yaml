@@ -105,6 +105,10 @@ jobs:
             echo "netlist $NL"
             [ -n "$NL" ] && [ -n "$(ls /tmp/extra/checks_* 2>/dev/null)" ] && gzip -c "$NL" > /tmp/extra/final.nl.v.gz
             ls -la /tmp/extra 2>/dev/null
+            echo "=== error log v4"
+            tail -c 3000 runs/wokwi/error.log 2>/dev/null | cut -c1-400
+            L=$(ls -t runs/wokwi/*/*.log 2>/dev/null | head -1); echo "--- newest step log $L"
+            grep -v "STA-1140" "$L" 2>/dev/null | tail -25 | cut -c1-300
             echo "=== yosys stat"
             for f in $(grep -rlsE "Chip area for" runs/wokwi --include='*.log' --include='*.rpt' | sort | tail -2); do echo "--- $f"; grep -B60 "Chip area for" "$f" | tail -75 | cut -c1-120; done
             echo "=== flow log tail"

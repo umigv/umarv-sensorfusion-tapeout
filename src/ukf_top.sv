@@ -7,7 +7,7 @@
 //
 //   ukf_steps     the table of steps (about 540). A step is  d = a op b,  or a jump/call/return.
 //   ukf_consts    the constants the steps use
-//   ukf_store     62 words of 32 bits, held in latches. Words 0-5 are wired straight out as the
+//   ukf_store     63 words of 32 bits, held in latches. Words 0-5 are wired straight out as the
 //                 state the lidar block reads.
 //   fp_serial     one single-precision unit: add, subtract, multiply, divide, square root, and
 //                 integer difference to float. One bit per clock.
@@ -31,7 +31,7 @@
 // period (ukf_prog.py lists them). Each keeps its table value until it is written. The host
 // reaches them through two SPI registers:
 //   6C       the address of a filter word (reset 96). Any time.
-//   70-73    that word. Reads work for every address (storage 0-61, constants 64-111, sensor
+//   70-73    that word. Reads work for every address (storage 0-62, constants 64-111, sensor
 //            words 112-126), which is also a way to look inside the filter. Writes are taken only
 //            for the tunable words, and only while enable is low and the filter is idle.
 //
@@ -116,6 +116,9 @@ module ukf_top #(
     logic [6:0]  m_waddr;
     logic [31:0] m_wdata;
     logic [6:0]  rd_addr;
+    logic [6:0]  ra;                    // the read address, registered (see din below)
+    logic [1:0]  rd_wait;               // 0: ra not loaded for this read, 1: loaded, wait, 2: din may be taken
+    logic        host_pend, host_is_cfg;
     wire  [31:0] m_rdata, k_value;
     wire  [191:0] m_first;
     // a tunable constant: read from storage (words 64 up) once the host has written it
@@ -127,6 +130,22 @@ module ukf_top #(
                        .raddr(m_raddr), .rdata(m_rdata), .first6(m_first));
     ukf_consts u_consts (.index(rd_addr[5:0]), .value(k_value));
 
+    wire running;
+    // The VN-300 words the filter uses, held for the whole beat. The timestamper shifts each new
+    // message straight into its registers, and the filter reads these words near the end of its
+    // beat, which can be after the next message has started to arrive. They are taken at every
+    // measurement pulse that finds the filter idle, so the host also reads the latest ones.
+    // (The wheel count, the single-precision latitude and the beat time are read in the first
+    // few steps of a beat, the last of them into storage, and need no copy here.)
+    logic [31:0] yaw_h, rate_h;
+    logic [25:0] lat_h, lon_h;
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin yaw_h <= 32'd0; rate_h <= 32'd0; lat_h <= 26'd0; lon_h <= 26'd0; end
+        else if (meas_pulse && !running) begin
+            yaw_h <= vn_yaw_f32; rate_h <= vn_rate_f32; lat_h <= vn_lat_f64[45:20]; lon_h <= vn_lon_f64[45:20];
+        end
+    end
+
     logic [31:0] ext;
     always_comb begin
         case (rd_addr[3:0])
@@ -134,10 +153,10 @@ module ukf_top #(
             4'd1:    ext = vn_lat_f64[63:32];
             4'd2:    ext = vn_lon_f64[31:0];
             4'd3:    ext = vn_lon_f64[63:32];
-            4'd8:    ext = vn_yaw_f32;
-            4'd9:    ext = vn_rate_f32;
-            4'd10:   ext = {6'd0, vn_lat_f64[45:20]};
-            4'd11:   ext = {6'd0, vn_lon_f64[45:20]};
+            4'd8:    ext = yaw_h;
+            4'd9:    ext = rate_h;
+            4'd10:   ext = {6'd0, lat_h};
+            4'd11:   ext = {6'd0, lon_h};
             4'd12:   ext = {{4{dw_delta[27]}}, dw_delta};
             4'd13:   ext = beat_ts;
             // latitude as single precision: same sign, exponent re-biased, top of the fraction
@@ -145,9 +164,36 @@ module ukf_top #(
             default: ext = 32'd0;
         endcase
     end
-    wire [31:0] din = !rd_addr[6]                        ? m_rdata :
-                      (rd_addr[6:4] == 3'd7)             ? ext     :
-                      (rd_cfg && cfg_set[rd_addr[3:0]])  ? m_rdata : k_value;
+    wire [31:0] din_pre = !rd_addr[6]                        ? m_rdata :
+                          (rd_addr[6:4] == 3'd7)             ? ext     :
+                          (rd_cfg && cfg_set[rd_addr[3:0]])  ? m_rdata : k_value;
+    // Two-clock read. The way from the read address through the storage to whatever takes the
+    // word is too long for one clock at the slow corner. So the address comes from a register
+    // (ra), or from the SPI block while spi_rd is high, and nothing takes the word (din) until
+    // ra and spi_rd have both been steady for a full clock: the filter and the host write count
+    // this with rd_wait, the SPI block with its own two-clock fetch. The timing constraints
+    // (project.sdc) give the paths from ra and from spi_rd through the buffers below two clocks
+    // to match. Anything added here that uses din must wait in the same way.
+    wire [31:0] din_b;
+    genvar db;
+    generate
+        for (db = 0; db < 32; db = db + 1) begin : dinb
+`ifdef SYNTHESIS
+            sky130_fd_sc_hd__buf_4 u_dinbuf (.A(din_pre[db]), .X(din_b[db]));
+`else
+            assign din_b[db] = din_pre[db];
+`endif
+        end
+    endgenerate
+`ifdef SYNTHESIS
+    wire [31:0] din = din_b;
+`else
+    // In simulation the word is unknown in the clock after ra or spi_rd changes, as it may be on
+    // the chip at the slow corner. If anything took it in that clock the tests would fail.
+    logic [7:0] rd_seen;
+    always_ff @(posedge clk) rd_seen <= {spi_rd, ra};
+    wire [31:0] din = (rd_seen === {spi_rd, ra}) ? din_b : 32'bx;
+`endif
     assign spi_rword = din;
 
     // ---- arithmetic ---------------------------------------------------------------------------
@@ -159,7 +205,10 @@ module ukf_top #(
 
     // ---- sequencer ----------------------------------------------------------------------------
     localparam [2:0] Q_CLEAR = 3'd0, Q_IDLE = 3'd1, Q_A = 3'd2, Q_B = 3'd3, Q_GO = 3'd4, Q_WAIT = 3'd5,
-                     Q_SETTLE1 = 3'd6, Q_SETTLE2 = 3'd7;
+                     Q_UNUSED6 = 3'd6, Q_UNUSED7 = 3'd7;
+    // After a step writes its result the next step starts at once. The word written must not be
+    // read for two clocks after the write; the next read is at least four clocks away (one for
+    // the step table, one to load ra, two for the storage), so no settling states are needed.
     logic [2:0]  q;
     logic [4:0]  clr;                   // after reset the six output words are cleared, one every four clocks
     logic        flag, started, vn_ok, dw_ok;
@@ -168,7 +217,7 @@ module ukf_top #(
     logic [7:0]  overruns;              // measurement pulses that arrived while a beat was still being worked on
 
     wire is_ctl = (fn == FN_CTL);
-    wire running = (q != Q_CLEAR) && (q != Q_IDLE);
+    assign running = (q != Q_CLEAR) && (q != Q_IDLE);
     // a host write of one byte of the state: read the word, replace the byte, write it back
     wire host_wr = cfg_we && !enable && (q == Q_IDLE) && (cfg_addr >= HOST_STATE_FIRST) && (cfg_addr < HOST_STATE_END);
     wire [4:0] host_word = cfg_addr[6:2] - 5'd9;
@@ -181,14 +230,12 @@ module ukf_top #(
         host_merged[8*cfg_addr[1:0] +: 8] = cfg_wdata;
     end
 
-    wire stall = spi_rd;                // the read path is lent to the SPI block for this clock
-    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && !stall && word_ok;
-    assign f_load_b = (q == Q_B) && !stall;
+    wire stall  = spi_rd;               // the read path is lent to the SPI block for this clock
+    wire din_ok = (rd_wait == 2'd2) && !stall;
+    assign f_load_a = (q == Q_A) && !is_ctl && (fn != FN_RAW) && word_ok && din_ok;
+    assign f_load_b = (q == Q_B) && din_ok;
     assign f_start  = (q == Q_GO);
-    assign rd_addr  = spi_rd      ? ((spi_raddr == 7'd127) ? cfg_index : spi_raddr) :
-                      host_wr     ? {2'b00, host_word} :
-                      host_cfg    ? cfg_index :
-                      (q == Q_B)  ? b_addr : a_addr;
+    assign rd_addr  = spi_rd ? ((spi_raddr == 7'd127) ? cfg_index : spi_raddr) : ra;
 
     wire write_ok = (wcond == 2'd0) || (wcond == 2'd2 && flag) || (wcond == 2'd3 && !flag);    // 1: never
 
@@ -212,10 +259,14 @@ module ukf_top #(
             ret0 <= 10'd0; ret1 <= 10'd0; depth <= 2'd0; overruns <= 8'd0; word_ok <= 1'b0;
             m_we <= 1'b0; m_waddr <= 7'd0; m_wdata <= 32'd0; state_valid <= 1'b0;
             cfg_index <= 7'd96; cfg_set <= 16'd0;
+            ra <= 7'd0; rd_wait <= 2'd0; host_pend <= 1'b0; host_is_cfg <= 1'b0;
         end else begin
             if (cfg_we && cfg_addr == 7'h6C) cfg_index <= cfg_wdata[6:0];
             m_we <= 1'b0; state_valid <= 1'b0;
             if (!enable) started <= 1'b0;
+            // the wait after ra is loaded; a clock lent to the SPI block starts the wait again
+            if (stall)                 rd_wait <= (rd_wait == 2'd0) ? 2'd0 : 2'd1;
+            else if (rd_wait == 2'd1)  rd_wait <= 2'd2;
             if (meas_pulse && enable && running && overruns != 8'hFF) overruns <= overruns + 8'd1;
             case (q)
                 Q_CLEAR: begin
@@ -224,17 +275,28 @@ module ukf_top #(
                     if (clr == 5'd23) q <= Q_IDLE;
                 end
                 Q_IDLE: begin
-                    if (host_wr) begin m_we <= 1'b1; m_waddr <= {2'b00, host_word}; m_wdata <= host_merged; end
-                    else if (host_cfg) begin
-                        m_we <= 1'b1; m_waddr <= {3'b100, cfg_index[3:0]}; m_wdata <= host_merged;
-                        cfg_set[cfg_index[3:0]] <= 1'b1;
+                    // a host write: load the read address, wait, then write the merged word back.
+                    // The host's address and byte (cfg_addr, cfg_wdata) hold until its next byte.
+                    if (host_wr || host_cfg) begin
+                        ra <= host_cfg ? cfg_index : {2'b00, host_word};
+                        rd_wait <= 2'd1; host_pend <= 1'b1; host_is_cfg <= host_cfg;
+                    end else if (host_pend && din_ok) begin
+                        host_pend <= 1'b0; rd_wait <= 2'd0;
+                        m_we <= 1'b1; m_wdata <= host_merged;
+                        if (host_is_cfg) begin m_waddr <= {3'b100, ra[3:0]}; cfg_set[ra[3:0]] <= 1'b1; end
+                        else             m_waddr <= ra;
                     end
-                    if (meas_pulse && enable) begin
+                    if (meas_pulse && enable && !host_pend && !(host_wr || host_cfg)) begin
                         vn_ok <= vn_valid; dw_ok <= dw_valid; pc <= 10'd0; depth <= 2'd0; q <= Q_A;
+                        rd_wait <= 2'd0;
                     end
                 end
                 Q_A: if (!word_ok) word_ok <= 1'b1;
-                else if (!stall) begin
+                else if (!is_ctl && rd_wait == 2'd0) begin
+                    // the step is known: load the first address (not in a clock lent to the SPI
+                    // block, whose read must see ra steady)
+                    if (!stall) begin ra <= a_addr; rd_wait <= 2'd1; end
+                end else if (is_ctl ? !stall : din_ok) begin
                     word_ok <= 1'b0;
                     if (is_ctl) begin
                         pc <= pc + 10'd1;
@@ -255,23 +317,19 @@ module ukf_top #(
                     end else if (fn == FN_RAW) begin
                         if (write_ok) begin m_we <= 1'b1; m_waddr <= {1'b0, d_addr}; m_wdata <= din; end
                         if (setf) flag <= din[31];
-                        q <= Q_SETTLE1;
+                        pc <= pc + 10'd1; rd_wait <= 2'd0;         // stays in Q_A for the next step
                     end else begin
-                        q <= Q_B;
+                        q <= Q_B; ra <= b_addr; rd_wait <= 2'd1;
                     end
                 end
-                Q_B:  if (!stall) q <= Q_GO;
+                Q_B:  if (din_ok) begin q <= Q_GO; rd_wait <= 2'd0; end
                 Q_GO: q <= Q_WAIT;
                 Q_WAIT: if (f_done) begin
                     if (write_ok) begin m_we <= 1'b1; m_waddr <= {1'b0, d_addr}; m_wdata <= f_result; end
                     if (setf) flag <= f_result[31];
-                    q <= Q_SETTLE1;
+                    pc <= pc + 10'd1; q <= Q_A;
                 end
-                Q_SETTLE1: q <= Q_SETTLE2;
-                default: begin          // Q_SETTLE2
-                    pc <= pc + 10'd1;
-                    q <= Q_A;
-                end
+                default: q <= Q_IDLE;   // not reachable
             endcase
         end
     end
@@ -286,7 +344,7 @@ module ukf_top #(
     wire _unused = &{f_busy, overruns, 1'b0};
 endmodule
 
-// Latch memory: words 0-61 for the filter, and words 64 to 64+NCFG-1 for the tunable constants
+// Latch memory: words 0-62 for the filter, and words 64 to 64+NCFG-1 for the tunable constants
 // (every other address reads as zero). Same write scheme as lidar_latch_mem: the data is
 // registered and held, and writes must be at least 3 clocks apart (the sequencer above leaves 3
 // or more). A word must not be read until 2 clocks after its write.
@@ -312,7 +370,7 @@ module ukf_store #(
         end
     end
 
-    localparam WORDS = 62;
+    localparam WORDS = 63;
     // TRIAL: one enable pulse for the whole store, from a single flip-flop on the falling edge,
     // ANDed with each word's select. The select is decoded from the held address, which is steady
     // from half a clock before the pulse rises until after it falls (writes are at least three
@@ -322,7 +380,33 @@ module ukf_store #(
     wire [127:0] sel, gate;
 
     wire [31:0] q [0:127];
-    assign rdata = q[raddr];
+
+    // Reading, in two levels: a selector and a named buffer for each group of 8 words, then a
+    // selector across the groups. Without the named buffers the tools build one flat selector,
+    // and wherever its words end up far apart a small gate in the middle of it is left driving
+    // millimetres of wire, which was the slowest path on the chip.
+    localparam GROUPS = (64 + NCFG + 7) / 8;
+    wire [31:0] grp_pre [0:15];
+    wire [31:0] grp     [0:15];
+    assign rdata = grp[raddr[6:3]];
+    genvar g, gb;
+    generate
+        for (g = 0; g < 16; g = g + 1) begin : rgrp
+            if (g < GROUPS) begin : real_
+                assign grp_pre[g] = q[{g[3:0], raddr[2:0]}];
+                for (gb = 0; gb < 32; gb = gb + 1) begin : rb
+`ifdef SYNTHESIS
+                    sky130_fd_sc_hd__buf_4 u_rbuf (.A(grp_pre[g][gb]), .X(grp[g][gb]));
+`else
+                    assign grp[g][gb] = grp_pre[g][gb];
+`endif
+                end
+            end else begin : none_
+                assign grp_pre[g] = 32'd0;
+                assign grp[g]     = 32'd0;
+            end
+        end
+    endgenerate
 
     genvar i;
     generate
