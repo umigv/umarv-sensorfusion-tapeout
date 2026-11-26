@@ -188,3 +188,63 @@ Swap:           3071           0        3071
 116584    368 provjobd3084489
 84500     368 Runner.Listener
 
+11:02:35
+Mem:           15701       13220         209          48        2656        2481
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+12505512  304 magicdnull
+179672    386 Runner.Worker
+121624    305 python
+117704    388 provjobd3084489
+84832     388 Runner.Listener
+
+11:02:55
+Mem:           15701       13409         159          48        2534        2292
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+12683064  324 magicdnull
+179700    406 Runner.Worker
+121624    325 python
+117872    408 provjobd3084489
+84812     408 Runner.Listener
+
+11:03:15
+Mem:           15701       14122         192          48        1772        1579
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+13429148  344 magicdnull
+179700    426 Runner.Worker
+121624    345 python
+115976    428 provjobd3084489
+84952     428 Runner.Listener
+
+11:03:35
+Mem:           15701       14548         229          48        1309        1153
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+13859504  364 magicdnull
+164476    446 Runner.Worker
+121548    365 python
+116628    448 provjobd3084489
+71648     463 dockerd
+
+11:03:55
+Mem:           15701       14620         260          48        1206        1081
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+13872836  384 magicdnull
+163460    466 Runner.Worker
+121548    385 python
+115872    468 provjobd3084489
+77396     468 Runner.Listener
+
+11:04:15
+Mem:           15701       14593         286          48        1208        1108
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+13874924  404 magicdnull
+163940    486 Runner.Worker
+121548    405 python
+116040    488 provjobd3084489
+78368     488 Runner.Listener
+
