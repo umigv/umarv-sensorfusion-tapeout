@@ -248,3 +248,63 @@ Swap:          24575           0       24575
 102724    484 Runner.Worker
 72320     486 Runner.Listener
 
+11:04:34
+Mem:           15983       15355         253          30         751         628
+Swap:          24575         783       23792
+  RSS ELAPSED COMMAND
+14746560  403 magicdnull
+111764    506 provjobd1454848
+53288     513 dockerd
+51536     404 python
+47268     514 php-fpm8.3
+
+11:04:54
+Mem:           15983       15338         270          30         751         645
+Swap:          24575         935       23640
+  RSS ELAPSED COMMAND
+14746984  423 magicdnull
+116004    526 provjobd1454848
+51536     424 python
+51360     533 dockerd
+47268     534 php-fpm8.3
+
+11:05:14
+Mem:           15983       15459         171          30         730         524
+Swap:          24575        1618       22957
+  RSS ELAPSED COMMAND
+14793956  444 magicdnull
+116024    547 provjobd1454848
+51536     444 python
+49032     546 Runner.Listener
+47268     554 php-fpm8.3
+
+11:05:34
+Mem:           15983       15407         238          30         715         576
+Swap:          24575        1964       22611
+  RSS ELAPSED COMMAND
+14828568  464 magicdnull
+116172    567 provjobd1454848
+51536     464 python
+49376     566 Runner.Listener
+47236     574 php-fpm8.3
+
+11:05:54
+Mem:           15983       15461         184          30         715         522
+Swap:          24575        1964       22611
+  RSS ELAPSED COMMAND
+14864232  484 magicdnull
+116172    587 provjobd1454848
+51536     484 python
+49376     586 Runner.Listener
+47236     594 php-fpm8.3
+
+11:06:14
+Mem:           15983       15510         168          32         684         473
+Swap:          24575        3182       21393
+  RSS ELAPSED COMMAND
+14882072  504 magicdnull
+116180    607 provjobd1454848
+51672     604 Runner.Worker
+51580     606 Runner.Listener
+51536     504 python
+
