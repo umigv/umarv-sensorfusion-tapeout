@@ -128,3 +128,63 @@ Swap:           3071           0        3071
 122504    150 python
 98448     243 Runner.Listener
 
+11:00:31
+Mem:           15983       10432         222          48        5723        5551
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+9634276   169 magicdnull
+139564    266 provjobd2284307
+121736    170 python
+111972    262 Runner.Worker
+80344     263 Runner.Listener
+
+11:00:51
+Mem:           15983       10635         238          48        5504        5348
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+9849532   189 magicdnull
+139564    286 provjobd2284307
+121736    190 python
+112080    282 Runner.Worker
+80384     283 Runner.Listener
+
+11:01:11
+Mem:           15983       11358         181          48        4838        4625
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+10583132  209 magicdnull
+139572    306 provjobd2284307
+121736    210 python
+114412    303 Runner.Worker
+82260     303 Runner.Listener
+
+11:01:31
+Mem:           15983       11790         215          48        4372        4193
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+11018384  229 magicdnull
+139584    326 provjobd2284307
+121736    230 python
+114400    323 Runner.Worker
+82660     323 Runner.Listener
+
+11:01:51
+Mem:           15983       11849         157          48        4372        4134
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+11078528  249 magicdnull
+139888    346 provjobd2284307
+121736    250 python
+114400    343 Runner.Worker
+83048     344 Runner.Listener
+
+11:02:11
+Mem:           15983       13229         256          48        2893        2754
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+12491932  269 magicdnull
+139900    366 provjobd2284307
+121736    270 python
+114400    363 Runner.Worker
+85332     364 Runner.Listener
+
