@@ -368,3 +368,63 @@ Swap:           3071         146        2925
 51688     724 Runner.Listener
 47048     730 php-fpm8.3
 
+11:08:32
+Mem:           15983        1645       13823          36         896       14337
+Swap:           3071         145        2926
+  RSS ELAPSED COMMAND
+945868     88 .klayout-wrappe
+113444    746 provjobd2284307
+71312     743 Runner.Worker
+52004     744 Runner.Listener
+47048     750 php-fpm8.3
+
+11:08:52
+Mem:           15983        1646       13823          36         897       14337
+Swap:           3071         145        2926
+  RSS ELAPSED COMMAND
+945884    108 .klayout-wrappe
+113448    766 provjobd2284307
+71312     763 Runner.Worker
+53512     764 Runner.Listener
+47048     770 php-fpm8.3
+
+11:09:12
+Mem:           15983        1648       13806          36         911       14335
+Swap:           3071         145        2926
+  RSS ELAPSED COMMAND
+945884    128 .klayout-wrappe
+113448    786 provjobd2284307
+71312     783 Runner.Worker
+53072     784 Runner.Listener
+47048     790 php-fpm8.3
+
+11:09:32
+Mem:           15983        1648       13806          36         911       14335
+Swap:           3071         145        2926
+  RSS ELAPSED COMMAND
+945884    148 .klayout-wrappe
+113448    806 provjobd2284307
+71328     803 Runner.Worker
+53064     804 Runner.Listener
+47048     810 php-fpm8.3
+
+11:09:52
+Mem:           15983        1835       13619          36         911       14148
+Swap:           3071         145        2926
+  RSS ELAPSED COMMAND
+1139008   168 .klayout-wrappe
+113448    826 provjobd2284307
+71336     823 Runner.Worker
+53064     824 Runner.Listener
+47048     830 php-fpm8.3
+
+11:10:12
+Mem:           15983        1858       13595          36         912       14125
+Swap:           3071         145        2926
+  RSS ELAPSED COMMAND
+1169020   188 .klayout-wrappe
+113448    846 provjobd2284307
+71396     843 Runner.Worker
+53648     844 Runner.Listener
+47048     850 php-fpm8.3
+
