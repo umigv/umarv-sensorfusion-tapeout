@@ -51,6 +51,7 @@ two_clock_between "lidar buffer read" \
 #    both have been steady for a full clock (ukf_top.sv, rd_wait; spi_regs.sv, fetch). Only the
 #    way through the buffers on the word read is relaxed: the borrow signal also holds the
 #    sequencer, and that must happen within one clock.
+#    After synthesis the borrow signal's net is named spi_rd (the port it drives), not spi_sel.
 two_clock_between "filter storage read" \
-    [list {u_ukf.ra[*]} {u_ukf\.ra\[*\]} {u_regs.spi_sel} {u_regs\.spi_sel} {u_ukf.cfg_index[*]} {u_ukf\.cfg_index\[*\]}] \
+    [list {u_ukf.ra[*]} {u_ukf\.ra\[*\]} {spi_rd} {u_regs.spi_rd} {u_ukf.spi_rd} {u_regs.spi_sel} {u_regs\.spi_sel} {u_ukf.cfg_index[*]} {u_ukf\.cfg_index\[*\]}] \
     [list {u_ukf.dinb*.u_dinbuf/X} {u_ukf\.dinb*\.u_dinbuf/X}]
