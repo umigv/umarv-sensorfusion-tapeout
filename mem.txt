@@ -1,0 +1,60 @@
+10:56:15
+Mem:           15701         865       14309          43         845       14835
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+151260      5 Runner.Worker
+151260      0 .NET TP Worker
+110484      8 provjobd3084489
+94884       8 Runner.Listener
+72132      23 dockerd
+
+10:56:35
+Mem:           15701        1151       13474          46        1403       14549
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+274156      7 MainThread
+168496     25 Runner.Worker
+130476     28 provjobd3084489
+95140      28 Runner.Listener
+72132      43 dockerd
+
+10:56:55
+Mem:           15701        1513       10369          46        4202       14188
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+275092      3 MainThread
+192416     45 Runner.Worker
+133352     48 provjobd3084489
+95164      48 Runner.Listener
+72132      63 dockerd
+
+10:57:15
+Mem:           15701        1398        7440          47        7247       14302
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+201096     65 Runner.Worker
+118740     68 provjobd3084489
+107204      6 nix-build
+96512      68 Runner.Listener
+72132      83 dockerd
+
+10:57:35
+Mem:           15701        3222        4920          47        7942       12479
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+1847516     4 magicdnull
+201964     85 Runner.Worker
+122392      4 python
+119856     88 provjobd3084489
+97368      88 Runner.Listener
+
+10:57:55
+Mem:           15701        5355        2787          47        7942       10345
+Swap:           3071           0        3071
+  RSS ELAPSED COMMAND
+4282664    24 magicdnull
+201860    105 Runner.Worker
+122392     24 python
+116764    108 provjobd3084489
+97392     108 Runner.Listener
+
